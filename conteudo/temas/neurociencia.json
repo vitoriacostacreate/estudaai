@@ -1,0 +1,129 @@
+{
+ "nome": "🧠 Neurociência",
+ "min_bloco": 40,
+ "blocos_padrao": 2,
+ "roteiro": "5' mapa → 15' leitura/vídeo → 10' desenhar o circuito de memória → 10' perguntas/cartões",
+ "ciclo": [
+  "cel",
+  "org",
+  "fun",
+  "cel",
+  "org",
+  "apl"
+ ],
+ "disciplinas": [
+  {
+   "id": "cel",
+   "nome": "Neurônio e sinapse",
+   "cor": "#5f3dc4",
+   "topicos": [
+    {
+     "id": "cel01",
+     "t": "Neurônio (dendrito, corpo, axônio) e glia",
+     "p": 3
+    },
+    {
+     "id": "cel02",
+     "t": "Potencial de repouso e potencial de ação; mielina",
+     "p": 3
+    },
+    {
+     "id": "cel03",
+     "t": "Sinapse química e principais neurotransmissores",
+     "p": 3
+    },
+    {
+     "id": "cel04",
+     "t": "Junção neuromuscular (ligação com a fisioterapia)",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "org",
+   "nome": "Organização do sistema nervoso",
+   "cor": "#1971c2",
+   "topicos": [
+    {
+     "id": "org01",
+     "t": "SNC × SNP; somático × autônomo (simpático/parassimpático)",
+     "p": 3
+    },
+    {
+     "id": "org02",
+     "t": "Lobos do córtex e suas funções",
+     "p": 3
+    },
+    {
+     "id": "org03",
+     "t": "Estruturas profundas: tálamo, núcleos da base, sistema límbico",
+     "p": 2
+    },
+    {
+     "id": "org04",
+     "t": "Tronco encefálico, cerebelo e medula",
+     "p": 2
+    },
+    {
+     "id": "org05",
+     "t": "Vias motoras e sensitivas (corticoespinal, homúnculo)",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "fun",
+   "nome": "Funções",
+   "cor": "#2f9e44",
+   "topicos": [
+    {
+     "id": "fun01",
+     "t": "Memória e aprendizagem: hipocampo, LTP, consolidação",
+     "p": 3
+    },
+    {
+     "id": "fun02",
+     "t": "Atenção e funções executivas (pré-frontal, dopamina)",
+     "p": 3
+    },
+    {
+     "id": "fun03",
+     "t": "Dor e modulação da dor (portão, sistema descendente)",
+     "p": 3
+    },
+    {
+     "id": "fun04",
+     "t": "Sono e emoção (amígdala, estresse)",
+     "p": 2
+    },
+    {
+     "id": "fun05",
+     "t": "Linguagem (Broca, Wernicke)",
+     "p": 1
+    }
+   ]
+  },
+  {
+   "id": "apl",
+   "nome": "Aplicações",
+   "cor": "#e8590c",
+   "topicos": [
+    {
+     "id": "apl01",
+     "t": "Neuroplasticidade e reabilitação",
+     "p": 3
+    },
+    {
+     "id": "apl02",
+     "t": "Neurociência do aprendizado aplicada ao próprio estudo",
+     "p": 3
+    },
+    {
+     "id": "apl03",
+     "t": "Neurodesenvolvimento: TDAH e autismo (visão científica geral)",
+     "p": 2
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,119 @@
+{
+ "nome": "🎼 Teoria musical",
+ "min_bloco": 30,
+ "blocos_padrao": 2,
+ "roteiro": "5' mapa → 10' conceito → 10' exercício no teclado/violão/FL → 5' treino de ouvido",
+ "ciclo": [
+  "fun",
+  "har",
+  "rit",
+  "fun",
+  "har",
+  "ouv"
+ ],
+ "disciplinas": [
+  {
+   "id": "fun",
+   "nome": "Fundamentos",
+   "cor": "#e8590c",
+   "topicos": [
+    {
+     "id": "tm01",
+     "t": "Notas, oitavas, sustenido e bemol",
+     "p": 3
+    },
+    {
+     "id": "tm02",
+     "t": "Intervalos (2ª a 8ª; maior, menor, justa)",
+     "p": 3
+    },
+    {
+     "id": "tm03",
+     "t": "Escala maior (T T S T T T S)",
+     "p": 3
+    },
+    {
+     "id": "tm04",
+     "t": "Escalas menores (natural, harmônica, melódica)",
+     "p": 2
+    },
+    {
+     "id": "tm05",
+     "t": "Ciclo das quintas e armaduras de clave",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "har",
+   "nome": "Harmonia",
+   "cor": "#1971c2",
+   "topicos": [
+    {
+     "id": "tm06",
+     "t": "Tríades: maior, menor, diminuta, aumentada",
+     "p": 3
+    },
+    {
+     "id": "tm07",
+     "t": "Campo harmônico maior (I ii iii IV V vi vii°)",
+     "p": 3
+    },
+    {
+     "id": "tm08",
+     "t": "Funções: tônica, subdominante, dominante",
+     "p": 2
+    },
+    {
+     "id": "tm09",
+     "t": "Progressões comuns (I–V–vi–IV, ii–V–I)",
+     "p": 3
+    },
+    {
+     "id": "tm10",
+     "t": "Tétrades (7M, 7, m7) e inversões",
+     "p": 1
+    },
+    {
+     "id": "tm11",
+     "t": "Modos gregos (visão geral)",
+     "p": 1
+    }
+   ]
+  },
+  {
+   "id": "rit",
+   "nome": "Ritmo",
+   "cor": "#2f9e44",
+   "topicos": [
+    {
+     "id": "tm12",
+     "t": "Pulso, compasso (4/4, 3/4, 6/8) e BPM",
+     "p": 3
+    },
+    {
+     "id": "tm13",
+     "t": "Figuras de duração e síncope",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "ouv",
+   "nome": "Treino de ouvido",
+   "cor": "#9c36b5",
+   "topicos": [
+    {
+     "id": "tm14",
+     "t": "Reconhecer intervalos de ouvido",
+     "p": 2
+    },
+    {
+     "id": "tm15",
+     "t": "Reconhecer acorde maior × menor",
+     "p": 2
+    }
+   ]
+  }
+ ]
+}

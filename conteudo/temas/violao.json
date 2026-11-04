@@ -1,0 +1,92 @@
+{
+ "nome": "🎸 Violão",
+ "min_bloco": 25,
+ "blocos_padrao": 2,
+ "medida": "Prática: 'acertos/total' = repetições limpas de 10 tentativas",
+ "roteiro": "5' aquecer dedos → 15' exercício com metrônomo → 5' tocar a música do dia",
+ "ciclo": [
+  "tec",
+  "rep",
+  "teo",
+  "tec",
+  "rep"
+ ],
+ "disciplinas": [
+  {
+   "id": "tec",
+   "nome": "Técnica",
+   "cor": "#e8590c",
+   "topicos": [
+    {
+     "id": "tec01",
+     "t": "Postura e afinação de ouvido com app",
+     "p": 3
+    },
+    {
+     "id": "tec02",
+     "t": "Acordes abertos: C, G, D, A, E, Am, Em, Dm",
+     "p": 3
+    },
+    {
+     "id": "tec03",
+     "t": "Troca de acordes a 60 BPM (1 por compasso)",
+     "p": 3
+    },
+    {
+     "id": "tec04",
+     "t": "Batida pop básica (baixo, baixo-cima, cima-baixo-cima)",
+     "p": 3
+    },
+    {
+     "id": "tec05",
+     "t": "Pestana: F e Bm",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "teo",
+   "nome": "Teoria musical",
+   "cor": "#1971c2",
+   "topicos": [
+    {
+     "id": "teo01",
+     "t": "Notas no braço (cordas 6 e 5)",
+     "p": 3
+    },
+    {
+     "id": "teo02",
+     "t": "Escala maior e campo harmônico",
+     "p": 2
+    },
+    {
+     "id": "teo03",
+     "t": "Cifras e tablaturas",
+     "p": 3
+    }
+   ]
+  },
+  {
+   "id": "rep",
+   "nome": "Repertório",
+   "cor": "#2f9e44",
+   "topicos": [
+    {
+     "id": "rep01",
+     "t": "Música 1 (só G, C, D)",
+     "p": 3
+    },
+    {
+     "id": "rep02",
+     "t": "Música 2 (com Am e Em)",
+     "p": 2
+    },
+    {
+     "id": "rep03",
+     "t": "Música 3 (com pestana)",
+     "p": 1
+    }
+   ]
+  }
+ ]
+}

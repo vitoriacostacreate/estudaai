@@ -1,0 +1,6 @@
+# seus dados pessoais: PDFs, progresso, chave da API
+dados/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

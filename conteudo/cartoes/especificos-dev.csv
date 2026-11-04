@@ -1,0 +1,60 @@
+#separator:semicolon
+#html:true
+#tags column:3
+#deck:UFMS::Específicos 506
+Scrum: os <b>3 papéis</b> (Guia 2020);Product Owner, Scrum Master, Developers (o "time de desenvolvimento" virou <b>Developers</b>);esp03 scrum
+Scrum: os <b>5 eventos</b>;Sprint (contém todos), Sprint Planning, Daily Scrum, Sprint Review, Sprint Retrospective;esp03 scrum
+Scrum: <b>artefatos</b> e seus <b>compromissos</b>;Product Backlog → <b>Meta do Produto</b>. Sprint Backlog → <b>Meta da Sprint</b>. Incremento → <b>Definição de Pronto</b>.;esp03 scrum
+Scrum: duração da <b>Sprint</b> e da <b>Daily</b>;Sprint: até <b>1 mês</b> (duração fixa). Daily: <b>15 min</b>.;esp03 scrum
+Kanban: 2 práticas centrais;Visualizar o fluxo (quadro) e <b>limitar o WIP</b> (trabalho em progresso). O sistema é <b>puxado</b> (pull).;esp03 kanban
+XP: 5 <b>valores</b>;Comunicação, simplicidade, feedback, coragem, respeito;esp03 xp
+XP: práticas mais cobradas;Programação em par, TDD, integração contínua, refatoração, pequenos releases, propriedade coletiva do código, ritmo sustentável;esp03 xp
+TDD: o ciclo;<b>Red</b> (escreve um teste que falha) → <b>Green</b> (código mínimo para passar) → <b>Refactor</b>;esp04 tdd
+<b>Mock</b> × <b>stub</b>;<b>Stub</b>: devolve respostas prontas (verifica estado). <b>Mock</b>: objeto com expectativas, verifica <b>se as interações/chamadas aconteceram</b> (comportamento).;esp04 comparativo
+Pirâmide de testes;Base: muitos testes <b>unitários</b> (rápidos e baratos) → meio: <b>integração</b> → topo: poucos testes <b>E2E/UI</b> (lentos e caros);esp04
+Caixa-preta × caixa-branca;<b>Caixa-preta</b>: testa pelas entradas e saídas, sem ver o código (particionamento de equivalência, valor-limite). <b>Caixa-branca</b>: baseada na estrutura interna (cobertura de comandos, desvios, caminhos).;esp04 comparativo
+Cobertura de <b>comandos</b> × <b>desvios</b> (branch);Comandos: cada linha executada ao menos 1 vez. Desvios: cada saída V e F de cada decisão. 100% de desvios ⇒ 100% de comandos (o inverso não vale).;esp04 pegadinha
+SonarQube: o que mede;Análise <b>estática</b> (sem executar o código): bugs, vulnerabilidades, code smells, duplicação, cobertura (importada) e dívida técnica, com <b>Quality Gates</b>.;esp05
+Pilares da <b>orientação a objetos</b>;Abstração, encapsulamento, herança, polimorfismo;esp06
+SOLID;<b>S</b>ingle responsibility, <b>O</b>pen/closed, <b>L</b>iskov substitution, <b>I</b>nterface segregation, <b>D</b>ependency inversion;esp06
+Sobrecarga × sobrescrita;<b>Sobrecarga</b> (overload): mesmo nome, assinaturas diferentes, resolvida em compilação. <b>Sobrescrita</b> (override): subclasse redefine o método da superclasse, resolvida em execução.;esp06 comparativo
+UML: diagramas <b>estruturais</b>;Classes, objetos, componentes, implantação, pacotes, estrutura composta, perfil;esp07
+UML: diagramas <b>comportamentais</b> e de <b>interação</b>;Comportamentais: casos de uso, atividades, máquina de estados. Interação: sequência, comunicação, visão geral de interação, tempo.;esp07
+Casos de uso: <b>include</b> × <b>extend</b>;<b>Include</b>: comportamento <b>obrigatório</b>, sempre executado (seta do base para o incluído). <b>Extend</b>: comportamento <b>opcional</b>/condicional (seta do extensor para o base).;esp02 comparativo
+Agregação × composição (UML);<b>Agregação</b> (losango vazio): a parte existe sem o todo. <b>Composição</b> (losango cheio): a parte morre com o todo.;esp07 comparativo
+GoF: padrões <b>criacionais</b>;Singleton, Factory Method, Abstract Factory, Builder, Prototype;esp08 gof
+GoF: padrões <b>estruturais</b>;Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy;esp08 gof
+GoF: padrões <b>comportamentais</b> mais cobrados;Observer, Strategy, Command, Iterator, State, Template Method, Chain of Responsibility, Mediator, Memento, Visitor, Interpreter;esp08 gof
+<b>Adapter</b> × <b>Facade</b> × <b>Decorator</b>;<b>Adapter</b>: converte uma interface em outra esperada. <b>Facade</b>: interface simplificada para um subsistema. <b>Decorator</b>: adiciona responsabilidades dinamicamente, sem herança.;esp08 comparativo
+MVC: responsabilidades;<b>Model</b>: dados e regras de negócio. <b>View</b>: apresentação. <b>Controller</b>: recebe a entrada e coordena Model e View.;esp08
+REST: restrições;Cliente-servidor, <b>stateless</b>, cacheável, interface uniforme, sistema em camadas e code on demand (opcional);esp11 rest
+Métodos HTTP <b>idempotentes</b>;GET, PUT, DELETE (e HEAD, OPTIONS). <b>POST não</b> é idempotente. Métodos <b>seguros</b> (não alteram estado): GET, HEAD, OPTIONS.;esp11 rest pegadinha
+Códigos HTTP essenciais;200 OK · 201 Created · 204 No Content · 400 Bad Request · <b>401</b> não autenticado · <b>403</b> autenticado sem permissão · 404 Not Found · 500 erro no servidor;esp11 rest
+e-PING e eMAG;<b>e-PING</b>: Padrões de Interoperabilidade de Governo Eletrônico. <b>eMAG</b>: Modelo de Acessibilidade em Governo Eletrônico (baseado nas WCAG).;esp11 esp12
+Git: merge × rebase;<b>Merge</b>: une históricos e cria um commit de merge (preserva o histórico). <b>Rebase</b>: reaplica commits sobre outra base (histórico linear, reescreve hashes). Não faça rebase de branch pública.;esp16 git comparativo
+CI × Entrega contínua × Implantação contínua;<b>CI</b>: integrar e testar automaticamente a cada commit. <b>Continuous Delivery</b>: sempre pronto para produção, com deploy <b>manual</b>. <b>Continuous Deployment</b>: deploy <b>automático</b> em produção.;esp16 comparativo
+Docker: imagem × contêiner;<b>Imagem</b>: modelo imutável em camadas (gerado pelo Dockerfile). <b>Contêiner</b>: instância em execução de uma imagem.;esp16 docker
+OAuth2: os 4 papéis;Resource Owner (usuário), Client (aplicação), Authorization Server (emite tokens), Resource Server (API protegida);esp17 oauth
+OAuth2 × autenticação;OAuth2 é protocolo de <b>autorização</b> (acesso delegado). Para autenticação, use <b>OpenID Connect</b> (camada sobre o OAuth2, com o ID Token).;esp17 pegadinha
+Formas normais: 1FN, 2FN, 3FN;<b>1FN</b>: atributos atômicos, sem grupos repetidos. <b>2FN</b>: 1FN + sem dependência <b>parcial</b> da chave composta. <b>3FN</b>: 2FN + sem dependência <b>transitiva</b>.;esp19
+BCNF (FNBC);Todo determinante é <b>chave candidata</b> (mais rígida que a 3FN);esp19
+Propriedades <b>ACID</b>;Atomicidade, Consistência, Isolamento, Durabilidade;esp21
+Anomalias × níveis de isolamento;Read Uncommitted: permite leitura suja. Read Committed: evita leitura suja (padrão do PostgreSQL). Repeatable Read: evita leitura não repetível. Serializable: evita leitura fantasma.;esp21 esp22
+SQL: DDL × DML × DCL × TCL;<b>DDL</b>: CREATE, ALTER, DROP, TRUNCATE. <b>DML</b>: SELECT, INSERT, UPDATE, DELETE. <b>DCL</b>: GRANT, REVOKE. <b>TCL</b>: COMMIT, ROLLBACK, SAVEPOINT.;esp20 sql
+WHERE × HAVING;WHERE filtra <b>linhas antes</b> do agrupamento. HAVING filtra <b>grupos depois</b> do GROUP BY (pode usar funções de agregação).;esp20 sql
+Ordem lógica de execução do SELECT;FROM/JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT;esp20 sql
+Álgebra relacional: símbolos;σ seleção (linhas) · π projeção (colunas) · ⨝ junção · ∪ união · − diferença · × produto cartesiano · ρ renomeação;esp20
+PostgreSQL: SAVEPOINT;Marca um ponto dentro da transação: <code>ROLLBACK TO SAVEPOINT x</code> desfaz só até ali, sem abortar a transação inteira.;esp22
+DW: OLTP × OLAP;<b>OLTP</b>: transacional, normalizado, muitas escritas pequenas. <b>OLAP</b>: analítico, desnormalizado (esquema estrela ou floco de neve), consultas de agregação.;esp23 comparativo
+OWASP Top 10 (2021): os 3 primeiros;A01 Broken Access Control · A02 Cryptographic Failures · A03 Injection (inclui XSS).<br>⚠️ Há uma versão 2025 que mudou a ordem (A01 continua Broken Access Control). Confira a lista atual em owasp.org/Top10 e no NotebookLM.;esp10 owasp
+SQL Injection: prevenção principal;<b>Consultas parametrizadas</b> (prepared statements) + validação de entrada + menor privilégio no banco;esp10 owasp
+Criptografia simétrica × assimétrica;<b>Simétrica</b>: 1 chave, rápida (AES). <b>Assimétrica</b>: par pública/privada (RSA). Assinatura digital = <b>hash</b> assinado com a chave <b>privada</b> do emissor.;esp24 comparativo
+LGPD: <b>dado pessoal sensível</b>;Origem racial ou étnica, convicção religiosa, opinião política, filiação sindical ou a organização religiosa, filosófica ou política, saúde, vida sexual, dado genético ou biométrico (art. 5º, II);esp25 lgpd
+LGPD: <b>controlador</b> × <b>operador</b> × <b>encarregado</b>;<b>Controlador</b>: toma as decisões sobre o tratamento. <b>Operador</b>: trata em nome do controlador. <b>Encarregado</b> (DPO): canal de comunicação entre controlador, titulares e ANPD.;esp25 lgpd comparativo
+LGPD: princípios (art. 6º);Finalidade, adequação, necessidade, livre acesso, qualidade dos dados, transparência, segurança, prevenção, não discriminação, responsabilização e prestação de contas (+ boa-fé no caput);esp25 lgpd
+LGPD: <b>anonimização</b> × <b>pseudonimização</b>;Dado <b>anonimizado</b> não identifica o titular e, em regra, <b>não é dado pessoal</b>. Na <b>pseudonimização</b>, a reidentificação é possível com informação adicional mantida separadamente.;esp25 lgpd pegadinha
+LGPD: multa máxima;Até <b>2% do faturamento</b> no Brasil, limitada a <b>R$ 50 milhões por infração</b> (art. 52);esp25 lgpd
+LGPD: o poder público precisa de consentimento?;Não necessariamente. Ele pode tratar dados para a <b>execução de políticas públicas</b> e o cumprimento de obrigação legal, sem consentimento (arts. 7º e 23).;esp25 lgpd pegadinha
+IA: aprendizado supervisionado × não supervisionado;<b>Supervisionado</b>: dados rotulados (classificação, regressão). <b>Não supervisionado</b>: sem rótulos (agrupamento/clustering).;esp26
+RAG (geração aumentada por recuperação);Antes de responder, o LLM <b>busca documentos relevantes</b> (normalmente por embeddings) e usa esse contexto. Reduz alucinação e permite usar dados próprios.;esp26
+Overfitting × underfitting;<b>Overfitting</b>: decora o treino e vai mal em dados novos. <b>Underfitting</b>: modelo simples demais, que vai mal até no treino.;esp26 comparativo

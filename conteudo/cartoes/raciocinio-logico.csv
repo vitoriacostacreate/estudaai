@@ -1,0 +1,31 @@
+#separator:semicolon
+#html:true
+#tags column:3
+#deck:UFMS::Raciocínio Lógico
+Quando a <b>conjunção</b> p ∧ q é verdadeira?;Só quando <b>as duas</b> são V;rlm01
+Quando a <b>disjunção</b> p ∨ q é falsa?;Só quando <b>as duas</b> são F;rlm01
+Quando a <b>condicional</b> p → q é falsa?;Só no caso <b>V → F</b> ("Vera Fischer é falsa");rlm01
+Quando a <b>bicondicional</b> p ↔ q é verdadeira?;Quando p e q têm o <b>mesmo valor</b> (V,V ou F,F);rlm01
+Quando a <b>disjunção exclusiva</b> p ⊻ q ("ou p ou q") é verdadeira?;Quando p e q têm valores <b>diferentes</b>;rlm01
+Número de linhas de uma tabela-verdade com n proposições simples;2ⁿ;rlm01
+Negação de <b>p ∧ q</b>;¬p ∨ ¬q (troca ∧ por ∨ e nega as duas, De Morgan);rlm02
+Negação de <b>p ∨ q</b>;¬p ∧ ¬q (De Morgan);rlm02
+Negação de <b>p → q</b>;<b>p ∧ ¬q</b> ("mantém a 1ª E nega a 2ª")<br>⚠️ Não é ¬p → ¬q!;rlm02 pegadinha
+Negação de <b>p ↔ q</b>;p ⊻ q (ou p ↔ ¬q);rlm02
+Equivalências da condicional <b>p → q</b>;① <b>¬q → ¬p</b> (contrapositiva: inverte e nega)<br>② <b>¬p ∨ q</b> (nega a 1ª OU mantém a 2ª);rlm02
+Tautologia × contradição × contingência;<b>Tautologia</b>: sempre V. <b>Contradição</b>: sempre F. <b>Contingência</b>: às vezes V, às vezes F.;rlm02
+Negação de "<b>Todo</b> A é B";"<b>Algum</b> A <b>não</b> é B";rlm04
+Negação de "<b>Algum</b> A é B";"<b>Nenhum</b> A é B";rlm04
+Negação de "<b>Nenhum</b> A é B";"<b>Algum</b> A é B";rlm04
+Argumento <b>válido</b>: definição;Se todas as premissas forem V, a conclusão é <b>obrigatoriamente</b> V. A validade depende da forma, não da verdade das premissas.;rlm03
+Modus ponens × modus tollens;<b>Ponens</b>: p→q, p ⊢ q.<br><b>Tollens</b>: p→q, ¬q ⊢ ¬p.;rlm03
+Falácias clássicas da condicional;<b>Afirmar o consequente</b> (p→q, q ⊢ p) e <b>negar o antecedente</b> (p→q, ¬p ⊢ ¬q): os dois são <b>inválidos</b>.;rlm03 pegadinha
+Princípio fundamental da contagem;Se uma etapa tem m modos e outra tem n modos, independentes, o total é <b>m × n</b>;rlm07
+Permutação simples;Pₙ = n! (ordenar <b>todos</b> os n elementos);rlm07
+Arranjo × combinação: como decidir;<b>A ordem importa?</b> Sim → arranjo A(n,p) = n!/(n−p)!. Não → combinação C(n,p) = n!/[p!(n−p)!].<br>Teste: troque dois elementos de lugar. Se mudou o resultado, é arranjo.;rlm07
+Permutação com repetição (ex.: anagramas de ARARA);n!/(a!·b!·…). ARARA = 5!/(3!·2!) = 10;rlm07
+Probabilidade clássica;P = casos favoráveis / casos possíveis (0 ≤ P ≤ 1);rlm08
+Probabilidade da <b>união</b> P(A ∪ B);P(A) + P(B) − P(A ∩ B);rlm08
+Eventos <b>independentes</b>: P(A ∩ B);P(A) · P(B);rlm08
+Probabilidade do <b>complementar</b>;P(não A) = 1 − P(A). Dica: "pelo menos um" → 1 − P(nenhum);rlm08
+Aumentos ou descontos <b>sucessivos</b>;Multiplique os fatores: +20% e depois −20% = 1,2 × 0,8 = 0,96 → <b>−4%</b> (não volta ao original!);rlm09 pegadinha

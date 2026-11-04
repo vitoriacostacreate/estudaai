@@ -1,0 +1,187 @@
+{
+ "nome": "🦴 Fisioterapia (base do curso)",
+ "min_bloco": 40,
+ "blocos_padrao": 2,
+ "roteiro": "5' mapa → 15' leitura/vídeo → 10' palpar no próprio corpo ou desenhar → 10' perguntas/cartões",
+ "ciclo": [
+  "ana",
+  "fis",
+  "cin",
+  "ana",
+  "ava",
+  "fis",
+  "rec"
+ ],
+ "disciplinas": [
+  {
+   "id": "ana",
+   "nome": "Anatomia",
+   "cor": "#e8590c",
+   "topicos": [
+    {
+     "id": "ana01",
+     "t": "COSTAS: camadas de tecido, músculos, fáscia toracolombar e por que ficam tensas (aula 01)",
+     "p": 3
+    },
+    {
+     "id": "ana02",
+     "t": "Planos, eixos e termos de posição",
+     "p": 3
+    },
+    {
+     "id": "ana03",
+     "t": "Osteologia: coluna vertebral (cervical, torácica, lombar, sacro)",
+     "p": 3
+    },
+    {
+     "id": "ana04",
+     "t": "Artrologia: tipos de articulação; disco intervertebral e facetas",
+     "p": 3
+    },
+    {
+     "id": "ana05",
+     "t": "Miologia do ombro: manguito rotador e escápula",
+     "p": 2
+    },
+    {
+     "id": "ana06",
+     "t": "Miologia do quadril e pelve (glúteos, iliopsoas, piriforme)",
+     "p": 2
+    },
+    {
+     "id": "ana07",
+     "t": "Joelho: ligamentos (LCA, LCP, colaterais) e meniscos",
+     "p": 2
+    },
+    {
+     "id": "ana08",
+     "t": "Pescoço: trapézio superior, levantador da escápula, ECM, escalenos",
+     "p": 2
+    },
+    {
+     "id": "ana09",
+     "t": "Anatomia palpatória: pontos de referência ósseos",
+     "p": 1
+    }
+   ]
+  },
+  {
+   "id": "fis",
+   "nome": "Fisiologia",
+   "cor": "#1971c2",
+   "topicos": [
+    {
+     "id": "fis01",
+     "t": "Contração muscular: sarcômero, actina, miosina, cálcio",
+     "p": 3
+    },
+    {
+     "id": "fis02",
+     "t": "Unidade motora, tipos de fibra (I e II) e fadiga",
+     "p": 3
+    },
+    {
+     "id": "fis03",
+     "t": "Dor: nocicepção, inflamação e sensibilização",
+     "p": 3
+    },
+    {
+     "id": "fis04",
+     "t": "Fisiologia cardiovascular e respiratória básicas",
+     "p": 2
+    },
+    {
+     "id": "fis05",
+     "t": "Tecido conjuntivo: colágeno, fáscia, tendão e ligamento",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "cin",
+   "nome": "Cinesiologia e biomecânica",
+   "cor": "#2f9e44",
+   "topicos": [
+    {
+     "id": "cin01",
+     "t": "Tipos de contração: concêntrica, excêntrica, isométrica",
+     "p": 3
+    },
+    {
+     "id": "cin02",
+     "t": "Alavancas do corpo (interfixa, inter-resistente, interpotente)",
+     "p": 2
+    },
+    {
+     "id": "cin03",
+     "t": "Movimentos articulares (flexão, abdução, rotação...)",
+     "p": 3
+    },
+    {
+     "id": "cin04",
+     "t": "Cadeia cinética aberta × fechada; agonista, antagonista, sinergista",
+     "p": 2
+    },
+    {
+     "id": "cin05",
+     "t": "Postura e marcha",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "ava",
+   "nome": "Avaliação",
+   "cor": "#9c36b5",
+   "topicos": [
+    {
+     "id": "ava01",
+     "t": "Anamnese e sinais de alerta (bandeiras vermelhas)",
+     "p": 3
+    },
+    {
+     "id": "ava02",
+     "t": "Goniometria (amplitude de movimento)",
+     "p": 2
+    },
+    {
+     "id": "ava03",
+     "t": "Teste de força muscular (escala 0 a 5)",
+     "p": 2
+    },
+    {
+     "id": "ava04",
+     "t": "Escalas de dor (EVA, numérica) e testes especiais",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "rec",
+   "nome": "Recursos e áreas",
+   "cor": "#c2255c",
+   "topicos": [
+    {
+     "id": "rec01",
+     "t": "Cinesioterapia: alongamento, fortalecimento, mobilização",
+     "p": 3
+    },
+    {
+     "id": "rec02",
+     "t": "Eletrotermofototerapia: TENS, ultrassom, calor e frio",
+     "p": 2
+    },
+    {
+     "id": "rec03",
+     "t": "Áreas: traumato-ortopédica, neurofuncional, respiratória, esportiva",
+     "p": 1
+    },
+    {
+     "id": "rec04",
+     "t": "Profissão: COFFITO/CREFITO e código de ética",
+     "p": 1
+    }
+   ]
+  }
+ ]
+}

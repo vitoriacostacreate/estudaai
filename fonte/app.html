@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>estudaai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Mundo único escuro, herdado do "Loop em Casa": azul-noite, cartões em camadas, acentos pastel por tema */
+  --bg:#0e1320; --s1:#161c2b; --s2:#1d2436; --s3:#262f45; --line:#2b3550;
+  --tx:#e9edf7; --mu:#9aa4be; --ac:#7f9cff; --ac2:#a98bf0;
+  --ok:#5fd38d; --warn:#f2a35b; --bad:#ff7d86; --teal:#35c9bd;
+  --fd:"Plus Jakarta Sans",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --fb:"Figtree",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --r:18px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--fb);font-size:16px;line-height:1.55}
+h1,h2,h3{font-family:var(--fd);line-height:1.15;text-wrap:balance;margin:0}
+a{color:var(--ac)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px;border-radius:8px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* topo */
+.top{position:sticky;top:0;z-index:20;background:rgba(14,19,32,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .in{max-width:1180px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--fd);font-weight:800;font-size:20px;text-decoration:none;color:var(--tx)}
+.logo .bars{display:flex;gap:3px;align-items:flex-end;height:22px}
+.logo .bars i{display:block;width:6px;border-radius:3px}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap}
+nav.tabs a{display:flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;color:var(--mu);text-decoration:none;font-weight:600}
+nav.tabs a:hover{color:var(--tx);background:var(--s1)}
+nav.tabs a.on{color:var(--ac);background:#1c2748}
+nav.tabs svg{width:18px;height:18px}
+.chipbar{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;background:var(--s1);border:1px solid var(--line);font-size:13px;color:var(--mu);font-variant-numeric:tabular-nums}
+.chip b{color:var(--tx)}
+
+main{max-width:1180px;margin:0 auto;padding:24px 16px 80px;display:grid;gap:22px}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.eyebrow{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);font-weight:700}
+.sub{color:var(--mu)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* botões */
+a.btn{text-decoration:none;display:inline-block}
+.btn{border:0;border-radius:999px;padding:11px 20px;font-weight:700;background:var(--s3);transition:transform .12s,background .12s}
+.btn:hover{transform:translateY(-1px);background:#2f3953}
+.btn.pri{background:var(--ac);color:#0b1020}
+.btn.pri:hover{background:#97afff}
+.btn.ghost{background:transparent;border:1px solid var(--line)}
+.btn.sm{padding:7px 13px;font-size:14px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+
+/* herói "seu próximo passo" */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+.hero h1{font-size:clamp(30px,4.4vw,48px);font-weight:800;margin:6px 0 8px}
+.go{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;max-width:520px;margin-top:22px;padding:22px 26px;border-radius:999px;border:0;background:var(--ac);color:#0b1020;font-weight:700;font-size:18px;text-align:left;transition:transform .15s}
+.go:hover{transform:scale(1.015)}
+.go svg{width:54px;height:54px;flex:none}
+.plano{display:grid;gap:10px}
+.passo{display:flex;gap:14px;align-items:center;padding:13px 15px;border-radius:14px;background:var(--s2);border:1px solid var(--line);text-align:left;width:100%}
+.passo .n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-family:var(--fd);background:var(--s3)}
+.passo.feito{opacity:.6}
+.passo.feito .n{background:var(--ok);color:#0b1020}
+.passo.atual{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac) inset}
+.passo small{display:block;color:var(--mu)}
+.vis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:18px;border-radius:16px;background:var(--s2)}
+.vis i{display:block;height:34px;border-radius:9px}
+
+/* temas */
+.tema{position:relative;display:grid;gap:10px;text-align:left;border:1px solid var(--line);background:var(--s1);border-radius:var(--r);padding:20px;overflow:hidden;transition:transform .15s,border-color .15s}
+.tema:hover{transform:translateY(-2px);border-color:var(--c)}
+.tema .stripe{position:absolute;inset:0 auto 0 0;width:5px;background:var(--c)}
+.tema h3{font-size:20px}
+.ringw{display:flex;align-items:center;gap:14px}
+.bar{height:9px;border-radius:9px;background:var(--s3);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:9px;background:var(--c,var(--ac))}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:700;background:var(--s3);color:var(--mu)}
+.pill.ok{background:rgba(95,211,141,.15);color:var(--ok)}
+.pill.med{background:rgba(242,163,91,.15);color:var(--warn)}
+.pill.bad{background:rgba(255,125,134,.15);color:var(--bad)}
+.pill.ac{background:rgba(127,156,255,.15);color:var(--ac)}
+
+/* trilha */
+.disc{display:grid;gap:12px}
+.disc h3{font-size:17px;display:flex;align-items:center;gap:8px}
+.disc h3 i{width:12px;height:12px;border-radius:4px;background:var(--c)}
+.trilha{display:flex;flex-wrap:wrap;gap:10px;position:relative}
+.no{display:flex;gap:10px;align-items:center;text-align:left;min-width:220px;flex:1 1 240px;max-width:380px;padding:11px 13px;border-radius:14px;background:var(--s2);border:1px solid var(--line);transition:border-color .12s}
+.no:hover{border-color:var(--c)}
+.no .dot{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;background:var(--s3);color:var(--mu)}
+.no.estudado .dot{background:#2a3d73;color:var(--ac)}
+.no.revisar .dot{background:rgba(242,163,91,.22);color:var(--warn)}
+.no.dominado .dot{background:rgba(95,211,141,.2);color:var(--ok)}
+.no .t{font-size:14px;line-height:1.3}
+.no .t small{display:block;color:var(--mu);font-size:12px;margin-top:2px}
+.estrela{color:var(--warn);font-size:11px;letter-spacing:1px}
+
+/* aula */
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.steps button{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--s1);padding:8px 13px;border-radius:999px;font-weight:600;color:var(--mu);font-size:14px}
+.steps button.on{color:#0b1020;background:var(--c);border-color:var(--c)}
+.steps button.ok{color:var(--ok)}
+.steps button span{font-family:var(--fd);font-weight:800}
+.aulah{display:grid;gap:8px}
+.aulah h1{font-size:clamp(26px,3.6vw,38px)}
+.ideia{font-size:19px;border-left:5px solid var(--c);padding:6px 0 6px 16px;color:#d5dbea;max-width:70ch}
+.conteudo{display:grid;gap:16px;max-width:860px}
+.conteudo h3{font-size:19px;margin-bottom:8px}
+.conteudo p,.conteudo li{max-width:72ch}
+.bloco{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.tab{border-collapse:collapse;width:100%;font-size:15px;display:block;overflow-x:auto}
+.tab th,.tab td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tab th{color:var(--mu);font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+.dica{background:rgba(242,163,91,.1);border-left:4px solid var(--warn);padding:10px 14px;border-radius:0 10px 10px 0}
+.pratica{background:rgba(53,201,189,.1);border-left:4px solid var(--teal);padding:10px 14px 10px 30px;border-radius:0 10px 10px 0}
+p.pratica{padding-left:14px}
+.grande{font-family:var(--fd);font-size:26px;font-weight:800;letter-spacing:.06em;color:var(--c)}
+kbd{background:var(--s3);border:1px solid var(--line);border-bottom-width:3px;border-radius:6px;padding:1px 7px;font-family:ui-monospace,monospace;font-size:13px}
+.fluxo,.linha,.ciclo{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0}
+.fluxo span,.linha span,.ciclo span{background:var(--s3);padding:8px 12px;border-radius:12px;font-size:14px;position:relative}
+.fluxo span:not(:last-child)::after,.linha span:not(:last-child)::after,.ciclo span::after{content:"→";margin-left:10px;color:var(--c)}
+.ciclo span:last-child::after{content:"↺"}
+
+/* mapa mental */
+.mapa{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;position:relative}
+.mapa .raiz{grid-column:1/-1;justify-self:center;font-family:var(--fd);font-weight:800;font-size:22px;padding:14px 26px;border-radius:999px;background:var(--c);color:#0b1020}
+.ramo{border-radius:16px;background:var(--s1);border:1px solid var(--line);border-top:5px solid var(--rc);padding:14px 16px}
+.ramo b{font-family:var(--fd);display:block;margin-bottom:6px}
+.ramo ul{margin:0;padding-left:18px;color:#cfd5e6;font-size:14.5px}
+.oculto .ramo ul{filter:blur(6px);user-select:none}
+
+/* recuperação */
+.lembre{display:grid;gap:12px;max-width:820px}
+.lembre label{font-weight:600}
+textarea,input[type=text],select{width:100%;background:var(--s2);border:1px solid var(--line);color:var(--tx);border-radius:12px;padding:11px 13px;font:inherit}
+textarea{min-height:76px;resize:vertical}
+
+/* quiz */
+.q{display:grid;gap:10px;max-width:780px}
+.q h3{font-size:20px}
+.opt{display:block;width:100%;text-align:left;padding:13px 16px;border-radius:14px;background:var(--s2);border:1px solid var(--line);font-size:16px}
+.opt:hover{border-color:var(--ac)}
+.opt.certa{border-color:var(--ok);background:rgba(95,211,141,.12)}
+.opt.errada{border-color:var(--bad);background:rgba(255,125,134,.12)}
+.exp{padding:12px 15px;border-radius:12px;background:var(--s2)}
+.placar{display:flex;gap:6px}
+.placar i{width:28px;height:8px;border-radius:5px;background:var(--s3)}
+.placar i.c{background:var(--ok)}.placar i.e{background:var(--bad)}
+
+/* flashcards */
+.fc{min-height:250px;display:grid;place-items:center;text-align:center;padding:30px;border-radius:22px;background:var(--s2);border:1px solid var(--line);font-size:21px;max-width:760px;margin:0 auto;width:100%}
+.fc .verso{border-top:1px solid var(--line);margin-top:18px;padding-top:18px;font-size:17px;color:#d6dcec}
+.notas{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:760px;margin:0 auto;width:100%}
+.notas .btn small{display:block;font-weight:500;font-size:12px;opacity:.75}
+
+/* widgets */
+.wid{background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:20px;display:grid;gap:14px}
+.wid h3{font-size:18px}
+.tv td,.tv th{text-align:center}
+.tv button{width:44px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--s3);font-weight:800}
+.tv button.V{color:var(--ok)}.tv button.F{color:var(--bad)}
+.tv button.certo{box-shadow:0 0 0 2px var(--ok)}.tv button.erro{box-shadow:0 0 0 2px var(--bad)}
+.par{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.par .col{display:grid;gap:8px;align-content:start}
+.par button{text-align:left;padding:11px 13px;border-radius:12px;background:var(--s2);border:1px solid var(--line);font-size:14.5px}
+.par button.sel{border-color:var(--ac);background:#1c2748}
+.par button.ok{border-color:var(--ok);background:rgba(95,211,141,.12);color:var(--ok);cursor:default}
+.par button.no{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.ord{display:flex;flex-wrap:wrap;gap:8px}
+.ord button{padding:10px 14px;border-radius:12px;background:var(--s2);border:1px solid var(--line)}
+.ord button.usado{opacity:.3}
+.resposta{display:grid;gap:6px;counter-reset:n}
+.resposta div{padding:9px 13px;border-radius:10px;background:var(--s3);counter-increment:n}
+.resposta div::before{content:counter(n) ". ";font-weight:800;color:var(--c)}
+.resposta div.ok{background:rgba(95,211,141,.14)}.resposta div.no{background:rgba(255,125,134,.14)}
+.piano{position:relative;height:150px;user-select:none;overflow-x:auto}
+.piano .k{position:absolute;top:0;border:1px solid #0b0f19;border-radius:0 0 8px 8px;display:flex;align-items:flex-end;justify-content:center;font-size:11px;padding-bottom:6px;font-weight:700}
+.piano .w{background:#eef1f8;color:#58607a;height:150px;z-index:1}
+.piano .b{background:#151a27;color:#9aa4be;height:92px;z-index:2}
+.piano .k.hi.w{background:#b7c6ff;color:#0b1020}
+.piano .k.hi.b{background:#5a76e0;color:#fff}
+.piano .k.on{background:var(--warn)!important;color:#0b1020!important}
+.seq{display:grid;gap:7px;overflow-x:auto}
+.seq .linha{display:grid;grid-template-columns:70px repeat(16,minmax(26px,1fr));gap:5px;align-items:center}
+.seq .linha b{font-size:13px;color:var(--mu)}
+.seq .st{height:34px;border-radius:8px;border:0;background:var(--s3)}
+.seq .st:nth-child(4n+2){background:#2f3a56}
+.seq .st.on{background:var(--rc)}
+.seq .st.cur{outline:2px solid #fff;outline-offset:-2px}
+.cordas{display:flex;flex-wrap:wrap;gap:8px}
+.cordas button{min-width:56px;padding:9px 12px;border-radius:12px;background:var(--s2);border:1px solid var(--line);font-weight:800;font-family:var(--fd)}
+.cordas button.on{background:var(--c);color:#0b1020;border-color:var(--c)}
+.met{display:flex;gap:12px;justify-content:center}
+.met i{width:46px;height:46px;border-radius:50%;background:var(--s3);transition:background .05s}
+.met i.on{background:var(--teal)}.met i.on.um{background:var(--warn)}
+.cam{display:grid;gap:8px}
+.cam button{text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--cc);color:#0b1020;font-weight:700;transition:transform .12s}
+.cam button.sel{transform:translateX(10px);box-shadow:0 0 0 3px #fff}
+.letra{font-family:var(--fd);font-size:110px;font-weight:800;text-align:center;line-height:1;color:var(--c)}
+canvas{max-width:100%;background:var(--s2);border-radius:12px}
+input[type=range]{width:100%;accent-color:var(--ac)}
+
+.modal{position:fixed;inset:0;background:rgba(5,8,15,.7);display:grid;place-items:center;padding:16px;z-index:50}
+.modal .card{max-width:760px;width:100%;max-height:88vh;overflow:auto;display:grid;gap:14px}
+pre.prompt{white-space:pre-wrap;background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:14px;font-size:13px;max-height:240px;overflow:auto}
+.cal{display:grid;grid-template-columns:repeat(14,1fr);gap:5px;max-width:520px}
+.cal i{aspect-ratio:1;border-radius:5px;background:var(--s3)}
+.cal i.l1{background:#2b3d73}.cal i.l2{background:#4a63c0}.cal i.l3{background:var(--ac)}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--line);padding:11px 18px;border-radius:999px;z-index:60;font-weight:600}
+footer{max-width:1180px;margin:0 auto;padding:0 16px 30px;color:var(--mu);font-size:13px}
+@media (max-width:820px){.hero{grid-template-columns:1fr}.notas{grid-template-columns:1fr 1fr}.par{grid-template-columns:1fr}.chipbar{margin-left:0}}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="logo" href="#inicio" aria-label="estudaai, início"><span class="bars"><i style="height:10px;background:#f2a35b"></i><i style="height:16px;background:#35c9bd"></i><i style="height:22px;background:#a98bf0"></i><i style="height:13px;background:#7f9cff"></i></span>estudaai</a>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="chipbar" id="chips"></div>
+</div></header>
+<main id="app"></main>
+<footer></footer>
+
+<script>
+/*DATA*/
+</script>
+<script>
+/*AULAS*/
+</script>
+<script>
+/*ORG*/
+</script>
+<script>
+"use strict";
+/* ============ utilidades ============ */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const hojeStr = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+const addDias = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+const diasAte = (iso) => Math.ceil((new Date(iso + "T00:00:00") - new Date(hojeStr() + "T00:00:00")) / 864e5);
+const fmt = iso => iso ? iso.slice(8, 10) + "/" + iso.slice(5, 7) : "";
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function toast(msg) { const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2600); }
+const ICON = {
+  inicio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
+  temas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>',
+  revisar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="14" height="14" rx="3"/><path d="M7 3h11a3 3 0 0 1 3 3v11"/></svg>',
+  novo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
+  biblioteca: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h5v16H4zM10 4h4v16h-4z"/><path d="M15.5 4.6l3.9-1 3.6 15.5-3.9 1z"/></svg>',
+  progresso: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  seta: '<svg viewBox="0 0 64 64" fill="none" stroke="#0b1020" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 32h38M36 16l16 16-16 16"/></svg>'
+};
+
+/* ============ estado ============ */
+const CHAVE = "estudaai.v1";
+let st, MODO = "arquivo", INFO = {}, BIB = { docs: [], temas: [], anexos: {}, aulas: {}, cartoes: [], textos: {} };
+let NUVEM = null, ultimoSync = null;   /* modo nuvem: progresso salvo na sua conta Claude e sincronizado entre aparelhos */
+const CARDS_BASE = CARDS.slice();
+function carregar(doServidor) {
+  try { st = doServidor && Object.keys(doServidor).length ? doServidor : (JSON.parse(localStorage.getItem(CHAVE)) || {}); } catch (e) { st = {}; }
+  st.top ||= {}; st.cards ||= {}; st.dias ||= {}; st.temasUser ||= []; st.aulasUser ||= {}; st.notas ||= {};
+  st.principal ||= "concurso"; st.novos ||= { data: "", n: 0 }; st.hoje ||= { data: "", feitos: [] };
+  if (st.hoje.data !== hojeStr()) st.hoje = { data: hojeStr(), feitos: [] };
+}
+let _salvarT;
+function salvar() {
+  st._t = Date.now();
+  try { localStorage.setItem(CHAVE, JSON.stringify(st)); } catch (e) { }
+  if (MODO === "nuvem") { clearTimeout(_salvarT); _salvarT = setTimeout(enviarEstado, 800); }
+  if (MODO === "local") { clearTimeout(_salvarT); _salvarT = setTimeout(() => fetch("/api/estado", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(st) }).catch(() => toast("Não consegui salvar no servidor. O estudaai ainda está rodando?")), 400); }
+}
+async function api(url, op) { const r = await fetch(url, op); const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.erro || ("Erro " + r.status)); return j; }
+async function carregarBiblioteca() { BIB = await api("/api/biblioteca"); BIB.textos ||= {}; mesclar(); }
+
+/* ---------- nuvem (capacidades do artefato: db, assets, sample, downloads) ---------- */
+function dadosDoc(r) { if (r == null) return null; if (typeof r.data === "function") return r.exists === false ? null : r.data(); if ("exists" in r && !r.exists) return null; if (r.data && typeof r.data === "object" && ("exists" in r || "id" in r)) return r.data; return r; }
+let _enviando = false;
+async function enviarEstado() {
+  if (!NUVEM || _enviando) return; _enviando = true;
+  try { await NUVEM.col.doc("estado").set({ json: JSON.stringify(st), t: st._t || Date.now() }); ultimoSync = new Date(); marcarSync(); }
+  catch (e) { marcarSync("Não consegui salvar na nuvem agora. Fica salvo neste aparelho e tento de novo."); }
+  finally { _enviando = false; }
+}
+function marcarSync(erro) { const c = document.getElementById("sync"); if (!c) return; c.innerHTML = erro ? "⚠️ <b>offline</b>" : `☁️ salvo <b>${ultimoSync ? ultimoSync.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "—"}</b>`; c.title = erro || "Progresso salvo na sua conta: abre igual no PC, no notebook e no celular"; }
+async function puxarNuvem(forcar) {
+  if (!NUVEM) return false; let mudou = false;
+  try {
+    const e = dadosDoc(await NUVEM.col.doc("estado").get());
+    if (e && e.json && (forcar === "remoto" || (e.t || 0) > (st._t || 0))) { carregar(JSON.parse(e.json)); mudou = true; }
+    else if (!e || (st._t || 0) > (e.t || 0)) await enviarEstado();
+    const b = dadosDoc(await NUVEM.col.doc("biblioteca").get());
+    const idx = b && b.json ? JSON.parse(b.json) : { docs: [], temas: [], anexos: {} };
+    if (JSON.stringify(idx.docs.map(d => d.id)) !== JSON.stringify((BIB.docs || []).map(d => d.id)) || !BIB._nuvem) {
+      const nova = { ...idx, aulas: {}, cartoes: [], textos: {}, _nuvem: true };
+      for (const d of idx.docs) { try { const pk = await (await fetch(d.pacoteUrl)).json(); Object.assign(nova.aulas, pk.aulas); nova.cartoes.push(...pk.cartoes.map(c => ({ ...c, tema: d.tema }))); Object.assign(nova.textos, pk.textos); } catch (er) { } }
+      BIB = nova; mesclar(); mudou = true;
+    }
+    ultimoSync = new Date(); marcarSync();
+  } catch (er) { marcarSync("Sem conexão com a nuvem agora."); }
+  return mudou;
+}
+async function salvarIndiceNuvem() { const idx = { docs: BIB.docs, temas: BIB.temas, anexos: BIB.anexos }; await NUVEM.col.doc("biblioteca").set({ json: JSON.stringify(idx), t: Date.now() }); }
+async function iniciarNuvem() {
+  if (!(window.claude && typeof window.claude.use === "function")) return;
+  try {
+    const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    if (!db || !user) return;
+    const uid = await user.id(); if (!uid) return;
+    NUVEM = { db, col: db.collection("data/users/" + uid) }; MODO = "nuvem";
+    window.claude.use("assets").then(a => { NUVEM.assets = a; });
+    window.claude.use("sample").then(sm => { NUVEM.sample = sm; INFO.ia = !!sm; });
+    window.claude.use("downloads").then(d => { NUVEM.downloads = d; });
+    rodape(); await puxarNuvem(); rotear();
+    document.addEventListener("visibilitychange", async () => { if (document.visibilityState === "visible" && await puxarNuvem()) rotear(); });
+  } catch (e) { }
+}
+let _pdfjs;
+function carregarPDFjs() {
+  if (_pdfjs) return _pdfjs;
+  const base = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+  const sc = src => new Promise((ok, falha) => { const el = document.createElement("script"); el.src = src; el.onload = ok; el.onerror = () => falha(new Error("Não consegui carregar o leitor de PDF (pdf.js). Verifique a internet.")); document.head.appendChild(el); });
+  _pdfjs = sc(base + "pdf.worker.min.js").then(() => sc(base + "pdf.min.js")).then(() => { const lib = window.pdfjsLib || window["pdfjs-dist/build/pdf"]; lib.GlobalWorkerOptions.workerSrc = base + "pdf.worker.min.js"; return lib; });
+  _pdfjs.catch(() => { _pdfjs = null; });
+  return _pdfjs;
+}
+async function importarNaNuvem(f, destino, nomeTema) {
+  if (!NUVEM.assets) throw new Error("Envio de arquivos indisponível nesta visualização.");
+  const buf = await f.arrayBuffer(); const lib = await carregarPDFjs();
+  const ext = await ORG.lerPDF(lib, buf.slice(0));
+  const nome = f.name.replace(/\.pdf$/i, ""); const docId = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").slice(0, 18) + "-" + Date.now().toString(36).slice(-4);
+  const r = ORG.organizar(ext, nome, docId);
+  if (!r.topicos.length) throw new Error("Não encontrei texto. O PDF pode ser escaneado (imagem).");
+  const upPdf = await NUVEM.assets.upload(new Blob([buf], { type: "application/pdf" }));
+  const pacote = { topicos: r.topicos, aulas: r.aulas, cartoes: r.cartoes, textos: r.textos };
+  const upPk = await NUVEM.assets.upload(new Blob([JSON.stringify(pacote)], { type: "application/json" }));
+  let temaId;
+  if (!destino || destino === "novo") { temaId = "pdf-" + docId; BIB.temas.push({ id: temaId, nome: "📄 " + (nomeTema || r.doc.titulo).slice(0, 50), cor: CORES[BIB.temas.length % CORES.length], desc: `Criado a partir de ${f.name} (${r.doc.paginas} páginas).`, doc: docId, disciplinas: [{ id: "d-" + docId, nome: "Seções do PDF", topicos: r.topicos }] }); }
+  else { temaId = destino; (BIB.anexos[destino] ||= []).push({ id: "d-" + docId, nome: "📄 " + nome.slice(0, 50), doc: docId, topicos: r.topicos }); }
+  const doc = { ...r.doc, tema: temaId, arquivo: f.name, importado: new Date().toLocaleString("pt-BR"), pdfAsset: upPdf.id, pdfUrl: upPdf.url || ("/_blob/" + upPdf.id), pacoteAsset: upPk.id, pacoteUrl: upPk.url || ("/_blob/" + upPk.id) };
+  BIB.docs.push(doc); Object.assign(BIB.aulas, r.aulas); Object.assign(BIB.textos, r.textos); BIB.cartoes.push(...r.cartoes.map(c => ({ ...c, tema: temaId }))); mesclar();
+  await salvarIndiceNuvem();
+  return doc;
+}
+async function removerDaNuvem(id) {
+  const d = BIB.docs.find(x => x.id === id); if (!d) return;
+  BIB.docs = BIB.docs.filter(x => x.id !== id); BIB.temas = BIB.temas.filter(t => t.doc !== id);
+  for (const k of Object.keys(BIB.anexos)) { BIB.anexos[k] = BIB.anexos[k].filter(a => a.doc !== id); if (!BIB.anexos[k].length) delete BIB.anexos[k]; }
+  BIB.cartoes = BIB.cartoes.filter(c => c.doc !== id); for (const k of Object.keys(BIB.aulas)) if (k.startsWith("p-" + id + "-")) { delete BIB.aulas[k]; delete BIB.textos[k]; }
+  await salvarIndiceNuvem(); mesclar();
+  try { if (NUVEM.assets) { await NUVEM.assets.delete(d.pdfAsset); await NUVEM.assets.delete(d.pacoteAsset); } } catch (e) { }
+}
+async function textoTopico(tid) {
+  if (MODO === "local") { try { return (await api("/api/texto/" + encodeURIComponent(tid))).texto || ""; } catch (e) { return ""; } }
+  return (BIB.textos || {})[tid] || "";
+}
+function urlPDF(docId, pag) { if (MODO === "local") return `/api/pdf/${docId}#page=${pag}`; const d = (BIB.docs || []).find(x => x.id === docId); return d ? `${d.pdfUrl}#page=${pag}` : "#"; }
+async function iaGerar(prompt) {
+  if (MODO === "nuvem" && NUVEM.sample) {
+    let r; try { r = await NUVEM.sample.json(prompt, { modelTier: "complex" }); } catch (e) { if (e && e.code === "rate_limited") throw new Error("Muitos pedidos seguidos. Espere um pouco e tente de novo."); if (e && e.code === "not_granted") throw new Error("Permissão para usar o Claude negada nesta página."); throw new Error((e && e.message) || "A IA não respondeu."); }
+    return typeof r === "string" ? JSON.parse(r) : r;
+  }
+  throw new Error("IA indisponível");
+}
+function rodape() {
+  const f = document.querySelector("footer"); if (!f) return;
+  f.innerHTML = MODO === "local" ? `Rodando no seu PC · progresso salvo em <code>dados/estado.json</code> · estudaai ${INFO.versao}`
+    : MODO === "nuvem" ? `☁️ Progresso salvo na sua conta Claude: abre igual no PC, no notebook e no celular. Use <a href="#progresso">Progresso → Sincronizar agora</a> para puxar na hora.`
+    : `Modo arquivo: o progresso fica neste navegador. Faça backup em <a href="#progresso">Progresso</a>.`;
+}
+function mesclar() {
+  CARDS.length = 0; CARDS.push(...CARDS_BASE, ...(BIB.cartoes || []));
+}
+function marcarDia(pontos) { const d = hojeStr(); st.dias[d] = (st.dias[d] || 0) + pontos; }
+/* ============ dados ============ */
+function todosTemas() {
+  const base = TEMAS.map(t => BIB.anexos && BIB.anexos[t.id] ? { ...t, disciplinas: t.disciplinas.concat(BIB.anexos[t.id]) } : t);
+  const extras = (BIB.temas || []).map(t => BIB.anexos && BIB.anexos[t.id] ? { ...t, disciplinas: t.disciplinas.concat(BIB.anexos[t.id]) } : t);
+  const user = st.temasUser.map(t => BIB.anexos && BIB.anexos[t.id] ? { ...t, disciplinas: t.disciplinas.concat(BIB.anexos[t.id]) } : t);
+  return base.concat(extras, user);
+}
+function tema(id) { return todosTemas().find(t => t.id === id); }
+function topicos(t) { return t.disciplinas.flatMap(d => d.topicos.map(x => ({ ...x, disc: d }))); }
+function acharTopico(tid) { for (const t of todosTemas()) for (const d of t.disciplinas) for (const x of d.topicos) if (x.id === tid) return { tema: t, disc: d, top: x }; return null; }
+function aula(tid) { return st.aulasUser[tid] || AULAS[tid] || (BIB.aulas || {})[tid] || null; }
+function situacao(tid) {
+  const i = st.top[tid]; if (!i || !i.n) return "novo";
+  if (i.prox && i.prox <= hojeStr()) return "revisar";
+  if (i.int >= 21 && i.tot && i.ac / i.tot >= .8) return "dominado";
+  return "estudado";
+}
+function registrarAula(tid, ac, tot) {
+  const i = st.top[tid] || { n: 0, ac: 0, tot: 0, int: 0 };
+  const r = tot ? ac / tot : null; const ant = i.int || 0; let novo;
+  if (!ant) novo = (r === null || r < .6) ? 1 : 3; else if (r === null) novo = Math.round(ant * 1.5);
+  else if (r >= .8) novo = Math.round(ant * 2.5); else if (r >= .6) novo = Math.round(ant * 1.5); else novo = 1;
+  novo = Math.max(1, Math.min(novo, 60));
+  Object.assign(i, { n: i.n + 1, ac: i.ac + ac, tot: i.tot + tot, int: novo, prox: addDias(novo), ultima: hojeStr() });
+  st.top[tid] = i; marcarDia(3); salvar(); return i;
+}
+function progressoTema(t) { const ts = topicos(t); const v = ts.filter(x => situacao(x.id) !== "novo").length; return { v, n: ts.length, p: ts.length ? v / ts.length : 0 }; }
+
+/* cartões */
+const NOVOS_DIA = 20;
+function cardsDoTema(tid) { return CARDS.filter(c => tid === "todos" || c.tema === tid); }
+function filaCartoes(tid) {
+  if (st.novos.data !== hojeStr()) st.novos = { data: hojeStr(), n: 0 };
+  const h = hojeStr(); const venc = [], novos = [];
+  for (const c of cardsDoTema(tid)) { const s = st.cards[c.id]; if (!s || !s.S) novos.push(c); else if (s.prox <= h) venc.push(c); }
+  const livres = Math.max(0, NOVOS_DIA - st.novos.n);
+  return venc.concat(novos.slice(0, livres));
+}
+/* FSRS-4.5: modelo de memória DSR (dificuldade, estabilidade, recuperabilidade) do projeto open-spaced-repetition,
+   o mesmo algoritmo que o Anki usa hoje. Pesos padrão do FSRS-4.5; retenção desejada de 90%. */
+const FSRS = {
+  W: [0.4872, 1.4003, 3.7145, 13.8206, 5.1618, 1.2298, 0.8975, 0.031, 1.6474, 0.1367, 1.0461, 2.1072, 0.0793, 0.3246, 1.587, 0.2272, 2.8755],
+  DECAY: -0.5, FACTOR: 19 / 81,
+  R(t, S) { return Math.pow(1 + this.FACTOR * t / S, this.DECAY); },
+  D0(g) { return Math.min(10, Math.max(1, this.W[4] - (g - 3) * this.W[5])); },
+  proximo(s, g) {               /* g: 1 errei, 2 difícil, 3 bom, 4 fácil */
+    const W = this.W; let S, D;
+    if (!s || !s.S) { S = W[g - 1]; D = this.D0(g); }
+    else {
+      const t = Math.max(0, (new Date(hojeStr() + "T00:00:00") - new Date((s.ultima || hojeStr()) + "T00:00:00")) / 864e5);
+      const R = this.R(t, s.S); D = s.D;
+      if (g === 1) S = W[11] * Math.pow(D, -W[12]) * (Math.pow(s.S + 1, W[13]) - 1) * Math.exp(W[14] * (1 - R));
+      else S = s.S * (1 + Math.exp(W[8]) * (11 - D) * Math.pow(s.S, -W[9]) * (Math.exp(W[10] * (1 - R)) - 1) * (g === 2 ? W[15] : 1) * (g === 4 ? W[16] : 1));
+      D = Math.min(10, Math.max(1, W[7] * this.D0(4) + (1 - W[7]) * (D - W[6] * (g - 3))));
+    }
+    const int = g === 1 ? 0 : Math.max(1, Math.min(36500, Math.round(S)));
+    return { S, D, int };
+  }
+};
+function responderCartao(c, nota) {
+  const ant = st.cards[c.id]; const novo = !ant || !ant.S; const g = nota + 1;
+  const r = FSRS.proximo(novo ? null : ant, g);
+  const s = { S: r.S, D: r.D, int: r.int, n: ((ant && ant.n) || 0) + 1, lapsos: ((ant && ant.lapsos) || 0) + (g === 1 ? 1 : 0), ultima: hojeStr(), prox: addDias(r.int) };
+  st.cards[c.id] = s; if (novo) st.novos.n++; marcarDia(.2); salvar();
+}
+
+/* ============ próximo passo ============ */
+function plano() {
+  const passos = [];
+  const fila = filaCartoes("todos");
+  passos.push({ id: "cartoes", titulo: fila.length ? `Aquecer: ${fila.length} cartões` : "Aquecer: cartões em dia", sub: "10 min de revisão espaçada", href: "#revisar", vazio: !fila.length });
+  const revs = []; for (const t of todosTemas()) for (const x of topicos(t)) if (situacao(x.id) === "revisar" && aula(x.id)) revs.push({ t, x });
+  if (revs.length) passos.push({ id: "rev-" + revs[0].x.id, titulo: `Revisar aula: ${aula(revs[0].x.id).titulo}`, sub: `${revs[0].t.nome} · refazer o teste`, href: "#aula-" + revs[0].x.id + "-teste" });
+  const p = tema(st.principal) || TEMAS[0];
+  const prox = proximaAula(p);
+  if (prox) passos.push({ id: "aula-" + prox.id, titulo: aula(prox.id) ? aula(prox.id).titulo : prox.t, sub: `${p.nome} · aula principal`, href: aula(prox.id) ? "#aula-" + prox.id : "#tema-" + p.id, sem: !aula(prox.id) });
+  const outros = todosTemas().filter(t => t.id !== p.id);
+  const rot = outros[(new Date().getDate()) % Math.max(outros.length, 1)];
+  const pref = outros.find(t => proximaAula(t) && aula(proximaAula(t).id) && t.id === (st.recompensa || "fisioterapia")) || outros.find(t => proximaAula(t) && aula(proximaAula(t).id)) || rot;
+  if (pref) { const r = proximaAula(pref); if (r) passos.push({ id: "aula-" + r.id, titulo: aula(r.id) ? aula(r.id).titulo : r.t, sub: `${pref.nome} · recompensa (depois da principal)`, href: aula(r.id) ? "#aula-" + r.id : "#tema-" + pref.id, sem: !aula(r.id) }); }
+  passos.forEach(x => x.feito = st.hoje.feitos.includes(x.id) || (x.id === "cartoes" && x.vazio && Object.keys(st.cards).length > 0));
+  return passos;
+}
+function proximaAula(t) {
+  const ts = topicos(t).filter(x => situacao(x.id) === "novo");
+  const com = ts.filter(x => aula(x.id)); const lista = com.length ? com : ts;
+  return lista.sort((a, b) => (b.p || 2) - (a.p || 2))[0] || null;
+}
+
+/* ============ roteador ============ */
+const ROTAS = [["inicio", "Início"], ["temas", "Temas"], ["biblioteca", "Biblioteca"], ["revisar", "Revisar"], ["novo", "Novo tema"], ["progresso", "Progresso"]];
+function topo(rota) {
+  $("#tabs").innerHTML = ROTAS.map(([id, nome]) => `<a href="#${id}" class="${rota.startsWith(id) || (id === "temas" && (rota.startsWith("tema-") || rota.startsWith("aula-"))) ? "on" : ""}">${ICON[id]}${nome}</a>`).join("");
+  const fila = filaCartoes("todos").length;
+  const dias = Object.keys(st.dias).sort(); let seq = 0; { let d = new Date(); for (; ;) { const s = d.toISOString().slice(0, 10); const loc = (x => x.getFullYear() + "-" + String(x.getMonth() + 1).padStart(2, "0") + "-" + String(x.getDate()).padStart(2, "0"))(d); if (st.dias[loc]) { seq++; d.setDate(d.getDate() - 1); } else break; } }
+  const prova = diasAte("2027-01-17");
+  $("#chips").innerHTML = (prova >= 0 ? `<span class="chip">🎯 prova em <b>${prova}</b> dias</span>` : "") + `<span class="chip">🔥 <b>${seq}</b> dia(s) seguidos</span><span class="chip">🃏 <b>${fila}</b> cartões hoje</span>` + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "");
+  if (MODO === "nuvem") marcarSync();
+}
+function rotear() {
+  pararAudio();
+  const h = (location.hash || "#inicio").slice(1);
+  topo(h); window.scrollTo(0, 0);
+  const app = $("#app");
+  if (h.startsWith("tema-")) return telaTema(app, h.slice(5));
+  if (h.startsWith("aula-")) { const resto = h.slice(5); const m = resto.match(/^(.*?)(?:-(mapa|lembre|aprenda|pratique|teste|explique|feito))?$/); return telaAula(app, m[1], m[2] || "mapa"); }
+  ({ temas: telaTemas, biblioteca: telaBiblioteca, revisar: telaRevisar, novo: telaNovo, progresso: telaProgresso }[h] || telaInicio)(app);
+}
+window.addEventListener("hashchange", rotear);
+
+/* ============ INÍCIO ============ */
+function telaInicio(app) {
+  const ps = plano(); const atual = ps.find(p => !p.feito) || ps[ps.length - 1];
+  const t = tema(st.principal) || TEMAS[0];
+  app.innerHTML = `
+  <section class="card hero">
+    <div>
+      <div class="eyebrow">Seu próximo passo</div>
+      <h1>${esc(atual.titulo)}</h1>
+      <p class="sub">${esc(atual.sub)}${atual.sem ? " · ainda sem aula pronta: gere com IA na trilha" : ""}</p>
+      <button class="go" id="go"><span>Começar<br>este passo</span>${ICON.seta}</button>
+    </div>
+    <div class="plano" aria-label="Plano de hoje">
+      <div class="eyebrow">Plano de hoje</div>
+      ${ps.map((p, i) => `<a class="passo ${p.feito ? "feito" : ""} ${p === atual ? "atual" : ""}" href="${p.href}" style="text-decoration:none;color:inherit" data-id="${p.id}"><span class="n">${p.feito ? "✓" : i + 1}</span><span>${esc(p.titulo)}<small>${esc(p.sub)}</small></span></a>`).join("")}
+      <p class="sub" style="font-size:14px;margin:4px 0 0">Tema principal: <b>${esc(t.nome)}</b> · <a href="#temas">trocar</a></p>
+    </div>
+  </section>
+  <section class="grid g3">${todosTemas().map(cartaoTema).join("")}</section>`;
+  $("#go").onclick = () => { location.hash = atual.href.slice(1); };
+}
+function anel(p, cor) { const r = 22, c = 2 * Math.PI * r; return `<svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="${r}" fill="none" stroke="#262f45" stroke-width="7"/><circle cx="28" cy="28" r="${r}" fill="none" stroke="${cor}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c * p} ${c}" transform="rotate(-90 28 28)"/><text x="28" y="33" text-anchor="middle" font-size="13" font-weight="800" fill="#e9edf7" font-family="Plus Jakarta Sans,sans-serif">${Math.round(p * 100)}%</text></svg>`; }
+function cartaoTema(t) {
+  const pr = progressoTema(t); const prontas = topicos(t).filter(x => aula(x.id)).length;
+  return `<a class="tema" href="#tema-${t.id}" style="--c:${t.cor};text-decoration:none;color:inherit"><span class="stripe"></span>
+    <div class="ringw">${anel(pr.p, t.cor)}<div><h3>${esc(t.nome)}</h3><span class="sub" style="font-size:14px">${pr.v}/${pr.n} tópicos · ${prontas} aulas prontas</span></div></div>
+    <span class="sub" style="font-size:14.5px">${esc(t.desc || "")}</span>
+    ${t.id === st.principal ? '<span class="pill ac">tema principal</span>' : ""}</a>`;
+}
+
+/* ============ TEMAS ============ */
+function telaTemas(app) {
+  app.innerHTML = `<section class="card"><div class="eyebrow">Seus temas</div><h1 style="font-size:34px;margin:6px 0">O que você quer aprender?</h1><p class="sub">Toque num tema para ver a trilha. Os pontos azuis já foram estudados, os laranja pedem revisão e os verdes estão dominados.</p><div class="row"><a class="btn pri" href="#novo">Criar um tema novo</a></div></section>
+  <section class="grid g3">${todosTemas().map(cartaoTema).join("")}</section>`;
+}
+function telaTema(app, id) {
+  const t = tema(id); if (!t) { app.innerHTML = `<div class="card">Tema não encontrado. <a href="#temas">Voltar</a></div>`; return; }
+  const pr = progressoTema(t);
+  app.innerHTML = `<section class="card" style="--c:${t.cor};border-top:6px solid ${t.cor}">
+    <div class="row" style="justify-content:space-between"><div><div class="eyebrow">Trilha</div><h1 style="font-size:34px;margin:6px 0">${esc(t.nome)}</h1><p class="sub" style="max-width:70ch">${esc(t.desc || "")}</p></div>${anel(pr.p, t.cor)}</div>
+    <div class="row"><button class="btn ${t.id === st.principal ? "" : "pri"}" id="principal">${t.id === st.principal ? "É o seu tema principal" : "Tornar tema principal"}</button>
+    ${CARDS.some(c => c.tema === t.id) ? `<a class="btn ghost" href="#revisar" id="revtema">Revisar cartões deste tema</a>` : ""}
+    ${t.user ? `<button class="btn ghost" id="apagar">Apagar tema</button>` : ""}${MODO !== "arquivo" ? `<a class="btn ghost" href="#biblioteca">Adicionar PDF a este tema</a>` : ""}</div></section>
+    ${t.id === "concurso" ? widgetCalcProva() : ""}
+    ${t.disciplinas.map(d => `<section class="card disc" style="--c:${d.cor || t.cor}"><h3><i></i>${esc(d.nome)}${d.questoes ? `<span class="pill">${d.questoes} questões · ${d.pontos} pts</span>` : ""}</h3>
+      <div class="trilha">${d.topicos.map(x => { const s = situacao(x.id); const a = aula(x.id); const i = st.top[x.id];
+        return `<button class="no ${s}" data-t="${x.id}"><span class="dot">${s === "dominado" ? "✓" : s === "revisar" ? "↻" : s === "estudado" ? "•" : (x.p || 2) === 3 ? "!" : ""}</span><span class="t">${esc(x.t)}<small><span class="estrela">${"★".repeat(x.p || 2)}</span> ${a ? (a.auto && !st.aulasUser[x.id] ? '<span class="pill med">aula automática</span>' : '<span class="pill ac">aula pronta</span>') : '<span class="pill">gerar com IA</span>'}${x.pi ? ` <span class="pill">p. ${x.pi}</span>` : ""} ${i && i.prox ? "· revisar " + fmt(i.prox) : ""}</small></span></button>`; }).join("")}</div></section>`).join("")}`;
+  $("#principal").onclick = () => { st.principal = t.id; salvar(); toast("Tema principal: " + t.nome); rotear(); };
+  if ($("#revtema")) $("#revtema").onclick = () => { st.filtroRev = t.id; salvar(); };
+  if ($("#apagar")) $("#apagar").onclick = () => abrirModal(`<h2>Apagar "${esc(t.nome)}"?</h2><p class="sub">Os tópicos e as aulas importadas deste tema somem deste navegador.</p><div class="row"><button class="btn" data-fechar>Cancelar</button><button class="btn pri" id="sim">Apagar</button></div>`, m => { $("#sim", m).onclick = () => { st.temasUser = st.temasUser.filter(x => x.id !== t.id); salvar(); fecharModal(); location.hash = "temas"; }; });
+  app.querySelectorAll(".no").forEach(b => b.onclick = () => { const tid = b.dataset.t; if (aula(tid)) location.hash = "aula-" + tid; else modalGerar(tid); });
+  if (t.id === "concurso") ligarCalcProva();
+}
+
+/* ============ AULA ============ */
+const PASSOS = [["mapa", "Mapa"], ["lembre", "Lembre"], ["aprenda", "Aprenda"], ["pratique", "Pratique"], ["teste", "Teste"], ["explique", "Explique"], ["feito", "Feito"]];
+let sessao = {};
+function telaAula(app, tid, passo) {
+  const a = aula(tid); const info = acharTopico(tid);
+  if (!a || !info) { app.innerHTML = `<div class="card">Aula não encontrada. <a href="#temas">Voltar aos temas</a></div>`; return; }
+  if (sessao.tid !== tid) sessao = { tid, quiz: {}, qi: 0 };
+  const t = info.tema; const cor = info.disc.cor || t.cor;
+  const passos = PASSOS.filter(p => p[0] !== "pratique" || a.widget);
+  const idx = passos.findIndex(p => p[0] === passo); const atual = idx < 0 ? 0 : idx;
+  app.style.setProperty("--c", cor);
+  const fonte = a.fonte && MODO !== "arquivo" ? `<div class="row"><a class="btn sm ghost" href="${urlPDF(a.fonte.doc, a.fonte.pi)}" target="_blank" rel="noopener">📄 Abrir no PDF (p. ${a.fonte.pi}${a.fonte.pf > a.fonte.pi ? "–" + a.fonte.pf : ""})</a><button class="btn sm ghost" id="trecho">Ler o trecho original</button>${a.auto ? `<button class="btn sm pri" id="melhorar">✨ ${INFO.ia ? "Melhorar com IA" + (MODO === "nuvem" ? " (Claude)" : "") : "Melhorar com IA (copiar pedido)"}</button>` : ""}</div>${a.auto ? `<p class="dica" style="max-width:860px">Aula <b>automática</b>, montada sem IA a partir do PDF: termos-chave, definições e lacunas. Funciona para revisar, mas fica muito mais rica com IA.</p>` : ""}` : "";
+  app.innerHTML = `<section class="aulah" style="--c:${cor}"><a href="#tema-${t.id}" class="sub" style="text-decoration:none">← ${esc(t.nome)} · ${esc(info.disc.nome)}</a><h1>${esc(a.titulo)}</h1><p class="ideia">${esc(a.ideia || "")}</p>${fonte}
+    <div class="steps" role="tablist">${passos.map((p, i) => `<button role="tab" class="${i === atual ? "on" : ""} ${i < atual ? "ok" : ""}" data-p="${p[0]}" style="--c:${cor}"><span>${i < atual ? "✓" : i + 1}</span>${p[1]}</button>`).join("")}</div></section>
+    <section id="corpo" style="--c:${cor}"></section>
+    <div class="row" style="justify-content:space-between;max-width:860px">${atual > 0 ? `<button class="btn ghost" id="ant">← ${passos[atual - 1][1]}</button>` : "<span></span>"}${atual < passos.length - 1 ? `<button class="btn pri" id="prox">${passos[atual + 1][1]} →</button>` : ""}</div>`;
+  app.querySelectorAll(".steps button").forEach(b => b.onclick = () => location.hash = `aula-${tid}-${b.dataset.p}`);
+  if ($("#trecho")) $("#trecho").onclick = async () => { const texto = await textoTopico(tid); abrirModal(`<div class="eyebrow">Trecho original · p. ${a.fonte.pi}–${a.fonte.pf}</div><h2>${esc(a.titulo)}</h2><div style="white-space:pre-wrap;max-width:72ch">${esc(texto)}</div><div class="row"><button class="btn" data-fechar>Fechar</button></div>`); };
+  if ($("#melhorar")) $("#melhorar").onclick = () => INFO.ia ? gerarComIA(tid, a, info) : modalGerar(tid);
+  if ($("#ant")) $("#ant").onclick = () => location.hash = `aula-${tid}-${passos[atual - 1][0]}`;
+  if ($("#prox")) $("#prox").onclick = () => location.hash = `aula-${tid}-${passos[atual + 1][0]}`;
+  const corpo = $("#corpo"); const p = passos[atual][0];
+  if (p === "mapa") passoMapa(corpo, a, cor);
+  if (p === "lembre") passoLembre(corpo, a, tid);
+  if (p === "aprenda") corpo.innerHTML = `<div class="conteudo">${a.blocos.map(b => `<article class="bloco"><h3>${esc(b.t)}</h3>${limparHTML(b.html)}</article>`).join("")}</div>`;
+  if (p === "pratique") { corpo.innerHTML = `<div class="conteudo" id="wbox"></div>`; montarWidget($("#wbox"), a, cor); }
+  if (p === "teste") passoTeste(corpo, a, tid);
+  if (p === "explique") passoExplique(corpo, a, tid);
+  if (p === "feito") passoFeito(corpo, a, tid, info);
+}
+function passoMapa(el, a, cor) {
+  const cores = ["#7f9cff", "#35c9bd", "#f2a35b", "#a98bf0", "#ee7fa8", "#5fd38d"];
+  el.innerHTML = `<div class="conteudo" style="max-width:none"><p class="sub">Olhe o mapa por 1 minuto. Depois clique em <b>Esconder</b> e tente dizer em voz alta o que tinha em cada ramo. Desenhar de memória fixa mais do que só olhar.</p>
+  <div class="row"><button class="btn sm" id="esconder">Esconder detalhes</button></div>
+  <div class="mapa" id="mapa"><div class="raiz">${esc(a.mapa.raiz)}</div>${a.mapa.ramos.map((r, i) => `<div class="ramo" style="--rc:${cores[i % cores.length]}"><b>${esc(r[0])}</b><ul>${r[1].map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div></div>`;
+  $("#esconder").onclick = e => { const m = $("#mapa"); m.classList.toggle("oculto"); e.target.textContent = m.classList.contains("oculto") ? "Mostrar detalhes" : "Esconder detalhes"; };
+}
+function passoLembre(el, a, tid) {
+  const n = st.notas[tid] || {};
+  el.innerHTML = `<div class="lembre"><p class="sub">Antes de aprender, tente responder <b>sem olhar</b>. Errar agora é bom: o cérebro fica curioso e guarda melhor a resposta certa depois.</p>
+  ${a.recupere.map((q, i) => `<div><label for="r${i}">${i + 1}. ${esc(q)}</label><textarea id="r${i}" placeholder="Escreva o que vier à cabeça…">${esc((n.lembre || [])[i] || "")}</textarea></div>`).join("")}</div>`;
+  el.querySelectorAll("textarea").forEach((ta, i) => ta.oninput = () => { st.notas[tid] ||= {}; (st.notas[tid].lembre ||= [])[i] = ta.value; salvar(); });
+}
+function passoTeste(el, a, tid) {
+  const qz = a.quiz; const s = sessao;
+  const desenhar = () => {
+    const i = s.qi;
+    if (i >= qz.length) {
+      const ac = Object.values(s.quiz).filter(Boolean).length;
+      el.innerHTML = `<div class="q"><h3>Resultado: ${ac} de ${qz.length}</h3><div class="placar">${qz.map((_, k) => `<i class="${s.quiz[k] === true ? "c" : s.quiz[k] === false ? "e" : ""}"></i>`).join("")}</div><p class="sub">${ac / qz.length >= .8 ? "Excelente. Agora explique com suas palavras." : ac / qz.length >= .6 ? "Bom. Os erros viram revisão mais cedo." : "Normal errar no começo. O estudaai vai trazer esta aula de volta amanhã."}</p><div class="row"><button class="btn" id="refazer">Refazer o teste</button></div></div>`;
+      $("#refazer").onclick = () => { s.quiz = {}; s.qi = 0; desenhar(); }; return;
+    }
+    const q = qz[i]; const ordem = s["ord" + i] ||= shuffle(q.o.map((_, k) => k));
+    el.innerHTML = `<div class="q"><div class="placar">${qz.map((_, k) => `<i class="${s.quiz[k] === true ? "c" : s.quiz[k] === false ? "e" : ""}"></i>`).join("")}</div><span class="eyebrow">Questão ${i + 1} de ${qz.length}</span><h3>${esc(q.q)}</h3>${ordem.map(k => `<button class="opt" data-k="${k}">${esc(q.o[k])}</button>`).join("")}<div id="fb"></div></div>`;
+    el.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+      if (s.quiz[i] !== undefined) return; const k = +b.dataset.k; const certo = k === q.a; s.quiz[i] = certo;
+      b.classList.add(certo ? "certa" : "errada"); el.querySelector(`.opt[data-k="${q.a}"]`).classList.add("certa");
+      $("#fb").innerHTML = `<div class="exp"><b>${certo ? "Isso!" : "Quase."}</b> ${esc(q.e)}</div><div class="row" style="margin-top:10px"><button class="btn pri" id="seg">${i + 1 < qz.length ? "Próxima questão" : "Ver resultado"}</button></div>`;
+      $("#seg").onclick = () => { s.qi++; desenhar(); };
+    });
+  };
+  desenhar();
+}
+function passoExplique(el, a, tid) {
+  const f = a.feynman || { pergunta: "Explique o tema com suas palavras.", chaves: [] };
+  const n = (st.notas[tid] || {}).feynman || "";
+  el.innerHTML = `<div class="lembre"><p class="sub">Técnica Feynman: se você consegue explicar de forma simples, você entendeu. As palavras-chave acendem quando aparecem no seu texto.</p><label for="fey">${esc(f.pergunta)}</label><textarea id="fey" style="min-height:150px" placeholder="Explique como se fosse para alguém de 12 anos…">${esc(n)}</textarea><div class="row" id="chaves"></div></div>`;
+  const ta = $("#fey"); const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const pinta = () => { const v = norm(ta.value); $("#chaves").innerHTML = f.chaves.map(c => `<span class="pill ${v.includes(norm(c)) ? "ok" : ""}">${esc(c)}</span>`).join("") + `<span class="sub" style="font-size:13px">${f.chaves.filter(c => v.includes(norm(c))).length}/${f.chaves.length} palavras-chave</span>`; };
+  ta.oninput = () => { st.notas[tid] ||= {}; st.notas[tid].feynman = ta.value; salvar(); pinta(); }; pinta();
+}
+function passoFeito(el, a, tid, info) {
+  const s = sessao; const tot = a.quiz.length; const feitos = Object.keys(s.quiz).length; const ac = Object.values(s.quiz).filter(Boolean).length;
+  el.innerHTML = `<div class="conteudo"><article class="bloco"><h3>Fechar a aula</h3>
+    <p>${feitos === tot ? `Você acertou <b>${ac} de ${tot}</b> no teste.` : `Você respondeu ${feitos} de ${tot} questões. Dá para registrar assim mesmo, ou voltar ao <a href="#aula-${tid}-teste">Teste</a>.`}</p>
+    <p class="sub">Ao registrar, o estudaai agenda a próxima revisão: mais cedo se você errou, mais tarde se foi bem.</p>
+    <div class="row"><button class="btn pri" id="reg">Registrar e agendar revisão</button></div><div id="pos"></div></article>
+    ${a.fontes && a.fontes.length ? `<article class="bloco"><h3>Para ir além</h3><ul>${a.fontes.map(x => `<li>${esc(x)}</li>`).join("")}</ul></article>` : ""}</div>`;
+  $("#reg").onclick = () => {
+    const i = registrarAula(tid, ac, feitos);
+    st.hoje.feitos.push("aula-" + tid, "rev-" + tid); salvar();
+    $("#pos").innerHTML = `<p class="exp" style="margin-top:12px">✅ Registrado. Próxima revisão em <b>${fmt(i.prox)}</b> (daqui a ${i.int} dia${i.int > 1 ? "s" : ""}).</p><div class="row"><a class="btn pri" href="#inicio">Próximo passo do dia</a><a class="btn ghost" href="#tema-${info.tema.id}">Voltar à trilha</a></div>`;
+    $("#reg").disabled = true; topo("temas");
+  };
+}
+
+/* ============ REVISAR (cartões) ============ */
+let filaAtual = [], cartaoIdx = 0, mostrando = false;
+function telaRevisar(app) {
+  const filtro = st.filtroRev || "todos";
+  const temasComCards = todosTemas().filter(t => CARDS.some(c => c.tema === t.id));
+  filaAtual = shuffle(filaCartoes(filtro)); cartaoIdx = 0; mostrando = false;
+  app.innerHTML = `<section class="card"><div class="row" style="justify-content:space-between"><div><div class="eyebrow">Revisão espaçada</div><h1 style="font-size:32px;margin:6px 0">Cartões de hoje</h1><p class="sub">Responda de cabeça, vire e avalie com sinceridade. Até ${NOVOS_DIA} cartões novos por dia.</p></div>
+    <div style="min-width:240px"><label for="filtro" class="sub" style="font-size:13px">Tema</label><select id="filtro"><option value="todos">Todos os temas</option>${temasComCards.map(t => `<option value="${t.id}" ${t.id === filtro ? "selected" : ""}>${esc(t.nome)}</option>`).join("")}</select></div></div></section>
+    <section id="fcbox" class="grid"></section>`;
+  $("#filtro").onchange = e => { st.filtroRev = e.target.value; salvar(); telaRevisar(app); };
+  $("#fcbox").insertAdjacentHTML("afterend", `<section class="row" style="justify-content:center"><button class="btn ghost sm" id="anki">Exportar estes cartões para o Anki (.csv)</button></section>`);
+  $("#anki").onclick = () => {
+    const linhas = ["#separator:semicolon", "#html:true", "#deck column:3"].concat(cardsDoTema(filtro).map(c => { const t = tema(c.tema); return [c.f, c.v, "estudaai::" + (t ? t.nome.replace(/[^\p{L}\p{N} ]/gu, "").trim() : c.tema)].map(x => String(x).replace(/;/g, ",").replace(/\n/g, " ")).join(";"); }));
+    if (NUVEM && NUVEM.downloads) { NUVEM.downloads.save({ filename: "estudaai-anki.csv", data: linhas.join("\n") }).then(() => toast("Arquivo salvo: importe no Anki em Arquivo → Importar")).catch(() => toast("Download cancelado.")); return; }
+    const url = URL.createObjectURL(new Blob([linhas.join("\n")], { type: "text/csv;charset=utf-8" }));
+    const a = document.createElement("a"); a.href = url; a.download = "estudaai-anki.csv"; document.body.appendChild(a); a.click(); a.remove(); toast("Arquivo gerado: importe no Anki em Arquivo → Importar");
+  };
+  desenharCartao();
+}
+function desenharCartao() {
+  const box = $("#fcbox"); const c = filaAtual[cartaoIdx];
+  if (!c) { box.innerHTML = `<div class="fc"><div><div style="font-size:46px">🎉</div><h2>Tudo revisado por hoje</h2><p class="sub">Volte amanhã: o estudaai traz cada cartão no momento certo.</p><a class="btn pri" href="#inicio">Próximo passo</a></div></div>`; if (filaAtual.length) { st.hoje.feitos.push("cartoes"); salvar(); } topo("revisar"); return; }
+  const t = tema(c.tema);
+  box.innerHTML = `<p class="sub" style="text-align:center">${cartaoIdx + 1} de ${filaAtual.length} · <span class="pill" style="color:${t ? t.cor : ""}">${esc(t ? t.nome : c.tema)}</span></p>
+    <div class="fc"><div><div>${limparHTML(c.f)}</div>${mostrando ? `<div class="verso">${limparHTML(c.v)}</div>` : ""}</div></div>
+    ${mostrando ? `<div class="notas"><button class="btn" data-n="0" style="color:var(--bad)">Errei<small>de novo hoje</small></button><button class="btn" data-n="1" style="color:var(--warn)">Difícil<small>${prevIntervalo(c, 1)}</small></button><button class="btn" data-n="2" style="color:var(--ac)">Bom<small>${prevIntervalo(c, 2)}</small></button><button class="btn" data-n="3" style="color:var(--ok)">Fácil<small>${prevIntervalo(c, 3)}</small></button></div>`
+      : `<div class="row" style="justify-content:center"><button class="btn pri" id="virar">Mostrar resposta</button></div>`}`;
+  if ($("#virar")) $("#virar").onclick = () => { mostrando = true; desenharCartao(); };
+  box.querySelectorAll("[data-n]").forEach(b => b.onclick = () => { const n = +b.dataset.n; responderCartao(c, n); if (n === 0) filaAtual.push(c); cartaoIdx++; mostrando = false; desenharCartao(); });
+}
+function prevIntervalo(c, n) { const s = st.cards[c.id]; const i = FSRS.proximo(s && s.S ? s : null, n + 1).int; return i + (i > 1 ? " dias" : " dia"); }
+document.addEventListener("keydown", e => {
+  if (!location.hash.startsWith("#revisar") || /input|textarea|select/i.test(document.activeElement.tagName)) return;
+  if (e.code === "Space" && !mostrando && $("#virar")) { e.preventDefault(); $("#virar").click(); }
+  if (mostrando && ["1", "2", "3", "4"].includes(e.key)) { const b = document.querySelector(`[data-n="${+e.key - 1}"]`); if (b) b.click(); }
+});
+
+/* ============ NOVO TEMA ============ */
+const CORES = ["#7f9cff", "#35c9bd", "#f2a35b", "#a98bf0", "#ee7fa8", "#5fd38d", "#f4d35e"];
+function telaNovo(app) {
+  app.innerHTML = `<section class="card grid g2"><div class="grid" style="gap:12px">
+    <div class="eyebrow">Novo tema</div><h1 style="font-size:32px">Estude o assunto que quiser</h1>
+    <p class="sub">Escreva os tópicos, um por linha. Linhas começando com <b>#</b> viram grupos. Depois, em cada tópico, clique em <b>gerar com IA</b>: o estudaai monta um pedido pronto para você colar no Claude, e a resposta vira uma aula interativa completa.</p>
+    <label for="nnome">Nome do tema</label><input type="text" id="nnome" placeholder="Ex.: Inglês para entrevistas">
+    <label for="ndesc">Para quê? (opcional)</label><input type="text" id="ndesc" placeholder="Ex.: conseguir vaga remota em dólar">
+    <span class="sub" style="font-size:14px">Cor</span><div class="row" id="ncor">${CORES.map((c, i) => `<button class="btn sm" data-c="${c}" style="background:${c};width:38px;height:38px;padding:0;${i ? "" : "box-shadow:0 0 0 3px #fff"}" aria-label="Cor ${i + 1}"></button>`).join("")}</div>
+    <button class="btn pri" id="criar">Criar tema</button></div>
+    <div class="grid" style="gap:10px"><label for="ntop">Tópicos</label><textarea id="ntop" style="min-height:330px" placeholder="# Básico&#10;Verbos to be e to have&#10;Apresentação pessoal&#10;# Entrevista&#10;Falar da experiência com QA&#10;Perguntas comportamentais (STAR)"></textarea>
+    <p class="sub" style="font-size:14px">Dica: peça ao Claude "liste de 10 a 20 tópicos em ordem para aprender X do zero" e cole aqui.</p></div></section>`;
+  let cor = CORES[0];
+  app.querySelectorAll("#ncor button").forEach(b => b.onclick = () => { cor = b.dataset.c; app.querySelectorAll("#ncor button").forEach(x => x.style.boxShadow = ""); b.style.boxShadow = "0 0 0 3px #fff"; });
+  $("#criar").onclick = () => {
+    const nome = $("#nnome").value.trim(); const linhas = $("#ntop").value.split("\n").map(s => s.trim()).filter(Boolean);
+    if (!nome || !linhas.some(l => !l.startsWith("#"))) { toast("Preencha o nome e pelo menos um tópico."); return; }
+    const id = "u-" + nome.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").slice(0, 24) + "-" + Date.now().toString(36).slice(-3);
+    const discs = []; let atual = null; let k = 0;
+    for (const l of linhas) { if (l.startsWith("#")) { atual = { id: "d" + discs.length, nome: l.replace(/^#+\s*/, ""), cor, topicos: [] }; discs.push(atual); continue; }
+      if (!atual) { atual = { id: "d0", nome: "Trilha", cor, topicos: [] }; discs.push(atual); } atual.topicos.push({ id: id + "-" + (++k), t: l, p: 2 }); }
+    st.temasUser.push({ id, nome, desc: $("#ndesc").value.trim(), cor, user: true, disciplinas: discs.filter(d => d.topicos.length) }); salvar();
+    toast("Tema criado!"); location.hash = "tema-" + id;
+  };
+}
+async function gerarComIA(tid, a, info) {
+  const b = $("#melhorar"); b.disabled = true; b.textContent = "Gerando aula com IA… (até 1 min)";
+  try {
+    let bruta;
+    if (MODO === "nuvem") { const texto = await textoTopico(tid); bruta = await iaGerar(promptAula(tid) + (texto ? `\n\nUse SOMENTE este texto-fonte como base:\n=== TEXTO-FONTE ===\n${texto.slice(0, 14000)}` : "")); }
+    else bruta = (await api("/api/ia/aula", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ topico: tid, titulo: a.titulo, tema: info.tema.nome }) })).aula;
+    const nova = validarAula(JSON.stringify(bruta)); nova.fonte = a.fonte; st.aulasUser[tid] = nova; sessao = {}; salvar(); toast("Aula nova pronta!"); rotear();
+  } catch (e) { toast(e.message); b.disabled = false; b.textContent = "✨ Melhorar com IA"; }
+}
+function promptAula(tid) {
+  const info = acharTopico(tid);
+  return `Você é um professor excelente e rigoroso. Crie UMA aula curta e muito visual sobre "${info.top.t}", dentro do tema "${info.tema.nome}" (grupo: ${info.disc.nome}).
+Aluna: aprende melhor com material visual, blocos curtos e exemplos concretos; tem perfil TDAH. Português do Brasil.
+Seja factualmente correto; se algo for debatido, diga. Não invente números, leis ou citações.
+
+Responda SOMENTE com um JSON válido, sem texto antes ou depois, neste formato:
+{
+ "titulo": "título curto",
+ "ideia": "a ideia central em 1 frase",
+ "mapa": {"raiz": "conceito central", "ramos": [["nome do ramo", ["item curto", "item curto"]], ...4 a 6 ramos]},
+ "recupere": ["3 perguntas abertas para a aluna tentar responder ANTES da aula"],
+ "blocos": [{"t": "título do bloco", "html": "conteúdo em HTML simples (<p>, <b>, <i>, <ul>, <ol>, <li>, <table class='tab'>, <p class='dica'> para pegadinhas, <p class='pratica'> para exercícios práticos)"}, ...3 a 5 blocos],
+ "widget": "parear",
+ "parear": [["termo", "definição curta"], ...5 pares],
+ "quiz": [{"q": "pergunta", "o": ["alternativa A", "B", "C", "D"], "a": 0, "e": "explicação curta de por que a correta é a correta"}, ...5 questões; "a" é o índice da correta],
+ "feynman": {"pergunta": "pedido para ela explicar o tema com suas palavras", "chaves": ["5 palavras-chave que uma boa explicação usaria"]},
+ "fontes": ["2 ou 3 fontes confiáveis para aprofundar"]
+}
+Para temas práticos (instrumento, idioma, esporte), inclua nos blocos um exercício prático com tempo e meta mensurável.`;
+}
+async function modalGerar(tid) {
+  const info = acharTopico(tid); let pr = promptAula(tid);
+  if (MODO !== "arquivo" && /^p-/.test(tid)) { try { const texto = await textoTopico(tid); if (texto) pr += `\n\nUse SOMENTE este texto-fonte (páginas ${info.top.pi}–${info.top.pf} do PDF) como base:\n=== TEXTO-FONTE ===\n${texto.slice(0, 14000)}`; } catch (e) { } }
+  abrirModal(`<div class="eyebrow">${esc(info.tema.nome)}</div><h2>${esc(info.top.t)}</h2>
+    <p class="sub"><b>1.</b> Copie o pedido e cole no Claude (ou em outra IA). <b>2.</b> Copie a resposta (o JSON) e cole abaixo. <b>3.</b> Importe: a aula aparece com mapa, perguntas, conteúdo, jogo, teste e Feynman.</p>
+    ${MODO === "nuvem" && NUVEM && NUVEM.sample ? `<div class="row"><button class="btn pri" id="agora">✨ Gerar agora com o Claude</button><span class="sub" id="agst"></span></div><p class="sub" style="margin:0">ou faça manualmente:</p>` : ""}
+    <pre class="prompt" id="ptxt">${esc(pr)}</pre><div class="row"><button class="btn ${MODO === "nuvem" ? "" : "pri"}" id="copiar">Copiar pedido</button></div>
+    <label for="json">Cole aqui a resposta da IA</label><textarea id="json" style="min-height:140px" placeholder='{"titulo": "...", ...}'></textarea><div id="erro" class="sub"></div>
+    <div class="row"><button class="btn" data-fechar>Fechar</button><button class="btn pri" id="importar">Importar aula</button></div>`, m => {
+    if ($("#agora", m)) $("#agora", m).onclick = async () => { const b = $("#agora", m); b.disabled = true; $("#agst", m).textContent = "Gerando… pode levar até 1 minuto";
+      try { const a = validarAula(JSON.stringify(await iaGerar(pr))); const ant = aula(tid); if (ant && ant.fonte) a.fonte = ant.fonte; st.aulasUser[tid] = a; sessao = {}; salvar(); fecharModal(); toast("Aula pronta!"); location.hash = "aula-" + tid; }
+      catch (e) { $("#agst", m).textContent = e.message; b.disabled = false; } };
+    $("#copiar", m).onclick = async () => { try { await navigator.clipboard.writeText(pr); toast("Pedido copiado"); } catch (e) { const r = document.createRange(); r.selectNodeContents($("#ptxt", m)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("Selecionado: aperte Ctrl+C"); } };
+    $("#importar", m).onclick = () => { try { const a = validarAula($("#json", m).value); const ant = aula(tid); if (ant && ant.fonte) a.fonte = ant.fonte; st.aulasUser[tid] = a; sessao = {}; salvar(); fecharModal(); toast("Aula importada!"); location.hash = "aula-" + tid; } catch (e) { $("#erro", m).innerHTML = `<span style="color:var(--bad)">${esc(e.message)}</span>`; } };
+  });
+}
+function validarAula(txt) {
+  let s = txt.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim(); const i = s.indexOf("{"), j = s.lastIndexOf("}"); if (i < 0 || j < 0) throw new Error("Não achei um JSON. Copie a resposta inteira, das chaves { até }.");
+  let a; try { a = JSON.parse(s.slice(i, j + 1)); } catch (e) { throw new Error("O JSON está quebrado: " + e.message + ". Peça à IA: 'reenvie só o JSON válido'."); }
+  for (const k of ["titulo", "mapa", "blocos", "quiz"]) if (!a[k]) throw new Error(`Falta o campo "${k}".`);
+  a.recupere ||= []; a.ideia ||= ""; a.fontes ||= []; if (!Array.isArray(a.mapa.ramos)) throw new Error("mapa.ramos precisa ser uma lista.");
+  a.quiz = a.quiz.filter(q => q.q && Array.isArray(q.o) && Number.isInteger(q.a) && q.a < q.o.length);
+  if (a.widget && !["parear", "ordenar"].includes(a.widget)) a.widget = null;
+  if (a.widget === "parear" && !Array.isArray(a.parear)) a.widget = null; if (a.widget === "ordenar" && !Array.isArray(a.ordenar)) a.widget = null;
+  return a;
+}
+function limparHTML(html) {
+  const ok = new Set(["P", "B", "I", "U", "STRONG", "EM", "UL", "OL", "LI", "TABLE", "TR", "TD", "TH", "THEAD", "TBODY", "BR", "KBD", "SPAN", "DIV", "SMALL", "CODE", "A", "H4", "SUP", "SUB"]);
+  const doc = new DOMParser().parseFromString(`<div>${html}</div>`, "text/html"); const raiz = doc.body.firstChild;
+  raiz.querySelectorAll("script,style,iframe,object,embed,link,meta").forEach(n => n.remove());
+  (function limpa(n) { [...n.children].forEach(c => { if (!ok.has(c.tagName)) { c.replaceWith(...c.childNodes); return limpa(n); } [...c.attributes].forEach(at => { if (!["class", "href"].includes(at.name) || (at.name === "href" && !/^https?:/i.test(at.value))) c.removeAttribute(at.name); }); if (c.tagName === "A") c.setAttribute("target", "_blank"); limpa(c); }); })(raiz);
+  return raiz.innerHTML;
+}
+
+/* ============ BIBLIOTECA (PDFs) ============ */
+function telaBiblioteca(app) {
+  if (MODO === "arquivo") { app.innerHTML = `<section class="card"><div class="eyebrow">Biblioteca</div><h1 style="font-size:32px;margin:6px 0">Importar PDFs precisa do estudaai rodando no seu PC</h1><p class="sub">Abra o estudaai pelo link do Claude (versão na nuvem) ou rode o <b>ESTUDAAI.bat</b> no PC. Esta cópia, aberta direto do arquivo, não lê PDFs.</p></section>`; return; }
+  const destinos = todosTemas().map(t => `<option value="${t.id}">${esc(t.nome)}</option>`).join("");
+  app.innerHTML = `<section class="card grid g2" style="align-items:start"><div class="grid" style="gap:12px">
+      <div class="eyebrow">Biblioteca</div><h1 style="font-size:32px">Jogue seus PDFs aqui</h1>
+      <p class="sub">O estudaai lê o PDF, acha as seções (pelo sumário ou pelos títulos), cria um tópico por seção, uma aula automática para cada um e cartões com definições, lacunas e números. ${MODO === "nuvem" ? "O PDF é lido aqui no navegador e fica guardado na sua conta: aparece no PC, no notebook e no celular." : "Tudo fica no seu computador, em <code>dados/</code>."}</p>
+      <label for="dest">Onde colocar</label><select id="dest"><option value="novo">Criar um tema novo para cada PDF</option>${destinos}</select>
+      <label for="ntema">Nome do tema novo (opcional)</label><input type="text" id="ntema" placeholder="Usa o título do PDF se ficar vazio">
+    </div>
+    <label class="bloco" id="zona" for="arq" style="display:grid;place-items:center;text-align:center;min-height:250px;border:2px dashed var(--line);cursor:pointer">
+      <div><div style="font-size:44px">📄</div><b>Arraste PDFs para cá</b><br><span class="sub">ou clique para escolher (pode ser mais de um)</span><div id="status" class="grid" style="gap:6px;margin-top:12px"></div></div>
+      <input type="file" id="arq" accept="application/pdf,.pdf" multiple hidden></label></section>
+    <section class="card grid" style="gap:12px"><div class="row" style="justify-content:space-between"><h3>Seus PDFs (${BIB.docs.length})</h3><input type="text" id="busca" placeholder="Buscar em todos os PDFs…" style="max-width:340px" aria-label="Buscar nos PDFs"></div><div id="res"></div>
+      ${BIB.docs.length ? `<div class="grid g2">${BIB.docs.slice().reverse().map(d => { const t = tema(d.tema); return `<div class="bloco grid" style="gap:8px;border-left:5px solid ${t ? t.cor : "var(--ac)"}"><b>${esc(d.titulo)}</b><span class="sub" style="font-size:14px">${d.paginas} páginas · ${d.secoes} seções (${esc(d.origem)}) · ${BIB.cartoes.filter(c => c.doc === d.id).length} cartões · ${esc(d.importado)}</span><span class="sub" style="font-size:14px">Tema: ${esc(t ? t.nome : d.tema)}</span><div class="row"><a class="btn sm pri" href="#tema-${d.tema}">Estudar</a><a class="btn sm ghost" href="${urlPDF(d.id, 1)}" target="_blank" rel="noopener">Ver PDF</a><button class="btn sm ghost" data-apagar="${d.id}">Remover</button></div></div>`; }).join("")}</div>` : `<p class="sub">Nenhum PDF ainda. Teste com <code>exemplos/apostila-exemplo.pdf</code>.</p>`}</section>
+    ${MODO === "nuvem" ? `<section class="card"><h3>IA ${INFO.ia ? '<span class="pill ok">Claude da sua conta</span>' : '<span class="pill">indisponível nesta visualização</span>'}</h3><p class="sub">Na versão na nuvem, "Melhorar com IA" e "Gerar com IA" usam o próprio Claude, sem chave de API. Na primeira vez, o Claude pede sua permissão.</p></section>` : `<section class="card grid g2" style="align-items:start"><div class="grid" style="gap:8px"><h3>IA (opcional) ${INFO.ia ? '<span class="pill ok">ligada</span>' : '<span class="pill">desligada</span>'}</h3><p class="sub">Sem IA, você usa "Melhorar com IA (copiar pedido)": o estudaai monta o pedido com o texto do PDF para você colar no Claude. Com uma chave da API da Anthropic, o botão gera a aula sozinho.</p></div>
+    <div class="grid" style="gap:8px"><label for="chave">Chave da API (fica só em dados/config.json)</label><input type="text" id="chave" placeholder="sk-ant-…" autocomplete="off" style="-webkit-text-security:disc"><label for="modelo">Modelo</label><input type="text" id="modelo" value="${esc(INFO.modelo || "")}"><div class="row"><button class="btn" id="salvarcfg">Salvar</button></div></div></section>`}`;
+  const zona = $("#zona"), inp = $("#arq");
+  const enviar = async files => {
+    const lista = [...files].filter(f => /\.pdf$/i.test(f.name)); if (!lista.length) { toast("Escolha arquivos .pdf"); return; }
+    const box = $("#status"); let ok = 0;
+    for (const f of lista) {
+      const linha = document.createElement("div"); linha.className = "pill"; linha.textContent = "Lendo " + f.name + "…"; box.appendChild(linha);
+      try { let doc;
+        if (MODO === "nuvem") doc = await importarNaNuvem(f, $("#dest").value, lista.length === 1 ? $("#ntema").value : "");
+        else { const q = new URLSearchParams({ nome: f.name, destino: $("#dest").value, tema: lista.length === 1 ? $("#ntema").value : "" }); doc = (await api("/api/pdf?" + q, { method: "POST", body: await f.arrayBuffer() })).doc; }
+        linha.className = "pill ok"; linha.textContent = `✓ ${f.name}: ${doc.secoes} seções`; ok++;
+      } catch (e) { linha.className = "pill bad"; linha.textContent = "✗ " + f.name + ": " + e.message; }
+    }
+    if (MODO === "local") await carregarBiblioteca(); if (ok) { toast(ok + " PDF(s) organizados!"); setTimeout(() => telaBiblioteca(app), 900); }
+  };
+  inp.onchange = () => enviar(inp.files);
+  ["dragover", "dragenter"].forEach(ev => zona.addEventListener(ev, e => { e.preventDefault(); zona.style.borderColor = "var(--ac)"; }));
+  zona.addEventListener("dragleave", () => zona.style.borderColor = "");
+  zona.addEventListener("drop", e => { e.preventDefault(); zona.style.borderColor = ""; enviar(e.dataTransfer.files); });
+  app.querySelectorAll("[data-apagar]").forEach(b => b.onclick = () => abrirModal(`<h2>Remover este PDF?</h2><p class="sub">Somem o tema/seções, as aulas automáticas e os cartões dele. Seu histórico de estudo continua salvo.</p><div class="row"><button class="btn" data-fechar>Cancelar</button><button class="btn pri" id="sim">Remover</button></div>`, m => { $("#sim", m).onclick = async () => { if (MODO === "nuvem") await removerDaNuvem(b.dataset.apagar); else { await api("/api/pdf/" + b.dataset.apagar, { method: "DELETE" }); await carregarBiblioteca(); } fecharModal(); telaBiblioteca(app); }; }));
+  let tb; $("#busca").oninput = e => { clearTimeout(tb); tb = setTimeout(async () => { const q = e.target.value; if (q.length < 3) { $("#res").innerHTML = ""; return; } const r = MODO === "nuvem" ? buscarLocal(q) : await api("/api/busca?q=" + encodeURIComponent(q)); $("#res").innerHTML = r.length ? `<div class="grid" style="gap:8px">${r.map(x => `<a class="passo" href="#aula-${x.topico}" style="text-decoration:none;color:inherit"><span class="n">${x.ocorrencias}</span><span>${esc(x.titulo)}<small>${esc(x.trecho)}</small></span></a>`).join("")}</div>` : `<p class="sub">Nada encontrado para "${esc(q)}".</p>`; }, 250); };
+  if ($("#salvarcfg")) $("#salvarcfg").onclick = async () => { const corpo = { modelo: $("#modelo").value }; if ($("#chave").value) corpo.anthropic_api_key = $("#chave").value; const r = await api("/api/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(corpo) }); INFO.ia = r.ia; toast(r.ia ? "IA ligada" : "Configuração salva"); telaBiblioteca(app); };
+}
+
+function buscarLocal(q) {
+  q = q.toLowerCase(); const out = [];
+  for (const [tid, txt] of Object.entries(BIB.textos || {})) { const i = txt.toLowerCase().indexOf(q); if (i < 0) continue; const ini = Math.max(0, i - 90); const info = acharTopico(tid);
+    out.push({ topico: tid, titulo: info ? info.top.t : tid, trecho: (ini ? "…" : "") + txt.slice(ini, i + 160).replace(/\n/g, " ") + "…", ocorrencias: txt.toLowerCase().split(q).length - 1 }); }
+  return out.sort((a, b) => b.ocorrencias - a.ocorrencias).slice(0, 30);
+}
+
+/* ============ PROGRESSO ============ */
+function telaProgresso(app) {
+  const dias = []; for (let i = 69; i >= 0; i--) dias.push(addDias(-i));
+  const lv = v => !v ? "" : v < 2 ? "l1" : v < 6 ? "l2" : "l3";
+  const totalAulas = Object.values(st.top).reduce((s, x) => s + (x.n || 0), 0); const totalCards = Object.keys(st.cards).length;
+  app.innerHTML = `<section class="card"><div class="eyebrow">Progresso</div><h1 style="font-size:32px;margin:6px 0">Seu histórico</h1>
+    <div class="grid g3" style="margin-top:14px"><div class="bloco"><div class="grande" style="--c:var(--ac)">${totalAulas}</div><span class="sub">aulas registradas</span></div><div class="bloco"><div class="grande" style="--c:var(--teal)">${totalCards}</div><span class="sub">cartões já vistos</span></div><div class="bloco"><div class="grande" style="--c:var(--warn)">${Object.keys(st.dias).length}</div><span class="sub">dias com estudo</span></div></div>
+    <h3 style="margin:20px 0 10px">Últimos 70 dias</h3><div class="cal">${dias.map(d => `<i class="${lv(st.dias[d])}" title="${fmt(d)}"></i>`).join("")}</div></section>
+    <section class="card grid" style="gap:14px"><h3>Por tema</h3>${todosTemas().map(t => { const p = progressoTema(t); const tops = topicos(t).map(x => st.top[x.id]).filter(Boolean); const ac = tops.reduce((s, x) => s + x.ac, 0), tot = tops.reduce((s, x) => s + x.tot, 0);
+      return `<div style="--c:${t.cor}"><div class="row" style="justify-content:space-between"><b>${esc(t.nome)}</b><span class="sub" style="font-variant-numeric:tabular-nums">${p.v}/${p.n} tópicos · acerto ${tot ? Math.round(100 * ac / tot) + "%" : "—"}</span></div><div class="bar"><i style="width:${p.p * 100}%"></i></div></div>`; }).join("")}</section>
+    ${MODO === "nuvem" ? `<section class="card grid" style="gap:10px"><h3>☁️ Sincronização entre aparelhos</h3><p class="sub">O progresso é salvo sozinho na sua conta poucos segundos depois de cada ação, e é puxado quando você volta para a página. Para forçar: <b>Sincronizar agora</b> pega a versão mais recente (deste aparelho ou da nuvem). <b>Usar a versão da nuvem</b> descarta o que estiver só neste aparelho.</p><div class="row"><button class="btn pri" id="sincr">Sincronizar agora</button><button class="btn ghost" id="remoto">Usar a versão da nuvem</button><span class="sub" id="sstat">${ultimoSync ? "Última sincronização: " + ultimoSync.toLocaleTimeString("pt-BR") : ""}</span></div></section>` : ""}
+    <section class="card grid g2"><div class="grid" style="gap:10px"><h3>Backup</h3><p class="sub">Seu progresso fica neste navegador. Copie o backup e guarde no Google Drive ou no Obsidian. Para restaurar, cole ao lado.</p><div class="row"><button class="btn pri" id="exp">Copiar backup</button></div><textarea id="exptxt" readonly style="min-height:90px" placeholder="O backup aparece aqui"></textarea></div>
+    <div class="grid" style="gap:10px"><h3>Restaurar</h3><textarea id="imptxt" style="min-height:130px" placeholder="Cole aqui um backup do estudaai"></textarea><div class="row"><button class="btn" id="imp">Restaurar backup</button></div></div></section>`;
+  if ($("#sincr")) { $("#sincr").onclick = async () => { $("#sstat").textContent = "Sincronizando…"; await puxarNuvem(); await enviarEstado(); toast("Sincronizado"); rotear(); };
+    $("#remoto").onclick = async () => { await puxarNuvem("remoto"); toast("Usando a versão da nuvem"); rotear(); }; }
+  $("#exp").onclick = async () => { const j = JSON.stringify(st); $("#exptxt").value = j; try { await navigator.clipboard.writeText(j); toast("Backup copiado"); } catch (e) { $("#exptxt").select(); toast("Selecionado: aperte Ctrl+C"); } };
+  $("#imp").onclick = () => { try { const o = JSON.parse($("#imptxt").value); if (!o.top) throw 0; carregar(o); salvar(); toast("Backup restaurado"); rotear(); } catch (e) { toast("Esse texto não é um backup válido."); } };
+}
+
+/* ============ modal ============ */
+function abrirModal(html, ligar) { fecharModal(); const m = document.createElement("div"); m.className = "modal"; m.innerHTML = `<div class="card" role="dialog" aria-modal="true">${html}</div>`; document.body.appendChild(m); m.addEventListener("click", e => { if (e.target === m || e.target.hasAttribute("data-fechar")) fecharModal(); }); if (ligar) ligar(m); }
+function fecharModal() { document.querySelectorAll(".modal").forEach(m => m.remove()); }
+document.addEventListener("keydown", e => { if (e.key === "Escape") fecharModal(); });
+
+/* ============ áudio ============ */
+let AC = null; const timers = [];
+function audio() { if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); } if (AC.state === "suspended") AC.resume(); return AC; }
+function pararAudio() { timers.forEach(clearInterval); timers.length = 0; }
+function nota(freq, t0 = 0, dur = .9, tipo = "triangle", vol = .18) {
+  const ac = audio(); if (!ac) return; const t = ac.currentTime + t0; const o = ac.createOscillator(), g = ac.createGain();
+  o.type = tipo; o.frequency.value = freq; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .015); g.gain.exponentialRampToValueAtTime(.0008, t + dur);
+  o.connect(g).connect(ac.destination); o.start(t); o.stop(t + dur + .05);
+}
+const midiF = m => 440 * Math.pow(2, (m - 69) / 12);
+const NOMES = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
+const NOMES_PT = ["Dó", "Dó♯", "Ré", "Ré♯", "Mi", "Fá", "Fá♯", "Sol", "Sol♯", "Lá", "Lá♯", "Si"];
+
+/* ============ WIDGETS ============ */
+function montarWidget(box, a, cor) {
+  const w = a.widget; box.style.setProperty("--c", cor);
+  const W = { tabelaVerdade: wTabela, parear: wParear, ordenar: wOrdenar, costas: wCostas, potencial: wPotencial, esquecimento: wEsquecimento, piano: wPiano, sequenciador: wSeq, acordes: wAcordes, metronomo: wMetronomo, soletrar: wSoletrar };
+  if (W[w]) W[w](box, a, cor); else box.innerHTML = `<div class="wid">Prática não disponível.</div>`;
+}
+function wTabela(box) {
+  const OPS = { "∧": (p, q) => p && q, "∨": (p, q) => p || q, "→": (p, q) => !p || q, "↔": (p, q) => p === q, "⊻": (p, q) => p !== q };
+  let op = "→"; let resp = {};
+  const draw = () => {
+    box.innerHTML = `<div class="wid"><h3>Monte a tabela-verdade</h3><p class="sub">Escolha o conectivo e clique nas células para marcar V ou F. Depois confira.</p>
+    <div class="row">${Object.keys(OPS).map(o => `<button class="btn sm ${o === op ? "pri" : ""}" data-op="${o}">p ${o} q</button>`).join("")}</div>
+    <table class="tab tv" style="max-width:420px"><tr><th>p</th><th>q</th><th>p ${op} q</th></tr>${[[1, 1], [1, 0], [0, 1], [0, 0]].map(([p, q], i) => `<tr><td>${p ? "V" : "F"}</td><td>${q ? "V" : "F"}</td><td><button data-i="${i}" class="${resp[i] || ""}">${resp[i] || "?"}</button></td></tr>`).join("")}</table>
+    <div class="row"><button class="btn pri" id="conf">Conferir</button><span id="res" class="sub"></span></div></div>`;
+    box.querySelectorAll("[data-op]").forEach(b => b.onclick = () => { op = b.dataset.op; resp = {}; draw(); });
+    box.querySelectorAll("[data-i]").forEach(b => b.onclick = () => { const i = b.dataset.i; resp[i] = resp[i] === "V" ? "F" : "V"; draw(); });
+    $("#conf", box).onclick = () => { let ok = 0; [[1, 1], [1, 0], [0, 1], [0, 0]].forEach(([p, q], i) => { const c = OPS[op](!!p, !!q) ? "V" : "F"; const b = box.querySelector(`[data-i="${i}"]`); b.classList.add(resp[i] === c ? "certo" : "erro"); if (resp[i] === c) ok++; }); $("#res", box).textContent = ok === 4 ? "Perfeito! Troque de conectivo." : `${ok}/4 certas. Lembre da situação especial do conectivo.`; };
+  };
+  draw();
+}
+function wParear(box, a) {
+  const pares = a.parear; let esq = shuffle(pares.map((p, i) => i)), dir = shuffle(pares.map((p, i) => i)); let sel = null, feitos = new Set(), erros = 0;
+  const draw = () => {
+    box.innerHTML = `<div class="wid"><h3>Ligue os pares</h3><p class="sub">Clique num item da esquerda e depois no par dele à direita.</p><div class="par"><div class="col">${esq.map(i => `<button data-l="${i}" class="${feitos.has(i) ? "ok" : sel === i ? "sel" : ""}">${esc(pares[i][0])}</button>`).join("")}</div><div class="col">${dir.map(i => `<button data-r="${i}" class="${feitos.has(i) ? "ok" : ""}">${esc(pares[i][1])}</button>`).join("")}</div></div><p class="sub">${feitos.size === pares.length ? `🎉 Completo com ${erros} erro(s). <button class="btn sm" id="denovo">Jogar de novo</button>` : `${feitos.size}/${pares.length} pares · ${erros} erro(s)`}</p></div>`;
+    box.querySelectorAll("[data-l]").forEach(b => b.onclick = () => { const i = +b.dataset.l; if (feitos.has(i)) return; sel = i; draw(); });
+    box.querySelectorAll("[data-r]").forEach(b => b.onclick = () => { const i = +b.dataset.r; if (sel === null || feitos.has(i)) return; if (i === sel) { feitos.add(i); sel = null; draw(); } else { erros++; b.classList.add("no"); setTimeout(() => b.classList.remove("no"), 350); $(".sub:last-child", box).textContent = `${feitos.size}/${pares.length} pares · ${erros} erro(s)`; } });
+    const d = $("#denovo", box); if (d) d.onclick = () => { esq = shuffle(esq); dir = shuffle(dir); feitos = new Set(); erros = 0; sel = null; draw(); };
+  };
+  draw();
+}
+function wOrdenar(box, a) {
+  const certa = a.ordenar; let pool = shuffle(certa.map((_, i) => i)), resp = [], checado = false;
+  const draw = () => {
+    box.innerHTML = `<div class="wid"><h3>${esc(a.ordenarTitulo || "Coloque na ordem certa")}</h3><p class="sub">Clique nos itens na ordem em que acontecem.</p><div class="ord">${pool.map(i => `<button data-i="${i}" class="${resp.includes(i) ? "usado" : ""}" ${resp.includes(i) ? "disabled" : ""}>${esc(certa[i])}</button>`).join("")}</div>
+    <div class="resposta">${resp.map((i, k) => `<div class="${checado ? (i === k ? "ok" : "no") : ""}">${esc(certa[i])}</div>`).join("")}</div>
+    <div class="row"><button class="btn" id="limpar">Recomeçar</button><button class="btn pri" id="conf" ${resp.length < certa.length ? "disabled" : ""}>Conferir</button><span class="sub" id="res"></span></div></div>`;
+    box.querySelectorAll("[data-i]").forEach(b => b.onclick = () => { resp.push(+b.dataset.i); checado = false; draw(); });
+    $("#limpar", box).onclick = () => { resp = []; checado = false; pool = shuffle(pool); draw(); };
+    $("#conf", box).onclick = () => { checado = true; draw(); const ok = resp.filter((i, k) => i === k).length; $("#res", box).textContent = ok === certa.length ? "🎉 Ordem perfeita!" : `${ok}/${certa.length} na posição certa`; };
+  };
+  draw();
+}
+function wCostas(box) {
+  const CAM = [
+    ["Pele e subcutâneo", "#f4c7a8", "Proteção e gordura, com muitos receptores. O toque e o calor já reduzem a percepção de tensão."],
+    ["Fáscia toracolombar", "#e9e2c8", "Lâminas de colágeno em losango na lombar. Liga o latíssimo do dorso ao glúteo máximo do lado oposto e recebe a tração do transverso do abdome. É muito inervada."],
+    ["Camada superficial", "#ee7fa8", "Trapézio, latíssimo do dorso, romboides e levantador da escápula. Ligam a coluna à escápula e ao braço. Tensionam com o uso de computador e com estresse (trapézio superior)."],
+    ["Camada intermediária", "#f2a35b", "Serráteis posteriores superior e inferior. Finos, ligados à respiração."],
+    ["Camada profunda", "#a98bf0", "Eretores da espinha (iliocostal, longuíssimo, espinal) estendem a coluna. Os transversoespinais (semiespinal, multífidos, rotadores) estabilizam vértebra a vértebra. Inervados pelos ramos dorsais."],
+    ["Vértebras, discos e facetas", "#7f9cff", "O disco tem anel fibroso por fora e núcleo pulposo por dentro. As facetas são as pequenas articulações de trás. Os ligamentos dão a estabilidade passiva."]];
+  let s = 2;
+  const draw = () => {
+    box.innerHTML = `<div class="wid"><h3>Atravesse as camadas das costas</h3><p class="sub">Clique em cada camada, de fora para dentro.</p><div class="grid g2" style="align-items:start"><div class="cam">${CAM.map((c, i) => `<button data-i="${i}" style="--cc:${c[1]}" class="${i === s ? "sel" : ""}">${i + 1}. ${c[0]}</button>`).join("")}</div>
+    <div class="bloco" style="border-left:6px solid ${CAM[s][1]}"><h3>${CAM[s][0]}</h3><p>${CAM[s][2]}</p><p class="pratica">${s === 2 ? "Palpe: encolha os ombros e sinta o trapézio superior endurecer." : s === 4 ? "Palpe: mão ao lado da coluna lombar e incline o tronco à frente. São os eretores." : s === 1 ? "Imagine um cinto em losango na lombar costurando os dois lados do corpo." : "Respire fundo pelo abdome 3 vezes e note se os ombros descem."}</p></div></div></div>`;
+    box.querySelectorAll("[data-i]").forEach(b => b.onclick = () => { s = +b.dataset.i; draw(); });
+  };
+  draw();
+}
+function wPotencial(box) {
+  box.innerHTML = `<div class="wid"><h3>Dispare um neurônio</h3><p class="sub">Ajuste a força do estímulo e clique em Estimular. Abaixo do limiar (−55 mV), nada acontece. Acima dele, o disparo é sempre do mesmo tamanho.</p>
+    <label for="forca">Força do estímulo: <b id="fv">+20</b> mV</label><input type="range" id="forca" min="2" max="30" value="20">
+    <div class="row"><button class="btn pri" id="est">Estimular</button><span id="fase" class="pill ac">Repouso: −70 mV</span></div><canvas id="cv" width="760" height="260"></canvas></div>`;
+  const cv = $("#cv", box), ctx = cv.getContext("2d"); const W = cv.width, H = cv.height; const y = mv => H - 20 - (mv + 90) / 140 * (H - 40);
+  const curva = f => { const pts = []; const disp = -70 + f >= -55; for (let t = 0; t <= 6; t += .02) { let v; if (t < 1) v = -70; else if (!disp) v = -70 + f * Math.exp(-(t - 1) * 2.2) * Math.min(1, (t - 1) * 8); else { const u = t - 1; if (u < .25) v = -70 + (f) * u / .25; else if (u < .6) v = -70 + f + (35 - (-70 + f)) * ((u - .25) / .35) ** 1.5; else if (u < 1.4) v = 35 - 115 * ((u - .6) / .8); else if (u < 3.2) v = -80 + 10 * ((u - 1.4) / 1.8); else v = -70; } pts.push([t, v]); } return { pts, disp }; };
+  const base = () => { ctx.clearRect(0, 0, W, H); ctx.font = "12px Figtree,sans-serif"; [[-70, "repouso −70"], [-55, "limiar −55"], [0, "0 mV"], [35, "+35"]].forEach(([mv, l]) => { ctx.strokeStyle = mv === -55 ? "#f2a35b" : "#2b3550"; ctx.setLineDash(mv === -55 ? [6, 5] : []); ctx.beginPath(); ctx.moveTo(60, y(mv)); ctx.lineTo(W - 10, y(mv)); ctx.stroke(); ctx.fillStyle = "#9aa4be"; ctx.fillText(l, 4, y(mv) + 4); }); ctx.setLineDash([]); };
+  const fase = (t, v, disp) => { if (t < 1) return "Repouso: −70 mV"; if (!disp) return "Abaixo do limiar: nada dispara"; const u = t - 1; if (u < .6) return "Despolarização: Na⁺ entra"; if (u < 1.4) return "Repolarização: K⁺ sai"; if (u < 3.2) return "Hiperpolarização (refratário)"; return "Volta ao repouso"; };
+  base(); let anim;
+  $("#forca", box).oninput = e => $("#fv", box).textContent = "+" + e.target.value;
+  $("#est", box).onclick = () => { cancelAnimationFrame(anim); const { pts, disp } = curva(+$("#forca", box).value); let k = 0; const passo = () => { base(); ctx.strokeStyle = "#7f9cff"; ctx.lineWidth = 3; ctx.beginPath(); for (let i = 0; i <= k && i < pts.length; i++) { const [t, v] = pts[i]; const X = 60 + t / 6 * (W - 70); i ? ctx.lineTo(X, y(v)) : ctx.moveTo(X, y(v)); } ctx.stroke(); ctx.lineWidth = 1; const [t, v] = pts[Math.min(k, pts.length - 1)]; $("#fase", box).textContent = fase(t, v, disp); if (k < pts.length) { k += 3; anim = requestAnimationFrame(passo); } }; passo(); if (disp) nota(880, .05, .12, "square", .05); };
+}
+function wEsquecimento(box) {
+  const revis = new Set([1, 3]); const DIAS = 30;
+  box.innerHTML = `<div class="wid"><h3>Vença a curva do esquecimento</h3><p class="sub">Escolha em que dias você revisa. Cada revisão volta a memória a 100% e deixa a queda seguinte mais lenta.</p><div class="row" id="chips">${[1, 2, 3, 5, 7, 10, 14, 21].map(d => `<button class="btn sm" data-d="${d}">dia ${d}</button>`).join("")}</div><canvas id="cv" width="760" height="260"></canvas><p class="sub" id="ret"></p></div>`;
+  const cv = $("#cv", box), ctx = cv.getContext("2d"), W = cv.width, H = cv.height; const X = d => 50 + d / DIAS * (W - 70), Y = r => 20 + (1 - r) * (H - 50);
+  const draw = () => {
+    box.querySelectorAll("[data-d]").forEach(b => b.className = "btn sm" + (revis.has(+b.dataset.d) ? " pri" : ""));
+    ctx.clearRect(0, 0, W, H); ctx.font = "12px Figtree,sans-serif"; ctx.fillStyle = "#9aa4be";
+    [0, .5, 1].forEach(r => { ctx.strokeStyle = "#2b3550"; ctx.beginPath(); ctx.moveTo(50, Y(r)); ctx.lineTo(W - 20, Y(r)); ctx.stroke(); ctx.fillText(Math.round(r * 100) + "%", 8, Y(r) + 4); });
+    [0, 7, 14, 21, 30].forEach(d => ctx.fillText("dia " + d, X(d) - 14, H - 8));
+    const semRev = d => Math.exp(-d / 1.6); ctx.strokeStyle = "#ff7d86"; ctx.setLineDash([5, 5]); ctx.beginPath(); for (let d = 0; d <= DIAS; d += .1) d ? ctx.lineTo(X(d), Y(semRev(d))) : ctx.moveTo(X(d), Y(1)); ctx.stroke(); ctx.setLineDash([]);
+    let S = 1.6, ult = 0, fim = 0; ctx.strokeStyle = "#5fd38d"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(X(0), Y(1));
+    for (let d = 0; d <= DIAS + .001; d += .1) { const dr = Math.round(d * 10) / 10; if (revis.has(dr) && dr > ult) { ctx.lineTo(X(dr), Y(Math.exp(-(dr - ult) / S))); ctx.lineTo(X(dr), Y(1)); ult = dr; S *= 2.6; } const r = Math.exp(-(d - ult) / S); ctx.lineTo(X(d), Y(r)); fim = r; }
+    ctx.stroke(); ctx.lineWidth = 1;
+    $("#ret", box).innerHTML = `No dia 30: <b style="color:var(--ok)">${Math.round(fim * 100)}%</b> com suas revisões × <b style="color:var(--bad)">${Math.round(semRev(30) * 100)}%</b> sem revisar. <span class="sub">(Modelo ilustrativo baseado em Ebbinghaus; os números reais variam.)</span>`;
+  };
+  box.querySelectorAll("[data-d]").forEach(b => b.onclick = () => { const d = +b.dataset.d; revis.has(d) ? revis.delete(d) : revis.add(d); draw(); });
+  draw();
+}
+function wPiano(box, a) {
+  const modo = a.pianoModo || "escala"; const BASE = 60; const N = 24;
+  const pretas = [1, 3, 6, 8, 10];
+  let raiz = 0, tipo = "maior", marcadas = [];
+  const ESC = { maior: [0, 2, 4, 5, 7, 9, 11] }; const TRI = { maior: [0, 4, 7], menor: [0, 3, 7], diminuta: [0, 3, 6], aumentada: [0, 4, 8] };
+  const PROG = { "I–V–vi–IV": [[0, "maior"], [7, "maior"], [9, "menor"], [5, "maior"]], "ii–V–I": [[2, "menor"], [7, "maior"], [0, "maior"]], "I–vi–IV–V": [[0, "maior"], [9, "menor"], [5, "maior"], [7, "maior"]] };
+  const nomeAc = (r, t) => NOMES[r % 12] + (t === "menor" ? "m" : t === "diminuta" ? "°" : t === "aumentada" ? "+" : "");
+  const controles = () => {
+    if (modo === "escala") return `<label for="raiz">Tônica</label><select id="raiz">${NOMES_PT.map((n, i) => `<option value="${i}" ${i === raiz ? "selected" : ""}>${n} maior</option>`).join("")}</select><div class="row"><button class="btn pri" id="tocar">Tocar a escala</button><span class="sub" id="info"></span></div>`;
+    const tri = `<div class="row">${Object.keys(TRI).map(t => `<button class="btn sm ${t === tipo ? "pri" : ""}" data-t="${t}">${t}</button>`).join("")}</div><label for="raiz">Nota fundamental</label><select id="raiz">${NOMES_PT.map((n, i) => `<option value="${i}" ${i === raiz ? "selected" : ""}>${n}</option>`).join("")}</select><div class="row"><button class="btn pri" id="tocar">Tocar o acorde</button><span class="sub" id="info"></span></div>`;
+    const prog = `<div class="row">${Object.keys(PROG).map(p => `<button class="btn sm" data-p="${p}">▶ ${p} em Dó</button>`).join("")}</div><p class="sub" id="pinfo"></p>`;
+    if (modo === "triades") return tri; if (modo === "progressoes") return prog; return tri + prog;
+  };
+  box.innerHTML = `<div class="wid"><h3>${modo === "escala" ? "Monte a escala maior de qualquer nota" : modo === "progressoes" ? "Toque as progressões" : "Ouça e veja os acordes"}</h3><p class="sub">Você também pode clicar nas teclas para tocar.</p><div class="grid" style="gap:10px">${controles()}</div><div class="piano" id="pn"></div></div>`;
+  const pn = $("#pn", box); let x = 0; const WW = 40;
+  for (let i = 0; i < N; i++) { const pc = i % 12; const k = document.createElement("div"); k.className = "k " + (pretas.includes(pc) ? "b" : "w"); k.dataset.m = BASE + i; if (pretas.includes(pc)) { k.style.left = (x - 12) + "px"; k.style.width = "24px"; } else { k.style.left = x + "px"; k.style.width = WW + "px"; x += WW; } k.textContent = pretas.includes(pc) ? "" : NOMES[pc]; k.onclick = () => { nota(midiF(BASE + i)); piscar([BASE + i]); }; pn.appendChild(k); }
+  pn.style.minWidth = x + "px";
+  const marcar = ms => { pn.querySelectorAll(".k").forEach(k => k.classList.toggle("hi", ms.includes(+k.dataset.m))); };
+  const piscar = (ms, dur = 500) => { ms.forEach(m => { const k = pn.querySelector(`[data-m="${m}"]`); if (k) { k.classList.add("on"); setTimeout(() => k.classList.remove("on"), dur); } }); };
+  const atualizar = () => {
+    if (modo === "escala") { marcadas = ESC.maior.map(i => BASE + raiz + i).concat([BASE + raiz + 12]); marcar(marcadas); $("#info", box).textContent = ESC.maior.map(i => NOMES_PT[(raiz + i) % 12]).join(" · ") + "   (T T S T T T S)"; }
+    else if ($("#info", box)) { marcadas = TRI[tipo].map(i => BASE + raiz + i); marcar(marcadas); $("#info", box).textContent = `${nomeAc(raiz, tipo)}: ` + TRI[tipo].map(i => NOMES_PT[(raiz + i) % 12]).join(" – "); }
+  };
+  const sel = $("#raiz", box); if (sel) sel.onchange = e => { raiz = +e.target.value; atualizar(); };
+  box.querySelectorAll("[data-t]").forEach(b => b.onclick = () => { tipo = b.dataset.t; box.querySelectorAll("[data-t]").forEach(x => x.classList.toggle("pri", x === b)); atualizar(); });
+  const toc = $("#tocar", box); if (toc) toc.onclick = () => { if (modo === "escala") marcadas.forEach((m, i) => { nota(midiF(m), i * .32, .5); setTimeout(() => piscar([m], 300), i * 320); }); else { marcadas.forEach(m => nota(midiF(m), 0, 1.4, "triangle", .12)); piscar(marcadas, 900); } };
+  box.querySelectorAll("[data-p]").forEach(b => b.onclick = () => { const seq = PROG[b.dataset.p]; seq.forEach(([r, t], i) => { const ms = TRI[t].map(k => BASE + r + k); ms.forEach(m => nota(midiF(m), i * .9, 1, "triangle", .1)); nota(midiF(BASE - 12 + r), i * .9, 1, "sine", .2); setTimeout(() => { marcar(ms); piscar(ms, 800); $("#pinfo", box).textContent = seq.map(([r2, t2], j) => (j === i ? "▶ " : "") + nomeAc(r2, t2)).join("   "); }, i * 900); }); });
+  atualizar();
+}
+function wSeq(box) {
+  const LIN = [["Kick", "#f2a35b"], ["Snare", "#35c9bd"], ["Hi-hat", "#a98bf0"]];
+  const PRE = { "Four on the floor": [[0, 4, 8, 12], [4, 12], [0, 2, 4, 6, 8, 10, 12, 14]], "Hip-hop": [[0, 7, 10], [4, 12], [0, 2, 4, 6, 8, 10, 12, 14]], "Limpar": [[], [], []] };
+  let grade = PRE["Four on the floor"].map(l => Array.from({ length: 16 }, (_, i) => l.includes(i))); let bpm = 100, tocando = false, passo = 0, prox = 0, tim;
+  box.innerHTML = `<div class="wid"><h3>Sequenciador de 16 passos</h3><p class="sub">Igual ao Channel Rack do FL: cada coluna é uma semicolcheia; os passos 1, 5, 9 e 13 são os tempos.</p>
+    <div class="row"><button class="btn pri" id="play">▶ Tocar</button>${Object.keys(PRE).map(p => `<button class="btn sm" data-pre="${p}">${p}</button>`).join("")}</div>
+    <label for="bpm">BPM: <b id="bv">100</b></label><input type="range" id="bpm" min="60" max="160" value="100"><div class="seq" id="sq"></div></div>`;
+  const sq = $("#sq", box);
+  const draw = () => { sq.innerHTML = LIN.map(([n, c], r) => `<div class="linha" style="--rc:${c}"><b>${n}</b>${grade[r].map((on, i) => `<button class="st ${on ? "on" : ""}" data-r="${r}" data-i="${i}" aria-label="${n} passo ${i + 1}"></button>`).join("")}</div>`).join(""); sq.querySelectorAll(".st").forEach(b => b.onclick = () => { grade[b.dataset.r][b.dataset.i] = !grade[b.dataset.r][b.dataset.i]; b.classList.toggle("on"); }); };
+  const som = (r, t) => { const ac = audio(); if (!ac) return; if (r === 0) { const o = ac.createOscillator(), g = ac.createGain(); o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + .15); g.gain.setValueAtTime(.9, t); g.gain.exponentialRampToValueAtTime(.001, t + .3); o.connect(g).connect(ac.destination); o.start(t); o.stop(t + .32); }
+    else { const n = ac.createBufferSource(); const b = ac.createBuffer(1, ac.sampleRate * .25, ac.sampleRate); const d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; n.buffer = b; const f = ac.createBiquadFilter(); f.type = r === 1 ? "bandpass" : "highpass"; f.frequency.value = r === 1 ? 1800 : 7000; const g = ac.createGain(); g.gain.setValueAtTime(r === 1 ? .5 : .18, t); g.gain.exponentialRampToValueAtTime(.001, t + (r === 1 ? .18 : .05)); n.connect(f).connect(g).connect(ac.destination); n.start(t); n.stop(t + .25); } };
+  const agenda = () => { const ac = audio(); while (prox < ac.currentTime + .12) { const p = passo; grade.forEach((l, r) => { if (l[p]) som(r, prox); }); const atraso = Math.max(0, (prox - ac.currentTime) * 1000); setTimeout(() => sq.querySelectorAll(".st").forEach(b => b.classList.toggle("cur", +b.dataset.i === p)), atraso); prox += 60 / bpm / 4; passo = (passo + 1) % 16; } };
+  $("#play", box).onclick = e => { const ac = audio(); if (!ac) return; tocando = !tocando; e.target.textContent = tocando ? "■ Parar" : "▶ Tocar"; if (tocando) { passo = 0; prox = ac.currentTime + .05; tim = setInterval(agenda, 25); timers.push(tim); } else { clearInterval(tim); sq.querySelectorAll(".cur").forEach(b => b.classList.remove("cur")); } };
+  $("#bpm", box).oninput = e => { bpm = +e.target.value; $("#bv", box).textContent = bpm; };
+  box.querySelectorAll("[data-pre]").forEach(b => b.onclick = () => { grade = PRE[b.dataset.pre].map(l => Array.from({ length: 16 }, (_, i) => l.includes(i))); draw(); });
+  draw();
+}
+function wAcordes(box) {
+  const AC_ = { C: "x32010", G: "320003", D: "xx0232", A: "x02220", E: "022100", Am: "x02210", Em: "022000", Dm: "xx0231" };
+  const AF = [82.41, 110, 146.83, 196, 246.94, 329.63]; let atual = "C";
+  const svg = s => { const W = 220, H = 250, x0 = 35, dx = 30, y0 = 50, dy = 40; let g = `<svg viewBox="0 0 ${W} ${H}" width="220" height="250" role="img" aria-label="Diagrama do acorde ${atual}">`;
+    g += `<rect x="${x0}" y="${y0 - 5}" width="${dx * 5}" height="6" fill="#e9edf7"/>`;
+    for (let i = 0; i < 6; i++) g += `<line x1="${x0 + i * dx}" y1="${y0}" x2="${x0 + i * dx}" y2="${y0 + dy * 4}" stroke="#9aa4be" stroke-width="${2.4 - i * .3}"/>`;
+    for (let f = 1; f <= 4; f++) g += `<line x1="${x0}" y1="${y0 + f * dy}" x2="${x0 + dx * 5}" y2="${y0 + f * dy}" stroke="#2b3550" stroke-width="2"/>`;
+    [...s].forEach((c, i) => { const X = x0 + i * dx; if (c === "x") g += `<text x="${X}" y="${y0 - 14}" text-anchor="middle" fill="#ff7d86" font-size="16" font-weight="800">×</text>`; else if (c === "0") g += `<circle cx="${X}" cy="${y0 - 19}" r="7" fill="none" stroke="#5fd38d" stroke-width="2.5"/>`; else g += `<circle cx="${X}" cy="${y0 + (+c - .5) * dy}" r="11" fill="#7f9cff"/>`; });
+    ["6ª", "5ª", "4ª", "3ª", "2ª", "1ª"].forEach((n, i) => g += `<text x="${x0 + i * dx}" y="${y0 + dy * 4 + 22}" text-anchor="middle" fill="#9aa4be" font-size="11">${n}</text>`);
+    return g + "</svg>"; };
+  const tocar = s => [...s].forEach((c, i) => { if (c !== "x") nota(AF[i] * Math.pow(2, (+c) / 12), i * .045, 1.6, "triangle", .11); });
+  const draw = () => { box.innerHTML = `<div class="wid"><h3>Os 8 acordes abertos</h3><p class="sub">Clique para ver e ouvir. Depois feche os olhos e tente montar no violão de memória.</p><div class="cordas">${Object.keys(AC_).map(k => `<button class="${k === atual ? "on" : ""}" data-a="${k}">${k}</button>`).join("")}</div><div class="row" style="align-items:flex-start;gap:24px">${svg(AC_[atual])}<div class="bloco" style="flex:1;min-width:220px"><h3>${atual}</h3><p>Cordas (da 6ª à 1ª): <b>${AC_[atual].toUpperCase().split("").join(" ")}</b></p><p class="sub">× = não tocar · ○ = corda solta · número = casa</p><button class="btn pri" id="dedilhar">▶ Ouvir de novo</button></div></div></div>`;
+    box.querySelectorAll("[data-a]").forEach(b => b.onclick = () => { atual = b.dataset.a; draw(); tocar(AC_[atual]); }); $("#dedilhar", box).onclick = () => tocar(AC_[atual]); };
+  draw();
+}
+function wMetronomo(box) {
+  let bpm = 60, on = false, tempo = 0, prox = 0, tim, taps = [];
+  box.innerHTML = `<div class="wid"><h3>Metrônomo</h3><p class="sub">Troque de acorde no tempo 1 (laranja). Quando acertar 8 de 10 trocas, suba 5 BPM.</p><div class="met" id="mt"><i class="um"></i><i></i><i></i><i></i></div><label for="mbpm">BPM: <b id="mv">60</b></label><input type="range" id="mbpm" min="40" max="160" value="60"><div class="row"><button class="btn pri" id="mplay">▶ Iniciar</button><button class="btn" id="tap">Tap (bata no ritmo)</button><button class="btn sm" id="m5">+5 BPM</button></div></div>`;
+  const luzes = box.querySelectorAll("#mt i");
+  const agenda = () => { const ac = audio(); while (prox < ac.currentTime + .1) { const b = tempo; nota(b === 0 ? 1500 : 1000, prox - ac.currentTime, .06, "square", b === 0 ? .12 : .07); setTimeout(() => luzes.forEach((l, i) => l.classList.toggle("on", i === b)), Math.max(0, (prox - ac.currentTime) * 1000)); prox += 60 / bpm; tempo = (tempo + 1) % 4; } };
+  const set = v => { bpm = Math.max(40, Math.min(160, v)); $("#mbpm", box).value = bpm; $("#mv", box).textContent = bpm; };
+  $("#mbpm", box).oninput = e => set(+e.target.value); $("#m5", box).onclick = () => set(bpm + 5);
+  $("#mplay", box).onclick = e => { const ac = audio(); if (!ac) return; on = !on; e.target.textContent = on ? "■ Parar" : "▶ Iniciar"; if (on) { tempo = 0; prox = ac.currentTime + .05; tim = setInterval(agenda, 25); timers.push(tim); } else { clearInterval(tim); luzes.forEach(l => l.classList.remove("on")); } };
+  $("#tap", box).onclick = () => { const t = performance.now(); taps = taps.filter(x => t - x < 3000); taps.push(t); if (taps.length > 2) { const d = (taps[taps.length - 1] - taps[0]) / (taps.length - 1); set(Math.round(60000 / d)); } };
+}
+function wSoletrar(box) {
+  let tim; box.innerHTML = `<div class="wid"><h3>Treino de datilologia</h3><p class="sub">Digite uma palavra. As letras aparecem no ritmo escolhido: faça cada uma com a mão dominante, sem parar.</p><div class="row"><input type="text" id="pal" value="VITORIA" style="max-width:260px" aria-label="Palavra para soletrar"><button class="btn pri" id="ir">Começar</button></div><label for="vel">Ritmo: <b id="vv">1,2</b> s por letra</label><input type="range" id="vel" min="5" max="25" value="12"><div class="letra" id="lt">A</div><div class="row" id="dots" style="justify-content:center"></div><p class="sub">Assista ao alfabeto feito por uma pessoa surda no <a href="https://www.ines.gov.br/dicionario-de-libras/" target="_blank" rel="noopener">dicionário do INES</a> ou no app Hand Talk e compare.</p></div>`;
+  $("#vel", box).oninput = e => $("#vv", box).textContent = (e.target.value / 10).toFixed(1).replace(".", ",");
+  $("#ir", box).onclick = () => { clearInterval(tim); const p = $("#pal", box).value.toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-ZÇ]/g, ""); if (!p) return; let i = 0; const dots = $("#dots", box); dots.innerHTML = [...p].map(() => '<span class="pill">•</span>').join(""); const show = () => { if (i >= p.length) { clearInterval(tim); $("#lt", box).textContent = "✓"; return; } $("#lt", box).textContent = p[i]; dots.children[i].className = "pill ac"; i++; }; show(); tim = setInterval(show, +$("#vel", box).value * 100); timers.push(tim); };
+}
+function widgetCalcProva() {
+  return `<section class="card wid" id="calc"><h3>Simule sua nota na prova</h3><p class="sub">Arraste o número de acertos. Específicos, RLM e Legislação valem 2 pontos por questão. Você precisa de 50 pontos e não pode zerar nenhuma área.</p><div class="grid g2" id="cs"></div><div class="bar" style="--c:var(--ac);height:14px"><i id="cb"></i></div><p id="cr" style="font-size:18px"></p></section>`;
+}
+function ligarCalcProva() {
+  const A = [["Específicos", 20, 2, 14], ["Raciocínio lógico", 10, 2, 6], ["Legislação", 10, 2, 6], ["Português", 15, 1, 9], ["Inglês", 5, 1, 3]];
+  $("#cs").innerHTML = A.map(([n, q, p, v], i) => `<div><label for="c${i}">${n}: <b id="cv${i}">${v}</b>/${q} acertos (${p} pt cada)</label><input type="range" id="c${i}" min="0" max="${q}" value="${v}"></div>`).join("");
+  const calc = () => { let tot = 0, zero = false; A.forEach(([n, q, p], i) => { const v = +$("#c" + i).value; $("#cv" + i).textContent = v; tot += v * p; if (!v) zero = true; }); $("#cb").style.width = tot + "%"; $("#cb").style.background = !zero && tot >= 50 ? "var(--ok)" : "var(--bad)"; $("#cr").innerHTML = `<b>${tot}</b> de 100 pontos · ${zero ? "❌ eliminada (zerou uma área)" : tot >= 50 ? "✅ aprovada (para entrar nas vagas, mire 65 ou mais)" : "❌ abaixo de 50"}`; };
+  A.forEach((_, i) => $("#c" + i).oninput = calc); calc();
+}
+
+(async function iniciar() {
+  let doServ = null;
+  try { if (location.protocol === "file:" || (window.claude && typeof window.claude.use === "function")) throw 0; INFO = await api("/api/info"); MODO = "local"; doServ = await api("/api/estado"); await carregarBiblioteca(); } catch (e) { MODO = "arquivo"; }
+  carregar(doServ);
+  if (MODO === "local" && !doServ.top) { try { const loc = JSON.parse(localStorage.getItem(CHAVE)); if (loc && loc.top) { st = loc; carregar(st); } } catch (e) { } salvar(); }
+  rodape(); rotear();
+  if (MODO !== "local") iniciarNuvem();
+})();
+</script>
+</body>
+</html>

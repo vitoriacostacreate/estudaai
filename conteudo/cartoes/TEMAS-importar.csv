@@ -1,0 +1,55 @@
+#separator:semicolon
+#html:true
+#tags column:3
+#deck column:4
+Costas: camadas de tecido de fora para dentro;Pele → subcutâneo → fáscia → músculos (superficial, intermediária, profunda) → ossos, discos, facetas e ligamentos;ana01 costas;Temas::Fisioterapia
+Costas: os 4 músculos da camada <b>superficial</b>;Trapézio, latíssimo do dorso, romboides, levantador da escápula. Ligam a coluna à escápula e ao braço.;ana01 costas;Temas::Fisioterapia
+Costas: músculos da camada <b>intermediária</b>;Serráteis posteriores superior e inferior (relacionados à respiração);ana01 costas;Temas::Fisioterapia
+Costas: os 3 <b>eretores da espinha</b>;Iliocostal, longuíssimo, espinal (de lateral para medial: "<b>I L E</b>");ana01 costas;Temas::Fisioterapia
+<b>Multífidos</b>: função;Estabilizar cada segmento (vértebra a vértebra). Fazem parte dos transversoespinais.;ana01 costas;Temas::Fisioterapia
+Inervação do <b>trapézio</b>;Nervo acessório (XI par craniano). ⚠️ Não são os ramos dorsais dos nervos espinais.;ana01 costas pegadinha;Temas::Fisioterapia
+Partes do <b>disco intervertebral</b>;Anel fibroso (por fora) + núcleo pulposo (gelatinoso, por dentro);ana01 ana04;Temas::Fisioterapia
+<b>Fáscia toracolombar</b>: conexão diagonal;Latíssimo do dorso de um lado ↔ glúteo máximo do lado oposto (diagonal posterior, usada ao andar e arremessar);ana01 costas;Temas::Fisioterapia
+3 motivos principais para as costas ficarem tensas;① ficar parado (contração leve e contínua, menos circulação) ② proteção contra dor ③ estresse (simpático), além de respiração no peito e fadiga;ana01 costas;Temas::Fisioterapia
+O que quebra o ciclo dor–tensão;Movimento frequente, respiração diafragmática, calor, fortalecimento progressivo, sono;ana01 costas;Temas::Fisioterapia
+Os 3 <b>planos anatômicos</b>;Sagital (divide em direita e esquerda), frontal ou coronal (frente e trás), transversal (cima e baixo);ana02;Temas::Fisioterapia
+Contração <b>concêntrica × excêntrica × isométrica</b>;Concêntrica: o músculo encurta. Excêntrica: alonga sob tensão (ex.: descer da cadeira devagar). Isométrica: não muda o comprimento.;cin01 comparativo;Temas::Fisioterapia
+Tipos de <b>alavanca</b>;Interfixa (o eixo no meio), inter-resistente (a resistência no meio), interpotente (a força no meio, a mais comum no corpo, ex.: o bíceps no cotovelo);cin02;Temas::Fisioterapia
+<b>Manguito rotador</b>: os 4 músculos;Supraespinal, infraespinal, redondo menor, subescapular (mnemônico em inglês: <b>SITS</b>);ana05;Temas::Fisioterapia
+Escala de <b>força muscular</b> 0–5;0 nenhuma contração · 1 contração sem movimento · 2 move sem gravidade · 3 vence a gravidade · 4 vence resistência moderada · 5 normal;ava03;Temas::Fisioterapia
+Agonista × antagonista × sinergista;Agonista: faz o movimento. Antagonista: faz o movimento oposto (e controla). Sinergista: ajuda o agonista.;cin04;Temas::Fisioterapia
+Partes do <b>neurônio</b>;Dendritos (recebem) → corpo celular → axônio (conduz) → terminal (libera o neurotransmissor);cel01;Temas::Neurociência
+Potencial de repouso típico;Cerca de −70 mV (interior negativo);cel02;Temas::Neurociência
+Para que serve a <b>mielina</b>;Isola o axônio. O impulso "salta" entre os nós de Ranvier (condução saltatória), o que é muito mais rápido.;cel02;Temas::Neurociência
+Principal neurotransmissor <b>excitatório</b> × <b>inibitório</b>;Excitatório: glutamato. Inibitório: GABA.;cel03 comparativo;Temas::Neurociência
+Neurotransmissor da <b>junção neuromuscular</b>;Acetilcolina;cel04;Temas::Neurociência
+Simpático × parassimpático;Simpático: luta ou fuga (coração ↑, músculos em prontidão). Parassimpático: repouso e digestão.;org01 comparativo;Temas::Neurociência
+Lobos do córtex: funções-chave;Frontal: planejar, decidir, movimento. Parietal: tato e espaço. Temporal: audição e memória. Occipital: visão.;org02;Temas::Neurociência
+Cerebelo: função;Coordenação, equilíbrio, ajuste fino do movimento e aprendizagem motora;org04;Temas::Neurociência
+Hipocampo × amígdala;Hipocampo: forma novas memórias. Amígdala: emoção, medo e relevância emocional.;fun01 fun04 comparativo;Temas::Neurociência
+<b>LTP</b> (potenciação de longo prazo);Uso repetido fortalece a sinapse ("neurônios que disparam juntos se conectam"). É uma base celular da memória.;fun01 apl01;Temas::Neurociência
+Por que revisar espaçado funciona;Cada recuperação reativa e reconsolida a memória. Espaçar obriga um esforço maior de lembrar, que fortalece mais.;apl02;Temas::Neurociência
+Dopamina e atenção;O córtex pré-frontal regula atenção e funções executivas com dopamina e noradrenalina. Novidade e recompensa aumentam a dopamina.;fun02;Temas::Neurociência
+Área de Broca × Wernicke;Broca (frontal): produção da fala. Wernicke (temporal): compreensão da linguagem.;fun05 comparativo;Temas::Neurociência
+Via <b>corticoespinal</b>: onde cruza;A maioria das fibras cruza no <b>bulbo</b> (decussação das pirâmides), por isso o hemisfério esquerdo controla o lado direito do corpo;org05;Temas::Neurociência
+FL Studio: janelas principais (teclas);F5 Playlist · F6 Channel Rack · F7 Piano Roll · F9 Mixer;fl01;Temas::FL Studio
+FL Studio: Pattern × Playlist;Pattern: um bloco (batida ou melodia) feito no Channel Rack ou no Piano Roll. Playlist: onde você organiza os patterns no tempo para montar a música.;fl02;Temas::FL Studio
+Envelope <b>ADSR</b>;Attack (subida), Decay (queda), Sustain (nível mantido), Release (fim depois de soltar a nota);fl10;Temas::FL Studio
+<b>Sidechain</b>: o que é;Um som (geralmente o kick) faz outro abaixar de volume (ex.: o baixo), abrindo espaço. Dá aquele efeito de "pulsar".;fl15;Temas::FL Studio
+<b>Gain staging</b>;Manter os volumes com folga (picos longe de 0 dB, ex.: em torno de −6 dB no master) para não distorcer e sobrar espaço para a mixagem;fl13;Temas::FL Studio
+EQ: primeiro cuidado na maioria dos canais;Cortar graves que o instrumento não precisa (filtro passa-alta), para o grave ficar limpo para o kick e o baixo;fl14;Temas::FL Studio
+Reverb em <b>send</b> × no canal;No send (envio), vários canais compartilham o mesmo reverb, o que economiza CPU e "cola" a mix. No canal afeta só aquele som.;fl16;Temas::FL Studio
+Escala maior: fórmula;T T S T T T S (tom, tom, semitom, tom, tom, tom, semitom);tm03;Temas::Teoria musical
+Escala menor natural: fórmula;T S T T S T T;tm04;Temas::Teoria musical
+Tríades: como se formam;Maior = 3ª maior + 3ª menor. Menor = 3ª menor + 3ª maior. Diminuta = 3ª menor + 3ª menor. Aumentada = 3ª maior + 3ª maior.;tm06;Temas::Teoria musical
+Campo harmônico maior;I ii iii IV V vi vii° (em Dó: C Dm Em F G Am Bm(b5));tm07;Temas::Teoria musical
+Funções harmônicas;Tônica (I, iii, vi): repouso. Subdominante (IV, ii): afastamento. Dominante (V, vii°): tensão que pede volta.;tm08;Temas::Teoria musical
+Progressão pop mais usada;I–V–vi–IV (em Dó: C–G–Am–F);tm09;Temas::Teoria musical
+Ordem dos sustenidos (ciclo das quintas);Fá, Dó, Sol, Ré, Lá, Mi, Si;tm05;Temas::Teoria musical
+Libras: os <b>5 parâmetros</b>;Configuração de mão, ponto de articulação, movimento, orientação da palma, expressões não manuais (rosto e corpo);lb09;Temas::Libras
+Libras é universal?;Não. Cada país tem sua língua de sinais (ex.: a ASL nos EUA). A Libras tem gramática própria e não é português sinalizado.;lb13 pegadinha;Temas::Libras
+Quando usar a <b>datilologia</b>;Para nomes próprios, palavras sem sinal conhecido ou para soletrar um termo novo;lb01;Temas::Libras
+<b>Sinal-nome</b>;Sinal que identifica uma pessoa. É dado pela comunidade surda, não escolhido por conta própria.;lb03;Temas::Libras
+Lei 10.436/2002;Reconhece a Libras como meio legal de comunicação e expressão da comunidade surda no Brasil;lb14;Temas::Libras
+Decreto 5.626/2005;Regulamenta a Lei 10.436. Inclui a Libras como disciplina obrigatória na formação de professores e em fonoaudiologia, e optativa nos demais cursos superiores.;lb14;Temas::Libras
+Expressões não manuais: por que importam;São gramática, não só emoção: marcam pergunta, negação, intensidade;lb09 lb10;Temas::Libras

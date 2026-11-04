@@ -1,0 +1,160 @@
+{
+ "nome": "🎛️ FL Studio (produção musical)",
+ "min_bloco": 40,
+ "blocos_padrao": 2,
+ "medida": "Prática: 'acertos/total' = repetições limpas de 10 tentativas",
+ "roteiro": "5' ver referência → 25' fazer no FL (projeto curto) → 5' salvar e exportar 15 s → 5' anotar o que aprendeu",
+ "ciclo": [
+  "int",
+  "bea",
+  "har",
+  "int",
+  "sd",
+  "mix",
+  "arr"
+ ],
+ "disciplinas": [
+  {
+   "id": "int",
+   "nome": "Interface e fluxo",
+   "cor": "#e8590c",
+   "topicos": [
+    {
+     "id": "fl01",
+     "t": "Janelas: Browser, Channel Rack, Piano Roll, Playlist, Mixer (F5–F9)",
+     "p": 3
+    },
+    {
+     "id": "fl02",
+     "t": "Patterns × Playlist; modo Pattern/Song",
+     "p": 3
+    },
+    {
+     "id": "fl03",
+     "t": "Salvar, templates e exportar (WAV/MP3)",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "bea",
+   "nome": "Batida e ritmo",
+   "cor": "#1971c2",
+   "topicos": [
+    {
+     "id": "fl04",
+     "t": "Beat 4/4 no Step Sequencer (kick, snare, hi-hat)",
+     "p": 3
+    },
+    {
+     "id": "fl05",
+     "t": "Swing, velocity e groove humanizado",
+     "p": 2
+    },
+    {
+     "id": "fl06",
+     "t": "Samples, fatiar loops (Slicex/Edison)",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "har",
+   "nome": "Melodia e harmonia",
+   "cor": "#2f9e44",
+   "topicos": [
+    {
+     "id": "fl07",
+     "t": "Piano Roll: notas, comprimento, ghost notes",
+     "p": 3
+    },
+    {
+     "id": "fl08",
+     "t": "Escala na prática (destacar escala) e acordes",
+     "p": 3
+    },
+    {
+     "id": "fl09",
+     "t": "Linha de baixo seguindo os acordes",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "sd",
+   "nome": "Sound design",
+   "cor": "#9c36b5",
+   "topicos": [
+    {
+     "id": "fl10",
+     "t": "Sintetizadores: oscilador, filtro, envelope ADSR",
+     "p": 2
+    },
+    {
+     "id": "fl11",
+     "t": "Presets do FLEX/Sytrus e como modificá-los",
+     "p": 2
+    },
+    {
+     "id": "fl12",
+     "t": "Automação de parâmetros",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "mix",
+   "nome": "Mixagem",
+   "cor": "#c2255c",
+   "topicos": [
+    {
+     "id": "fl13",
+     "t": "Mixer: rotear canais, volume e pan; gain staging",
+     "p": 3
+    },
+    {
+     "id": "fl14",
+     "t": "EQ (Parametric EQ 2): cortar graves desnecessários",
+     "p": 3
+    },
+    {
+     "id": "fl15",
+     "t": "Compressão e sidechain",
+     "p": 2
+    },
+    {
+     "id": "fl16",
+     "t": "Reverb e delay em envios (sends)",
+     "p": 2
+    },
+    {
+     "id": "fl17",
+     "t": "Master e loudness (LUFS)",
+     "p": 1
+    }
+   ]
+  },
+  {
+   "id": "arr",
+   "nome": "Arranjo",
+   "cor": "#0c8599",
+   "topicos": [
+    {
+     "id": "fl18",
+     "t": "Estrutura: intro, verso, refrão/drop, ponte, final",
+     "p": 3
+    },
+    {
+     "id": "fl19",
+     "t": "Recriar uma música de referência (análise de arranjo)",
+     "p": 2
+    },
+    {
+     "id": "fl20",
+     "t": "Terminar 1 faixa curta de 1 minuto",
+     "p": 3
+    }
+   ]
+  }
+ ]
+}

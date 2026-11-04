@@ -1,0 +1,115 @@
+{
+ "nome": "🤟 Libras",
+ "min_bloco": 25,
+ "blocos_padrao": 2,
+ "medida": "Prática: 'acertos/total' = repetições limpas de 10 tentativas",
+ "roteiro": "5' assistir aos sinais → 10' repetir em frente ao espelho/câmera → 5' sinalizar de memória → 5' cartões",
+ "ciclo": [
+  "bas",
+  "voc",
+  "gra",
+  "bas",
+  "voc",
+  "cul"
+ ],
+ "disciplinas": [
+  {
+   "id": "bas",
+   "nome": "Base",
+   "cor": "#e8590c",
+   "topicos": [
+    {
+     "id": "lb01",
+     "t": "Alfabeto manual (datilologia) e o próprio nome",
+     "p": 3
+    },
+    {
+     "id": "lb02",
+     "t": "Números (quantidade, valores, idade)",
+     "p": 3
+    },
+    {
+     "id": "lb03",
+     "t": "Saudações e apresentação pessoal; sinal-nome",
+     "p": 3
+    }
+   ]
+  },
+  {
+   "id": "voc",
+   "nome": "Vocabulário",
+   "cor": "#1971c2",
+   "topicos": [
+    {
+     "id": "lb04",
+     "t": "Família e pessoas",
+     "p": 2
+    },
+    {
+     "id": "lb05",
+     "t": "Cores, objetos e lugares",
+     "p": 2
+    },
+    {
+     "id": "lb06",
+     "t": "Tempo: dias, meses, ontem/hoje/amanhã",
+     "p": 2
+    },
+    {
+     "id": "lb07",
+     "t": "Sentimentos e verbos do dia a dia",
+     "p": 2
+    },
+    {
+     "id": "lb08",
+     "t": "Vocabulário de saúde (útil na fisioterapia)",
+     "p": 2
+    }
+   ]
+  },
+  {
+   "id": "gra",
+   "nome": "Gramática",
+   "cor": "#2f9e44",
+   "topicos": [
+    {
+     "id": "lb09",
+     "t": "Os 5 parâmetros: configuração de mão, ponto de articulação, movimento, orientação, expressões não manuais",
+     "p": 3
+    },
+    {
+     "id": "lb10",
+     "t": "Perguntas (QUE, ONDE, QUEM, QUANDO, POR QUÊ)",
+     "p": 3
+    },
+    {
+     "id": "lb11",
+     "t": "Verbos direcionais e uso do espaço",
+     "p": 2
+    },
+    {
+     "id": "lb12",
+     "t": "Classificadores",
+     "p": 1
+    }
+   ]
+  },
+  {
+   "id": "cul",
+   "nome": "Cultura e lei",
+   "cor": "#9c36b5",
+   "topicos": [
+    {
+     "id": "lb13",
+     "t": "Cultura e identidade surda",
+     "p": 2
+    },
+    {
+     "id": "lb14",
+     "t": "Lei 10.436/2002 e Decreto 5.626/2005",
+     "p": 1
+    }
+   ]
+  }
+ ]
+}

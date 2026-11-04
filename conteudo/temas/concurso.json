@@ -1,0 +1,90 @@
+{
+  "_fonte": "Anexo V OFICIAL do Edital PROGEP/UFMS nº 152/2026 (ver concurso/anexo-v-oficial.md). Cargo padrão: 506, Analista de TI, Desenvolvimento de Software. 'p' = prioridade estimada (3 alta, 2 média, 1 baixa). É julgamento pela abrangência e pelo histórico de bancas, não estatística da FAPEC. Depois de editar, rode 'python scripts/estudo.py gerar'.",
+  "prova": "2027-01-17",
+  "disciplinas": [
+    {
+      "id": "esp", "nome": "Específicos: 506 Dev de Software", "cor": "#e8590c", "questoes": 20, "pontos": 40,
+      "topicos": [
+        {"id": "esp01", "t": "Engenharia de requisitos: coleta, reuniões, especificação, validação, gerência, prototipação", "p": 3},
+        {"id": "esp02", "t": "Casos de uso e padrões de casos de uso; modelos de processo de software", "p": 2},
+        {"id": "esp03", "t": "Ágil: Scrum, Kanban, XP (papéis, artefatos, cerimônias)", "p": 3},
+        {"id": "esp04", "t": "Testes: unitário, integração, usabilidade, automatizado, cobertura, TDD, mocks", "p": 3},
+        {"id": "esp05", "t": "Clean Code e análise estática (SonarQube)", "p": 2},
+        {"id": "esp06", "t": "Orientação a objetos: conceitos e princípios", "p": 3},
+        {"id": "esp07", "t": "UML: visão geral, modelos e diagramas", "p": 2},
+        {"id": "esp08", "t": "Padrões de projeto (GoF), MVC, arquitetura back-end/front-end", "p": 3},
+        {"id": "esp09", "t": "Desenvolvimento seguro: Secure SDLC, Security/Privacy by Design, modelagem de ameaças, revisão de código", "p": 2},
+        {"id": "esp10", "t": "OWASP Top 10", "p": 3},
+        {"id": "esp11", "t": "Interoperabilidade: e-PING, Web Services, RESTful", "p": 2},
+        {"id": "esp12", "t": "Acessibilidade (eMAG) e usabilidade", "p": 2},
+        {"id": "esp13", "t": "Java, JEE/Jakarta EE, Spring Boot", "p": 2},
+        {"id": "esp14", "t": "PHP, CakePHP, Laravel, WordPress; Flutter", "p": 1},
+        {"id": "esp15", "t": "Web: HTML5, CSS3, JavaScript, Vue.js, Bootstrap, Swagger/OpenAPI", "p": 2},
+        {"id": "esp16", "t": "Git e GitLab, CI/CD, Docker", "p": 3},
+        {"id": "esp17", "t": "SSO e OAuth2; autenticação e autorização", "p": 2},
+        {"id": "esp18", "t": "BD: modelagem, DER, projeto lógico/físico, modelo relacional, engenharia reversa", "p": 3},
+        {"id": "esp19", "t": "Normalização e formas normais", "p": 3},
+        {"id": "esp20", "t": "SQL (DDL, DML), álgebra relacional, otimização de consultas", "p": 3},
+        {"id": "esp21", "t": "Transações e controle de concorrência (ACID, isolamento)", "p": 2},
+        {"id": "esp22", "t": "PostgreSQL: arquitetura, views, triggers, procedures, índices, schemas, tablespaces, dblink, savepoints, regex", "p": 2},
+        {"id": "esp23", "t": "Data Warehouse, Data Mining, BI; modelo cliente/servidor", "p": 1},
+        {"id": "esp24", "t": "Segurança da informação: políticas, controle de acesso, criptografia, vulnerabilidades e incidentes, segurança de APIs", "p": 2},
+        {"id": "esp25", "t": "LGPD (Lei 13.709/2018)", "p": 3},
+        {"id": "esp26", "t": "IA, Machine Learning, IA generativa e LLMs; uso responsável, vieses; Big Data", "p": 2}
+      ]
+    },
+    {
+      "id": "rlm", "nome": "Raciocínio Lógico", "cor": "#1971c2", "questoes": 10, "pontos": 20,
+      "topicos": [
+        {"id": "rlm01", "t": "Proposições, conectivos e tabela-verdade; tautologia, contradição, contingência", "p": 3},
+        {"id": "rlm02", "t": "Negação de proposições; equivalências e implicações lógicas", "p": 3},
+        {"id": "rlm03", "t": "Argumentação: validade, inferências e conclusões a partir de hipóteses", "p": 3},
+        {"id": "rlm04", "t": "Diagramas lógicos e operações com conjuntos", "p": 2},
+        {"id": "rlm05", "t": "Sequências numéricas, alfabéticas e figurais", "p": 2},
+        {"id": "rlm06", "t": "Orientação espacial e temporal; problemas de relações (quem é quem)", "p": 2},
+        {"id": "rlm07", "t": "Princípio fundamental da contagem; arranjos, permutações e combinações", "p": 3},
+        {"id": "rlm08", "t": "Probabilidade", "p": 3},
+        {"id": "rlm09", "t": "Razões, proporções e porcentagem", "p": 2}
+      ]
+    },
+    {
+      "id": "leg", "nome": "Legislação", "cor": "#2f9e44", "questoes": 10, "pontos": 20,
+      "topicos": [
+        {"id": "leg01", "t": "CF/88, arts. 37 a 41: princípios, concurso, acumulação, servidores, estabilidade", "p": 3},
+        {"id": "leg02", "t": "Lei 8.112/90: provimento, posse, exercício, estágio probatório, vacância, remoção, redistribuição", "p": 3},
+        {"id": "leg03", "t": "Lei 8.112/90: direitos e vantagens (indenizações, gratificações, férias, licenças, afastamentos)", "p": 2},
+        {"id": "leg04", "t": "Lei 8.112/90: regime disciplinar (deveres, proibições, responsabilidades, penalidades)", "p": 3},
+        {"id": "leg05", "t": "Lei 8.112/90: sindicância e PAD", "p": 3},
+        {"id": "leg06", "t": "Lei 9.784/99: processo administrativo federal", "p": 3},
+        {"id": "leg07", "t": "Decreto 9.283/2018: Marco Legal de CT&I", "p": 2},
+        {"id": "leg08", "t": "Estatuto da UFMS (Res. 93-Coun/2021)", "p": 2},
+        {"id": "leg09", "t": "Regimento Geral da UFMS (Res. 137-Coun/2021)", "p": 2},
+        {"id": "leg10", "t": "Código de Ética dos Servidores da UFMS (Res. 426-Coun/2026)", "p": 2}
+      ]
+    },
+    {
+      "id": "por", "nome": "Língua Portuguesa", "cor": "#9c36b5", "questoes": 15, "pontos": 15,
+      "topicos": [
+        {"id": "por01", "t": "Compreensão e interpretação de textos", "p": 3},
+        {"id": "por02", "t": "Gêneros, tipos textuais e funções da linguagem", "p": 2},
+        {"id": "por03", "t": "Coesão e coerência", "p": 3},
+        {"id": "por04", "t": "Semântica: sinonímia, antonímia, polissemia, paronímia, homonímia; sentido próprio e figurado", "p": 2},
+        {"id": "por05", "t": "Ortografia, hífen, maiúsculas; acentuação", "p": 1},
+        {"id": "por06", "t": "Classes de palavras; estrutura e formação de palavras", "p": 2},
+        {"id": "por07", "t": "Sintaxe: termos da oração; coordenação e subordinação; orações reduzidas", "p": 2},
+        {"id": "por08", "t": "Regência e crase", "p": 3},
+        {"id": "por09", "t": "Concordância verbal e nominal", "p": 3},
+        {"id": "por10", "t": "Tempos e modos verbais; colocação pronominal", "p": 2},
+        {"id": "por11", "t": "Pontuação", "p": 3}
+      ]
+    },
+    {
+      "id": "ing", "nome": "Língua Inglesa", "cor": "#c2255c", "questoes": 5, "pontos": 5,
+      "topicos": [
+        {"id": "ing01", "t": "Leitura: sentido global, localizar ideia, cognatos", "p": 3},
+        {"id": "ing02", "t": "Vocabulário fundamental e de TI; falsos cognatos", "p": 2},
+        {"id": "ing03", "t": "Gramática funcional para leitura (tempos, conectivos, modais)", "p": 1}
+      ]
+    }
+  ]
+}
