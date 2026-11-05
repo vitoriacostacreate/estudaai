@@ -43,21 +43,22 @@ O código é o mesmo `web/index.html`: ele detecta onde está rodando (nuvem, se
 
 ## 🚀 Como rodar
 
-Você precisa só do **Python 3.10+** ([python.org](https://www.python.org/downloads/)).
+Você precisa só do **Python 3.10+** ([python.org](https://www.python.org/downloads/)). Nada para instalar além dele.
 
-**Windows:** dois cliques em **`ESTUDAAI.bat`**. Na primeira vez, ele instala o `pypdf` sozinho.
+**Windows:** dois cliques em **`ESTUDAAI.bat`**.
 
 **Mac/Linux:**
 ```bash
 ./estudaai.sh
 # ou, manualmente:
-python -m pip install -r requirements.txt
 python servidor.py
 ```
 
 O navegador abre em **http://127.0.0.1:8765**. Vá em **Biblioteca** e arraste um PDF. Para testar, use `exemplos/apostila-exemplo.pdf`.
 
 > Sem servidor também funciona: abra `web/index.html` direto no navegador. As aulas e os cartões prontos funcionam; só a importação de PDF precisa do servidor.
+
+> O PDF é lido no próprio navegador (pdf.js), então **importar** precisa de internet. Estudar funciona offline.
 
 ### IA (opcional)
 Em **Biblioteca → IA**, cole uma chave da [API da Anthropic](https://console.anthropic.com/). Ela fica só em `dados/config.json`, no seu computador. Você também pode usar a variável `ANTHROPIC_API_KEY`.
@@ -67,12 +68,14 @@ Em **Biblioteca → IA**, cole uma chave da [API da Anthropic](https://console.a
 ```
 estudaai/
 ├── ESTUDAAI.bat / estudaai.sh   ← abrir
-├── servidor.py                  ← servidor local (só biblioteca padrão do Python)
-├── nucleo/
-│   ├── organizar.py             ← PDF → seções → termos, definições, lacunas, aula
-│   └── ia.py                    ← aula com IA (opcional)
+├── servidor.py                  ← servidor local: só guarda arquivos (biblioteca padrão do Python)
+├── nucleo/ia.py                 ← repassa pedidos à IA: aula (Claude), revisão e dúvidas (Claude, ChatGPT ou Gemini, com busca na web), opcional
 ├── web/index.html               ← o app (gerado; não edite à mão)
-├── fonte/                       ← código do app e aulas prontas → python fonte/build.py
+├── fonte/                       ← código do app → python fonte/build.py
+│   ├── app.html + estilo.css    ← casca da página e visual
+│   ├── js/NN-*.js               ← o app, um arquivo por parte (juntados na ordem do número)
+│   ├── organizar.js             ← PDF → seções → termos, definições, lacunas, aula
+│   └── aulas-*.js               ← aulas prontas
 ├── conteudo/                    ← temas e cartões que já vêm prontos
 ├── dados/                       ← SEU material: PDFs, progresso, config (fora do git)
 └── testes/
@@ -84,7 +87,8 @@ estudaai/
 
 ```bash
 python testes/gerar_exemplo.py     # recria o PDF de exemplo (precisa de reportlab)
-python -m unittest discover testes # testes do organizador de PDF
+python -m unittest discover testes # testes do servidor
+node --test testes/                # testes do organizador de PDF
 python fonte/build.py              # depois de editar fonte/ ou conteudo/
 ```
 

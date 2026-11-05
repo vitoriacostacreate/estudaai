@@ -12,7 +12,7 @@
     {
       "label": "Testes",
       "type": "shell",
-      "command": "python -m unittest discover testes -v",
+      "command": "python -m unittest discover testes -v; node --test testes/",
       "group": { "kind": "test", "isDefault": true },
       "problemMatcher": []
     },

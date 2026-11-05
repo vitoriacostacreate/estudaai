@@ -137,7 +137,7 @@ explica acontece começa depende costuma ajuda realiza formam forma quanto mesma
       for (const f of fr) {
         if (usados.has(f)) continue;
         const m = f.match(new RegExp(B + escRe(t) + E, "i"));
-        if (m && m.index > 0) { cards.push({ f: f.slice(0, m.index) + "<b>_____</b>" + f.slice(m.index + m[0].length), v: `<b>${escH(m[0])}</b><br><small>${escH(f)}</small>`, resp: m[0] }); usados.add(f); break; }
+        if (m && m.index > 0) { cards.push({ f: f.slice(0, m.index) + "<b>_____</b>" + f.slice(m.index + m[0].length), v: `<b>${escH(m[0])}</b><br><small>${escH(f)}</small>`, resp: m[0], src: f }); usados.add(f); break; }
       }
       if (cards.length >= n) break;
     }
@@ -155,7 +155,7 @@ explica acontece começa depende costuma ajuda realiza formam forma quanto mesma
       const certo = c.resp; let d = todos.filter(t => t.toLowerCase() !== certo.toLowerCase() && t.includes(" ") === certo.includes(" "));
       if (d.length < 3) d = todos.filter(t => t.toLowerCase() !== certo.toLowerCase());
       const ops = emb([certo, ...emb(d).slice(0, 3)]);
-      return { q: c.f.replace(/<[^>]+>/g, ""), o: ops, a: ops.indexOf(certo), e: c.v.split("<br>").pop().replace(/<[^>]+>/g, "") };
+      return { q: c.f.replace(/<[^>]+>/g, ""), o: ops, a: ops.indexOf(certo), e: c.src };   /* frase original, sem escape: a tela escapa ao mostrar */
     });
     const a = {
       titulo: s.titulo, auto: true, ideia: fr[0] || s.texto.slice(0, 200), fonte: { doc: docId, pi: s.pi + 1, pf: s.pf + 1 },
@@ -209,6 +209,27 @@ explica acontece começa depende costuma ajuda realiza formam forma quanto mesma
     let titulo = ""; try { const meta = await pdf.getMetadata(); titulo = ((meta && meta.info && meta.info.Title) || "").trim(); } catch (e) { }
     return { paginas, sumario: sumario.length >= 2 ? sumario : [], titulo };
   }
-  return { organizar, lerPDF, _: { secoes, termos, definicoes, frases } };
+  /* Qual tema já existente recebe este PDF? Devolve {id, pontos} ou null (aí cria tema novo).
+     Compara radicais (6 letras, sem acento): o nome do tema no nome/título do PDF vale mais;
+     depois, o nome do tema no corpo e o vocabulário comum (disciplinas e tópicos). */
+  const semAcento = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const STOPN = new Set([...STOP].map(semAcento));
+  const radicais = s => (semAcento(s).match(/[a-z][a-z-]{3,}/g) || []).filter(w => !STOPN.has(w)).map(w => w.slice(0, 6));
+  const MINIMO = 6;
+  function escolherTema(r, temas) {
+    const tit = new Set(radicais(r.doc.nome + " " + r.doc.titulo));
+    const corpo = new Set([...tit, ...r.topicos.flatMap(t => radicais(t.t)), ...radicais(Object.values(r.textos || {}).join(" ").slice(0, 6000))]);
+    let melhor = null;
+    for (const t of temas) {
+      const nome = [...new Set(radicais(String(t.nome || "").replace(/\(.*?\)/g, " ")))]; if (!nome.length) continue;   // "(base do curso)" não conta
+      const vocab = new Set([...radicais(t.desc), ...(t.disciplinas || []).flatMap(d => [...radicais(d.nome), ...d.topicos.flatMap(x => radicais(x.t))])]);
+      const fr = conj => nome.filter(w => conj.has(w)).length / nome.length;
+      let comum = 0; for (const w of vocab) if (corpo.has(w)) comum++;
+      const pontos = 10 * fr(tit) + 3 * fr(corpo) + Math.min(comum, 20) * 0.3;
+      if (pontos >= MINIMO && (!melhor || pontos > melhor.pontos)) melhor = { id: t.id, pontos: Math.round(pontos * 10) / 10 };
+    }
+    return melhor;
+  }
+  return { organizar, lerPDF, escolherTema, _: { secoes, termos, definicoes, frases } };
 })();
 if (typeof module !== "undefined") module.exports = ORG;

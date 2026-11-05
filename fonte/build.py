@@ -47,13 +47,22 @@ def cartoes():
     return out
 
 
+def app_js() -> str:
+    """Junta fonte/js/*.js na ordem do prefixo numérico (10-util, 20-estado, ... 99-iniciar).
+    Todos compartilham o mesmo escopo global, como se fossem um arquivo só."""
+    partes = [f"/* ==== js/{f.name} ==== */\n" + f.read_text(encoding="utf-8") for f in sorted((FONTE / "js").glob("[0-9]*.js"))]
+    return '"use strict";\n' + "\n".join(partes)
+
+
 def main():
     ts, cs = temas(), cartoes()
     aulas = "\n".join(f.read_text(encoding="utf-8") for f in sorted(FONTE.glob("aulas-*.js")))
     html = (FONTE / "app.html").read_text(encoding="utf-8")
+    html = html.replace("/*CSS*/", (FONTE / "estilo.css").read_text(encoding="utf-8"))
     html = html.replace("/*DATA*/", "const TEMAS = " + json.dumps(ts, ensure_ascii=False) + ";\nconst CARDS = " + json.dumps(cs, ensure_ascii=False) + ";")
     html = html.replace("/*AULAS*/", aulas)
     html = html.replace("/*ORG*/", (FONTE / "organizar.js").read_text(encoding="utf-8"))
+    html = html.replace("/*APP*/", app_js())
     (RAIZ / "web").mkdir(exist_ok=True)
     (RAIZ / "web" / "index.html").write_text(html, encoding="utf-8")
     n_aulas = len(re.findall(r"^AULAS\.\w+ =", aulas, re.M))

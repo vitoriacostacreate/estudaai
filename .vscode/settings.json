@@ -20,5 +20,5 @@
 
   // Corretor ortográfico em português e inglês
   "cSpell.language": "pt_BR,en",
-  "cSpell.words": ["estudaai", "FSRS", "pypdf", "Feynman", "UFMS", "FAPEC", "Libras"]
+  "cSpell.words": ["estudaai", "FSRS", "Feynman", "UFMS", "FAPEC", "Libras"]
 }
