@@ -1,0 +1,31 @@
+{
+  // F5 = rodar com depurador (pontos de parada funcionam)
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Servidor (build antes)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/servidor.py",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Build (gerar web/index.html)",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Build",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/fonte/build.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Arquivo Python aberto",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}

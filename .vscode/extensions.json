@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.debugpy",
+    "charliermarsh.ruff",
+    "usernamehw.errorlens",
+    "streetsidesoftware.code-spell-checker",
+    "streetsidesoftware.code-spell-checker-portuguese-brazilian",
+    "mhutchie.git-graph",
+    "yzhang.markdown-all-in-one",
+    "mechatroner.rainbow-csv",
+    "github.vscode-github-actions",
+    "pkief.material-icon-theme",
+    "anthropic.claude-code"
+  ]
+}

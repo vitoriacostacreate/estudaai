@@ -1,0 +1,24 @@
+{
+  // estudaai: configuração do projeto
+  "files.encoding": "utf8",
+
+  // web/index.html é gerado pelo build: fica só leitura e fora da busca
+  "files.readonlyInclude": { "web/index.html": true },
+  "files.exclude": { "**/__pycache__": true },
+  "search.exclude": { "web/index.html": true, "dados/**": true },
+
+  // Testes (aba de testes do VS Code): python -m unittest discover testes
+  "python.testing.unittestEnabled": true,
+  "python.testing.pytestEnabled": false,
+  "python.testing.unittestArgs": ["-v", "-s", "testes", "-p", "test_*.py"],
+
+  // Python: Ruff aponta problemas; formatar só quando você pedir (Shift+Alt+F)
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": false
+  },
+
+  // Corretor ortográfico em português e inglês
+  "cSpell.language": "pt_BR,en",
+  "cSpell.words": ["estudaai", "FSRS", "pypdf", "Feynman", "UFMS", "FAPEC", "Libras"]
+}

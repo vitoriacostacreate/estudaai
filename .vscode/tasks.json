@@ -1,0 +1,33 @@
+{
+  // Ctrl+Shift+B = build | Terminal > Executar Tarefa para as outras
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build (gerar web/index.html)",
+      "type": "shell",
+      "command": "python fonte/build.py",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Testes",
+      "type": "shell",
+      "command": "python -m unittest discover testes -v",
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Rodar servidor (127.0.0.1:8765)",
+      "type": "shell",
+      "command": "python servidor.py",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Build + servidor",
+      "dependsOrder": "sequence",
+      "dependsOn": ["Build (gerar web/index.html)", "Rodar servidor (127.0.0.1:8765)"],
+      "problemMatcher": []
+    }
+  ]
+}
