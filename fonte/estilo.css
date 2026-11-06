@@ -7,7 +7,7 @@
 :root {
   --bg: #0b0e14; --s1: #11151d; --s2: #171c26; --s3: #1f2531;
   --line: #232a37; --line2: #2f3747;
-  --tx: #e7eaf0; --tx2: #c9cfdb; --mu: #9aa3b5; --mu2: #6c7486;
+  --tx: #e7eaf0; --tx2: #c9cfdb; --mu: #9aa3b5; --mu2: #7c8597;   /* --mu2 ≥ 4.5:1 sobre --bg (antes 4.1:1) */
   --ac: #7f9cff; --ok: #4fcf86; --warn: #f2a35b; --bad: #ff7d86; --teal: #35c9bd;
   --on-c: #0b0e14;
   --fd: "Plus Jakarta Sans", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
@@ -156,8 +156,10 @@ kbd { background: var(--s3); border: 1px solid var(--line2); border-bottom-width
 .tile .meta { font-size: 13px; color: var(--mu); }
 .tile .desc { font-size: 13.5px; color: var(--mu); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .tile { position: relative; }
-.tile .topo > .pill { position: absolute; top: 12px; right: 12px; }
-.tile.principal h3 { padding-right: 86px; }
+/* tema principal: só a estrela no canto, para o nome não quebrar em blocos estreitos */
+.tile .topo > .fixa { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; padding: 0; justify-content: center; border-radius: 8px; }
+.tile .topo > .fixa .i { width: 14px; height: 14px; }
+.tile.principal h3 { padding-right: 28px; }
 
 /* ---------- trilha de um tema ---------- */
 .tema-cab { display: grid; gap: 18px; padding: 24px; border-radius: var(--r); border: 1px solid var(--line); border-top: 3px solid var(--c); background: linear-gradient(180deg, var(--c-soft), transparent 70%), var(--s1); }
@@ -285,8 +287,12 @@ textarea { min-height: 76px; resize: vertical; }
 .placar i.c, .placar i.e { background: var(--b); }
 .placar button.c, .placar button.e { background-image: linear-gradient(var(--b), var(--b)); }
 .placar button.on { background-size: 100% 10px; outline: 2px solid var(--c-line); outline-offset: 2px; border-radius: 4px; }
-.opt { display: flex; gap: 12px; align-items: baseline; }
-.opt .letra { color: var(--mu); font-weight: 700; min-width: 1.2em; }
+.opt { display: flex; gap: 12px; align-items: center; }
+/* letra da alternativa: selo pequeno (não confundir com .wid .letra, a letra gigante da datilologia) */
+.opt .letra { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--s3); color: var(--mu); font-family: var(--fd); font-size: 13px; font-weight: 800; transition: background .15s, color .15s; }
+.opt:hover:not([disabled]) .letra { background: var(--c-soft); color: var(--c); }
+.opt.certa .letra { background: var(--ok); color: var(--on-c); }
+.opt.errada .letra { background: var(--bad); color: var(--on-c); }
 .opt[disabled] { cursor: default; }
 .opt[disabled]:not(.certa):not(.errada) { opacity: .7; }
 
@@ -320,6 +326,9 @@ textarea { min-height: 76px; resize: vertical; }
 .cal i.l1 { background: #2b3d73; }
 .cal i.l2 { background: #4a63c0; }
 .cal i.l3 { background: var(--ac); }
+.cal-leg { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 12.5px; color: var(--mu); }
+.cal-leg .cal { display: flex; gap: 4px; }
+.cal-leg .cal i { width: 12px; height: 12px; }
 
 /* ---------- widgets (prática) ---------- */
 .wid { background: var(--s1); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 14px; }
@@ -369,7 +378,7 @@ textarea { min-height: 76px; resize: vertical; }
 .cam { display: grid; gap: 8px; }
 .cam button { text-align: left; padding: 12px 14px; border-radius: var(--r2); border: 1px solid var(--line); background: var(--cc); color: #0b1020; font-weight: 700; transition: transform .12s; }
 .cam button.sel { transform: translateX(10px); box-shadow: 0 0 0 3px #fff; }
-.letra { font-family: var(--fd); font-size: 110px; font-weight: 800; text-align: center; line-height: 1; color: var(--c); }
+.wid .letra { font-family: var(--fd); font-size: 110px; font-weight: 800; text-align: center; line-height: 1; color: var(--c); }
 canvas { max-width: 100%; background: var(--s2); border-radius: var(--r2); }
 input[type=range] { width: 100%; accent-color: var(--c); }
 
@@ -382,7 +391,14 @@ pre.prompt { white-space: pre-wrap; background: var(--s2); border: 1px solid var
 /* ---------- telas menores ---------- */
 @media (max-width: 860px) {
   .hoje { grid-template-columns: 1fr; }
-  .chip .l { display: none; }
+  /* some da tela, mas o leitor de tela ainda lê "73 dias para a prova" */
+  .chip .l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+/* toque (celular, tablet): alvos de pelo menos 44px */
+@media (pointer: coarse) {
+  .btn { min-height: 44px; }
+  .btn.sm { min-height: 40px; }
+  .topico { min-height: 52px; }
 }
 @media (max-width: 720px) {
   /* backdrop-filter prenderia a barra fixa de baixo ao cabeçalho: no celular, fundo sólido */
@@ -390,7 +406,7 @@ pre.prompt { white-space: pre-wrap; background: var(--s2); border: 1px solid var
   .top .in { height: 54px; gap: 12px; }
   /* abas viram a barra de baixo, ao alcance do polegar */
   nav.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; justify-content: space-around; gap: 0; padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); background: rgba(11, 14, 20, .96); backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
-  nav.tabs a { flex-direction: column; gap: 2px; padding: 6px 8px; font-size: 11px; min-width: 60px; }
+  nav.tabs a { flex-direction: column; gap: 2px; padding: 6px 6px; font-size: 12px; min-width: 60px; min-height: 48px; justify-content: center; }
   nav.tabs a.on { background: none; color: var(--ac); }
   nav.tabs .badge { position: absolute; top: 0; right: 6px; min-width: 17px; height: 17px; font-size: 10.5px; }
   main { padding: 20px 16px 110px; gap: 22px; }
@@ -404,6 +420,11 @@ pre.prompt { white-space: pre-wrap; background: var(--s2); border: 1px solid var
   .par { grid-template-columns: 1fr; }
   .toast { bottom: 84px; }
   .legenda { gap: 10px 14px; }
+  /* cabeçalho do tema: "Continuar" ocupa a linha toda; as ações secundárias vão para a linha de baixo */
+  .tema-cab .row > #revtema { flex: 1; }
+  .tema-cab .row > .btn.pri { width: 100%; justify-content: flex-start; text-align: left; }
+  .tema-cab .row > .sep { flex-basis: 100%; height: 0; }
+  .tema-cab .id { align-items: flex-start; }
 }
 
 /* ---------- revisão com IA e dúvidas (52-revisao-ia, 77-tela-ia) ---------- */

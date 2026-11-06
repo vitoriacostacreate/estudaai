@@ -61,7 +61,7 @@ const atalhoIA = (href, cor, icone, titulo, n, frase, acao) => `<a class="tile a
 function tileTema(t, comDesc = false) {
   const pr = progressoTema(t); const prontas = topicos(t).filter(x => aula(x.id)).length; const principal = t.id === st.principal;
   return `<a class="tile ${principal ? "principal" : ""}" href="#tema-${t.id}" style="--c:${t.cor}">
-    <div class="topo">${iconeTema(t)}<div class="nome"><h3>${esc(t.nome)}</h3><span class="meta">${pr.v} de ${pr.n} tópicos · ${prontas} ${prontas === 1 ? "aula" : "aulas"}</span></div>${principal ? `<span class="pill ac" title="Tema principal">${ico("estrela")}principal</span>` : ""}</div>
+    <div class="topo">${iconeTema(t)}<div class="nome"><h3>${esc(t.nome)}</h3><span class="meta">${pr.v} de ${pr.n} tópicos · ${prontas} ${prontas === 1 ? "aula" : "aulas"}</span></div>${principal ? `<span class="pill ac fixa" title="Tema principal">${ico("estrela")}<span class="sr">Tema principal</span></span>` : ""}</div>
     ${comDesc && t.desc ? `<p class="desc">${esc(t.desc)}</p>` : ""}
     <div class="bar"><i style="width:${pr.p * 100}%"></i></div></a>`;
 }
