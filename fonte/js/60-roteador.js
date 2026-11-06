@@ -1,6 +1,6 @@
 /* ============ roteador ============ */
 /* Abas do topo (no celular viram a barra de baixo). "Novo tema" é uma ação dentro de Temas, não uma aba. */
-const ROTAS = [["inicio", "Início"], ["temas", "Temas"], ["revisar", "Revisar"], ["biblioteca", "Biblioteca"], ["foco", "Foco"], ["progresso", "Progresso"]];
+const ROTAS = [["inicio", "Início"], ["temas", "Temas"], ["revisar", "Revisar"], ["biblioteca", "Biblioteca"], ["foco", "Foco"], ["prepara", "Prepara"], ["progresso", "Progresso"]];
 const abaDaRota = r => r.startsWith("tema-") || r.startsWith("aula-") || r === "novo" ? "temas" : (ROTAS.find(([id]) => r.startsWith(id)) || ["inicio"])[0];
 function topo(rota) {
   const fila = filaCartoes("todos").length; const aba = abaDaRota(rota);
@@ -9,7 +9,7 @@ function topo(rota) {
   const prova = diasAte("2027-01-17");
   $("#chips").innerHTML = (prova >= 0 ? `<span class="chip" title="Prova da UFMS em 17/01/2027">${ico("calendario")}<b>${prova}</b><span class="l">dias para a prova</span></span>` : "")
     + `<span class="chip ${seq ? "quente" : ""}" title="Dias seguidos com estudo">${ico("chama")}<b>${seq}</b><span class="l">${seq === 1 ? "dia seguido" : "dias seguidos"}</span></span>`
-    + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + chipFoco();
+    + chipPrepara() + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + chipFoco();
   if (MODO === "nuvem") marcarSync();
 }
 function rotear() {
@@ -18,6 +18,7 @@ function rotear() {
   focoRota(h); topo(h); window.scrollTo(0, 0);
   const app = $("#app");
   if (h.startsWith("tema-")) return telaTema(app, h.slice(5));
+  if (h === "prepara" || h.startsWith("prepara-")) return telaPrepara(app, h.slice(8) || null);
   if (h === "ia" || h === "ia-duvidas") return telaIA(app, h === "ia-duvidas");
   if (h.startsWith("aula-")) { const resto = h.slice(5); const m = resto.match(/^(.*?)(?:-(mapa|lembre|aprenda|pratique|teste|explique|feito))?$/); return telaAula(app, m[1], m[2] || "mapa"); }
   ({ temas: telaTemas, biblioteca: telaBiblioteca, revisar: telaRevisar, novo: telaNovo, progresso: telaProgresso, foco: telaFoco }[h] || telaInicio)(app);

@@ -7,6 +7,7 @@ function carregar(doServidor) {
   st.top ||= {}; st.cards ||= {}; st.dias ||= {}; st.temasUser ||= []; st.aulasUser ||= {}; st.notas ||= {};
   st.tentativas ||= []; st.duvidas ||= []; st.respostasIA ||= [];   /* revisão com IA e dúvidas (52-revisao-ia) */
   st.foco ||= {}; st.foco.sessoes ||= []; st.foco.cats ||= []; st.foco.atual ||= null;   /* acrescentou.ai (45-foco, 78-tela-foco) */
+  st.prepara ||= {}; st.prepara.r ||= {}; st.prepara.bens ||= []; st.prepara.notas ||= {}; st.prepara.pesos ||= {}; st.prepara.concluidas ||= {}; st.prepara.marcosEd ||= {}; st.prepara.marcosExtra ||= [];   /* prepara.ai (46-prepara, 79-tela-prepara) */
   st.principal ||= "concurso"; st.novos ||= { data: "", n: 0 }; st.hoje ||= { data: "", feitos: [] };
   if (st.hoje.data !== hojeStr()) st.hoje = { data: hojeStr(), feitos: [] };
 }

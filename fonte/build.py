@@ -56,7 +56,7 @@ def app_js() -> str:
 
 def main():
     ts, cs = temas(), cartoes()
-    aulas = "\n".join(f.read_text(encoding="utf-8") for f in sorted(FONTE.glob("aulas-*.js")))
+    aulas = "\n".join(f.read_text(encoding="utf-8") for f in sorted(FONTE.glob("aulas-*.js")) + sorted(FONTE.glob("prepara-*.js")))   # prepara-*.js: conteúdo do prepara.ai
     html = (FONTE / "app.html").read_text(encoding="utf-8")
     html = html.replace("/*CSS*/", (FONTE / "estilo.css").read_text(encoding="utf-8"))
     html = html.replace("/*DATA*/", "const TEMAS = " + json.dumps(ts, ensure_ascii=False) + ";\nconst CARDS = " + json.dumps(cs, ensure_ascii=False) + ";")

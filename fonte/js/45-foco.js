@@ -2,10 +2,10 @@
    O número só cresce: cada bloco FECHADO de foco vale +1 soma. O tempo total guarda todos os segundos, à parte.
    Uma sessão: { tipo, ref, rotulo, cat, bloco (s), ini (ms), seg (s acumulados), desde (ms do trecho rodando, ou null se pausada), ultimo (ms do último sinal de atividade) }. */
 const FOCO = (() => {
-  const BLOCO = { aula: 20 * 60, cartoes: 20 * 60, ia: 20 * 60, manual: 30 * 60 };
+  const BLOCO = { aula: 20 * 60, cartoes: 20 * 60, ia: 20 * 60, prepara: 20 * 60, manual: 30 * 60 };
   const OCIOSO = 5 * 60;          /* atividades automáticas pausam depois de 5 min sem clique, tecla ou rolagem */
   const MINIMO = 60;              /* sessões com menos de 1 min não entram no histórico */
-  const NOMES = { aula: "Aulas", cartoes: "Cartões", ia: "Revisão com IA", manual: "Foco livre" };
+  const NOMES = { aula: "Aulas", cartoes: "Cartões", ia: "Revisão com IA", prepara: "prepara.ai", manual: "Foco livre" };
   const dia = ms => { const d = new Date(ms); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
 
   const novo = (tipo, ref, rotulo, agora) => ({ tipo, ref: ref || null, rotulo: rotulo || NOMES[tipo] || "", cat: null, bloco: BLOCO[tipo] || BLOCO.manual, ini: agora, seg: 0, desde: agora, ultimo: agora });

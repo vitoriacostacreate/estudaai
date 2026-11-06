@@ -512,6 +512,115 @@ button.link[disabled] { opacity: .45; cursor: not-allowed; }
 @media (max-width: 420px) { .chip.foco .t { display: none; } }
 @media (max-width: 720px) { .placar { bottom: 84px; } nav.tabs a { min-width: 52px; padding-inline: 4px; } .foco-lista select { max-width: 40%; } }
 
+/* ---------- prepara.ai (79-tela-prepara) ---------- */
+.prep-topo { display: grid; grid-template-columns: minmax(150px, .5fr) minmax(200px, .7fr) minmax(0, 1.4fr); gap: 16px; }
+.prep-conta { display: grid; gap: 6px; align-content: center; }
+.prep-prox { display: grid; gap: 6px; text-decoration: none; color: var(--tx); border-color: var(--c-line); background: linear-gradient(135deg, var(--c-soft), transparent 70%), var(--s1); }
+.prep-prox b { font-family: var(--fd); font-size: 18px; }
+.prep-prox .btn { justify-self: start; margin-top: 6px; }
+.prep-pergunta { display: grid; gap: 10px; }
+.prep-pergunta .riscado { color: var(--mu2); text-decoration: line-through; text-decoration-color: var(--line2); }
+.prep-pergunta .nova { font-family: var(--fd); font-size: 19px; font-weight: 700; line-height: 1.35; color: var(--tx); border-left: 3px solid var(--c); padding-left: 14px; max-width: 75ch; }
+.prep-pergunta ul { margin: 4px 0 0; padding-left: 20px; display: grid; gap: 6px; color: var(--tx2); max-width: 80ch; }
+.prep-trilha { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.prep-im { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; text-decoration: none; color: var(--tx); padding: 16px 18px; }
+.prep-im:hover { border-color: var(--c-line); }
+.prep-im > div { display: grid; gap: 4px; min-width: 0; }
+.prep-im .sub { font-size: 13px; }
+.prep-im > .i { color: var(--mu2); }
+.prep-n { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--c-soft); color: var(--c); font-family: var(--fd); font-weight: 800; }
+.prep-im.ok .prep-n { background: rgba(79, 207, 134, .15); color: var(--ok); }
+.prep-linha { border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.prep-linha:last-child { border-bottom: 0; }
+.prep-linha b { text-align: right; }
+.t-ok { color: var(--ok); } .t-bad { color: var(--bad); } .t-warn { color: var(--warn); }
+.prep-imersao { gap: 24px; }
+.prep-prog { display: grid; gap: 6px; min-width: 180px; }
+.prep-passos { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.prep-passos a { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--c-line); color: var(--c); text-decoration: none; font-weight: 600; font-size: 14px; }
+.prep-bloco { display: grid; gap: 10px; }
+.prep-txt { display: grid; gap: 10px; color: var(--tx2); max-width: 80ch; }
+.prep-txt ul, .prep-txt ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.prep-txt table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+.prep-txt th, .prep-txt td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.prep-txt th { color: var(--mu); font-weight: 600; font-size: 13px; }
+.prep-rotas { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.prep-rota { display: grid; gap: 10px; align-content: start; padding: 18px; }
+.prep-rota dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; font-size: 14px; }
+.prep-rota dt { color: var(--mu); font-weight: 600; }
+.prep-rota dd { margin: 0; color: var(--tx2); }
+.prep-rota > .sub { font-size: 13.5px; }
+.prep-campo { display: grid; gap: 8px; border: 0; padding: 0; margin: 0; min-width: 0; }
+.prep-campo legend, .prep-rot { font-weight: 600; color: var(--tx); padding: 0; margin-bottom: 2px; }
+.prep-dica { font-size: 13px; }
+.prep-check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.prep-check input { accent-color: var(--c); width: 20px; height: 20px; flex: none; margin-top: 2px; }
+.prep-check.sm { align-items: center; font-size: 13px; color: var(--mu); }
+.prep-check.sm input { width: 16px; height: 16px; margin: 0; }
+.prep-saida { display: grid; gap: 12px; border-color: var(--c-line); }
+.prep-bens { display: grid; gap: 8px; }
+.prep-bem input[type=text] { flex: 1; min-width: 140px; width: auto; }
+.prep-bem input.prep-valor { flex: 0 1 130px; min-width: 100px; }
+.prep-res .grande { font-size: 22px; }
+.prep-mtz-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r2); }
+.prep-mtz { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 13.5px; }
+.prep-mtz th, .prep-mtz td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.prep-mtz thead th { color: var(--mu); font-weight: 600; vertical-align: bottom; }
+.prep-mtz thead select { margin-top: 6px; }
+.prep-mtz tbody th { font-weight: 600; min-width: 170px; }
+.prep-mtz select { padding: 6px 8px; min-width: 56px; }
+.prep-marcos { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.prep-marcos li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px; border-radius: var(--r2); background: var(--s2); border-left: 3px solid var(--line2); }
+.prep-marcos li.decisao { border-left-color: var(--c); }
+.prep-marcos li.feito { opacity: .6; }
+.prep-marcos li.atrasado:not(.feito) { border-left-color: var(--bad); }
+.prep-data { font-variant-numeric: tabular-nums; color: var(--c); margin-right: 4px; }
+.prep-quando { font-size: 13px; white-space: nowrap; }
+.prep-go { display: grid; gap: 4px; padding: 14px 16px; border-radius: var(--r2); background: rgba(242, 163, 91, .1); border: 1px solid rgba(242, 163, 91, .35); }
+.prep-go b { font-family: var(--fd); font-size: 18px; color: var(--warn); }
+.prep-go.vai { background: rgba(79, 207, 134, .1); border-color: rgba(79, 207, 134, .4); }
+.prep-go.vai b { color: var(--ok); }
+.prep-golista { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.prep-fontes { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+@media (max-width: 860px) { .prep-topo { grid-template-columns: 1fr 1fr; } .prep-prox { grid-column: 1 / -1; } }
+@media (max-width: 520px) { .prep-marcos li { flex-direction: column; align-items: flex-start; } .prep-rota dl { grid-template-columns: 1fr; } }
+/* 7 abas (com o Prepara): abaixo de 1360 px os chips do topo mostram só ícone + número, para não estourar a largura. */
+@media (max-width: 1360px) and (min-width: 721px) { .chipbar .chip .l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .top .in { gap: 18px; } }
+/* prepara.ai, adaptado ao perfil (perfil/perfil-aprendizagem.md): mapa antes do detalhe, recuperação no meio, versão de dia ruim. */
+a.chip { text-decoration: none; }
+a.chip:hover { border-color: var(--c-line, var(--line2)); }
+a.chip .i { color: var(--c); }
+.prep-mapa { display: grid; gap: 12px; border-color: var(--c-line); }
+.prep-mapa ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.prep-mapa li { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 999px; background: var(--s2); font-weight: 600; font-size: 14px; }
+.prep-n.sm { width: 24px; height: 24px; border-radius: 999px; font-size: 13px; }
+.prep-min { display: flex; gap: 10px; align-items: flex-start; margin: 0; padding: 10px 12px; border-radius: var(--r2); background: rgba(242, 163, 91, .08); color: var(--tx2); font-size: 14px; }
+.prep-min .i { color: var(--warn); flex: none; margin-top: 2px; }
+.prep-quiz { display: grid; gap: 12px; border-color: var(--c-line); background: linear-gradient(135deg, var(--c-soft), transparent 60%), var(--s1); }
+.prep-q { margin: 0; font-family: var(--fd); font-size: 18px; font-weight: 700; line-height: 1.35; max-width: 70ch; }
+.prep-ops { display: grid; gap: 8px; }
+.prep-op { display: flex; gap: 12px; align-items: center; text-align: left; width: 100%; padding: 10px 14px; border-radius: var(--r2); border: 1px solid var(--line); background: var(--s2); color: var(--tx); font: inherit; cursor: pointer; }
+.prep-op:hover:not(:disabled) { border-color: var(--c-line); }
+.prep-op:disabled { cursor: default; }
+.prep-op .l { width: 26px; height: 26px; flex: none; border-radius: 8px; display: grid; place-items: center; background: var(--s1); font-weight: 800; color: var(--mu); }
+.prep-op.certa { border-color: rgba(79, 207, 134, .6); background: rgba(79, 207, 134, .1); }
+.prep-op.certa .l { color: var(--ok); }
+.prep-op.errada { border-color: rgba(255, 125, 134, .6); background: rgba(255, 125, 134, .08); }
+.prep-op.errada .l { color: var(--bad); }
+.prep-fb { display: flex; gap: 10px; align-items: flex-start; margin: 0; padding: 10px 12px; border-radius: var(--r2); max-width: 80ch; }
+.prep-fb.ok { background: rgba(79, 207, 134, .1); } .prep-fb.ok .i { color: var(--ok); flex: none; }
+.prep-fb.warn { background: rgba(242, 163, 91, .1); } .prep-fb.bad { background: rgba(255, 125, 134, .08); }
+.prep-quiz .btn.ghost { justify-self: start; }
+.prep-sug { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: var(--r2); background: var(--c-soft); font-size: 14px; }
+.prep-marco-ed { background: var(--s2); border-radius: var(--r2); padding: 10px 12px; border-left: 3px solid var(--c); }
+.prep-marco-ed form { gap: 8px; width: 100%; }
+.prep-marco-ed input[type=date] { width: auto; }
+.prep-marco-ed input[type=text] { flex: 1; min-width: 180px; width: auto; }
+.btn.ico-so { padding: 4px 6px; margin-left: 4px; vertical-align: middle; }
+.prep-ia { display: grid; gap: 12px; border-color: var(--c-line); }
+/* Com o contador de foco ligado, o chip do embarque sai do topo até 1400 px (o foco é o que importa naquela hora; o número continua na aba Prepara). */
+@media (max-width: 1400px) { .chipbar:has(.foco) .chip.prep { display: none; } }
+
 </style>
 </head>
 <body>
@@ -1040,6 +1149,265 @@ AULAS.lb01 = {
   fontes: ["Dicionário de Libras do INES", "App Hand Talk"]
 };
 
+/* ============ prepara.ai: conteúdo do plano "Sair do Brasil até 07/02/2027" ============
+   Informações conferidas em 06/11/2026 (fontes no fim). Regras de imigração mudam: a tela sempre manda conferir no site oficial.
+   Tipos de tarefa em "faca": check | texto | numero | escolha (opcoes: [[valor, rótulo]]) | rota (escolhe uma de "rotas") | longo | widget (bens, matriz, marcos, gonogo).
+   Cada imersão: mapa (o todo antes do detalhe), minimo (versão de dia ruim, ~10 min), recupere (1 pergunta no meio: p, op, c = índice certo, por), entenda, faca, saida.
+   rotas[].comprova: [valor, moeda] = comprovação financeira mínima exigida pelo governo (sem custo de vida). */
+const PREPARA = {
+  meta: { data: "2027-02-07", dataBR: "07/02/2027", verificado: "2026-11-06", verificadoBR: "06/11/2026", cor: "#5cc8f5" },
+
+  pergunta: {
+    original: "Como eu saio do Brasil e começo do zero lá fora, com pouco dinheiro, até 07/02/2027?",
+    texto: "Qual rota LEGAL me deixa morar e trabalhar fora a partir de fevereiro de 2027, cabendo no dinheiro que eu consigo juntar até janeiro, e qual é o plano B se ela não fechar a tempo?",
+    porque: [
+      "<b>Legal</b>: sair como turista e trabalhar lá é a forma mais rápida de ser deportada e ficar proibida de voltar. Toda rota aqui tem autorização de trabalho.",
+      "<b>Morar e trabalhar</b>: viajar é fácil. O que decide tudo é o documento que deixa você ficar e ter renda.",
+      "<b>Dinheiro que eu consigo juntar</b>: cada rota tem um valor mínimo exigido pelo governo. Primeiro o número, depois o país.",
+      "<b>Plano B</b>: vários vistos dependem de vagas e prazos que você não controla. Adiar com segurança também é um resultado válido."
+    ]
+  },
+
+  imersoes: [
+    {
+      id: "diagnostico", n: 1, titulo: "Diagnóstico: de onde eu parto", tempo: "40 min",
+      objetivo: "Levantar os dados que abrem ou fecham portas. Sem eles, qualquer lista de países é chute.",
+      mapa: ["Idade","Passaporte","Ascendência","Idiomas","Renda remota","Concurso"],
+      minimo: "Responda só idade, passaporte e o que o concurso é no plano.",
+      recupere: {"p":"Qual destas respostas fecha de uma vez todos os Working Holiday?","op":["Inglês intermediário","Não ter renda remota","Morar em Campo Grande","Ter 31 anos na data do pedido"],"c":3,"por":"Os Working Holiday para brasileiros aceitam só de 18 a 30 anos. Idioma e renda pesam, mas não eliminam."},
+      entenda: [
+        { t: "Por que começar por você, e não pelo país", html: "<p>Os programas mais baratos têm <b>idade máxima</b> (Working Holiday: 18 a 30 anos). A rota mais fácil da Europa é a <b>cidadania por descendência</b>. O idioma decide onde você consegue o primeiro emprego. São quatro variáveis que mudam o mapa inteiro:</p><ul><li><b>Idade</b>: abre ou fecha os Working Holiday.</li><li><b>Passaporte</b>: sem ele quase nada anda (exceto Mercosul).</li><li><b>Ascendência europeia</b>: pode valer mais que qualquer visto.</li><li><b>Dinheiro líquido</b>: o mínimo exigido muda de R$ 1 mil a mais de R$ 60 mil.</li></ul>" },
+        { t: "O conflito de datas", html: "<p>A prova da UFMS é em <b>17/01/2027</b>, em Campo Grande. A meta de embarque é <b>07/02/2027</b>. Se você passar, a posse é aqui. Decida agora o que o concurso é no seu plano, para não dividir a energia sem perceber.</p>" }
+      ],
+      faca: [
+        { id: "idade", tipo: "numero", rotulo: "Sua idade hoje", dica: "Working Holiday aceita 18 a 30 anos na data do pedido." },
+        { id: "passaporte", tipo: "escolha", rotulo: "Passaporte", opcoes: [["valido", "Tenho, válido por mais de 1 ano"], ["vencido", "Tenho, mas vencido ou vencendo"], ["nao", "Não tenho"]] },
+        { id: "ascendencia", tipo: "escolha", rotulo: "Tem pai, mãe, avós ou bisavós europeus?", opcoes: [["sim", "Sim, sei de quem"], ["talvez", "Talvez, preciso perguntar à família"], ["nao", "Não"]], dica: "Italiana, portuguesa, espanhola, alemã, polonesa... Cidadania leva meses ou anos, mas muda tudo no longo prazo." },
+        { id: "ingles", tipo: "escolha", rotulo: "Inglês", opcoes: [["basico", "Básico"], ["inter", "Intermediário"], ["avanc", "Avançado"]] },
+        { id: "espanhol", tipo: "escolha", rotulo: "Espanhol", opcoes: [["nada", "Não sei"], ["entendo", "Entendo, mas não falo"], ["conversa", "Consigo conversar"]] },
+        { id: "formacao", tipo: "texto", rotulo: "Formação e experiência que posso provar com papel", dica: "Ex.: ADS (concluído?), QA em X projetos, suporte. Diploma e carteira/contratos contam muito em visto de trabalho." },
+        { id: "renda_remota", tipo: "escolha", rotulo: "Renda remota (em dólar ou não)", opcoes: [["tenho", "Já tenho"], ["buscando", "Estou buscando"], ["nao", "Não tenho"]], dica: "Renda que vai junto na mala é o maior redutor de risco de qualquer rota." },
+        { id: "aluguel", tipo: "texto", rotulo: "Contrato do apartamento: prazo de aviso e multa", dica: "Leia a cláusula de rescisão. Só avise o locador DEPOIS de escolher a rota (marco de 10/12)." },
+        { id: "concurso", tipo: "escolha", rotulo: "O concurso UFMS no meu plano", opcoes: [["faco", "Faço a prova em 17/01 e decido depois do resultado"], ["faco_saio", "Faço a prova, mas a mudança vem primeiro"], ["largo", "Paro o concurso e foco 100% na mudança"]] },
+        { id: "idioma_alvo", tipo: "escolha", rotulo: "Preferência de idioma do país", opcoes: [["en", "Inglês"], ["es", "Espanhol"], ["qualquer", "Qualquer um, se a rota for boa"]] }
+      ],
+      saida: "Um retrato seu em 10 respostas. A tela inicial do prepara.ai passa a mostrar quais rotas combinam com sua idade."
+    },
+    {
+      id: "burocracia", n: 2, titulo: "Burocracia 101: as palavras e os papéis", tempo: "45 min",
+      objetivo: "Entender o que cada documento faz e já colocar o passaporte em andamento (é o item que mais trava o resto).",
+      mapa: ["Passaporte","Visto","Residência","Trabalho","Papéis-base","Fronteira"],
+      minimo: "Preencha o formulário da PF e pague a GRU. O resto espera.",
+      recupere: {"p":"Brasileiro entra sem visto como turista em vários países. Isso dá direito a quê?","op":["Morar até 6 meses","Trabalhar meio período","Só visitar: morar e trabalhar pedem autorização própria","Pedir residência em qualquer país depois"],"c":2,"por":"Turista não mora nem trabalha. Residência e trabalho são autorizações separadas, dadas pelo outro país."},
+      entenda: [
+        { t: "Quatro palavras que não são sinônimos", html: "<table><tr><th>Palavra</th><th>Quem dá</th><th>O que permite</th></tr><tr><td><b>Passaporte</b></td><td>Brasil (Polícia Federal)</td><td>Provar quem você é lá fora. Não dá direito a nada sozinho.</td></tr><tr><td><b>Visto</b></td><td>O outro país (consulado)</td><td>Entrar com um propósito: turismo, estudo, trabalho.</td></tr><tr><td><b>Autorização de residência</b></td><td>O outro país (imigração)</td><td>Morar por um tempo definido.</td></tr><tr><td><b>Autorização de trabalho</b></td><td>O outro país</td><td>Trabalhar. Turista nunca tem.</td></tr></table><p>Brasileiro entra sem visto como turista em muitos países. Isso <b>não</b> é morar nem trabalhar.</p>" },
+        { t: "Passaporte, passo a passo", html: "<ol><li>Formulário no site da Polícia Federal.</li><li>Pagar a GRU: <b>R$ 257,25</b> (taxa comum em 2026). Urgência: R$ 334,42, só com comprovação. Perda do anterior: R$ 514,50.</li><li>Agendar atendimento num posto da PF (Campo Grande tem).</li><li>Ir com RG, CPF regular e quitação eleitoral. Foto e digitais são feitas lá.</li><li>Retirar quando ficar pronto. <b>Não retirou em 90 dias, perde a taxa.</b></li></ol><p>Validade: 10 anos para adultos. A PF propôs reajuste da taxa: se a GRU vencer, gere outra.</p>" },
+        { t: "Os papéis que quase toda rota pede", html: "<ul><li><b>Antecedentes criminais</b>: certidão da PF, online e gratuita.</li><li><b>Diploma e histórico</b> com <b>apostila de Haia</b> (cartório) e, às vezes, tradução juramentada.</li><li><b>Comprovação financeira</b>: extrato no seu nome. Cartão de crédito não vale.</li><li><b>Seguro saúde</b> válido no destino, para todo o período.</li><li><b>Passagem de volta</b> ou dinheiro para comprá-la.</li></ul>" },
+        { t: "Na fronteira", html: "<p>Quem decide se você entra é o agente, na hora. Leve tudo <b>impresso</b> (reserva de hospedagem, seguro, extrato, carta da escola ou do visto). Diga a verdade: mentir sobre o motivo da viagem dá proibição de entrada.</p>" }
+      ],
+      faca: [
+        { id: "pp_form", tipo: "check", rotulo: "Preenchi o formulário do passaporte no site da PF" },
+        { id: "pp_gru", tipo: "check", rotulo: "Paguei a GRU (R$ 257,25)" },
+        { id: "pp_agenda", tipo: "texto", rotulo: "Data agendada na PF", dica: "Se não houver vaga próxima, olhe outros postos e volte ao site todo dia: vagas reabrem." },
+        { id: "antecedentes", tipo: "check", rotulo: "Emiti a certidão de antecedentes criminais da PF" },
+        { id: "diploma", tipo: "check", rotulo: "Separei diploma e histórico (ou declaração de conclusão)" },
+        { id: "apostila", tipo: "texto", rotulo: "Preço da apostila de Haia num cartório de Campo Grande", dica: "Ligue ou veja o site do cartório. Só apostile depois de saber se a rota pede." }
+      ],
+      saida: "Passaporte em andamento e uma pasta (física e no Drive) com os documentos-base."
+    },
+    {
+      id: "caminhos", n: 3, titulo: "Mapa dos caminhos", tempo: "90 min",
+      objetivo: "Conhecer todas as rotas reais para brasileiros em 2026/2027, eliminar as que não cabem e dar nota às que sobram.",
+      mapa: ["Como ler os cartões","O que não é caminho","10 rotas","Matriz com pesos","Rota A e B"],
+      minimo: "Dê nota só às 3 rotas de que você mais gostou.",
+      recupere: {"p":"Qual rota cabe até 07/02 só com a nacionalidade brasileira?","op":["Working Holiday Canadá","Mercosul (Argentina, Uruguai, Paraguai)","Portugal: entrar como turista e regularizar lá","Work and Holiday Austrália"],"c":1,"por":"Canadá não tem acordo com o Brasil, Portugal acabou com essa via em 2025 e a Austrália está pausada para o Brasil."},
+      entenda: [
+        { t: "Como ler os cartões", html: "<p>Cada rota tem o requisito que mais pesa, o custo mínimo exigido, o prazo e se <b>cabe até 07/02</b>. Verde: cabe se você agir agora. Laranja: depende de algo que você não controla. Vermelho: não cabe nesta janela, mas pode entrar no plano C.</p>" },
+        { t: "O que NÃO é caminho (2026)", html: "<ul><li><b>Portugal como turista e regularizar lá</b>: acabou com a Lei 61/2025 (em vigor desde 23/10/2025). O visto de procura de trabalho foi suspenso. O substituto, “procura de trabalho qualificado”, ainda aguardava regulamentação em julho de 2026.</li><li><b>Working Holiday no Canadá</b>: o Brasil não tem acordo. Quem vende isso está vendendo outra coisa.</li><li><b>Working Holiday na Irlanda</b>: o Brasil não aparece na lista oficial de países do programa. Alguns blogs dizem o contrário: confira no irishimmigration.ie antes de acreditar.</li><li><b>Worldpackers e Workaway</b>: são turismo com troca de hospedagem. Não dão permissão de trabalho e alguns países tratam a troca como trabalho.</li><li><b>Entrar como turista para trabalhar</b>: irregular em qualquer país.</li></ul>" },
+        { t: "A combinação mais forte para o seu perfil", html: "<p>Rota com residência barata + <b>renda remota</b> (a sua busca de vaga em dólar). Mercosul resolve o documento em semanas e o custo de vida é menor. O trabalho remoto resolve a renda. Juntas, reduzem o risco de chegar e ficar sem dinheiro.</p>" }
+      ],
+      faca: [
+        { id: "rotas_lidas", tipo: "check", rotulo: "Li todos os cartões de rota" },
+        { id: "rotas_eliminadas", tipo: "texto", rotulo: "Rotas que eliminei e por quê", dica: "Ex.: Austrália (pausada), NZ (só em out/2027)." },
+        { id: "matriz", tipo: "widget", widget: "matriz", rotulo: "Dei nota às rotas que sobraram" },
+        { id: "rota_a", tipo: "rota", rotulo: "Rota A (a que vou perseguir)", dica: "Pela matriz, a primeira do ranking costuma ser a A. Você decide." },
+        { id: "rota_b", tipo: "rota", rotulo: "Rota B (se a A não fechar até o marco)", dica: "De preferência uma rota verde (cabe até 07/02) e que não dependa de vaga." }
+      ],
+      saida: "Ranking das rotas pela sua matriz, rota A e rota B escritas."
+    },
+    {
+      id: "dinheiro", n: 4, titulo: "Dinheiro: quanto eu terei no embarque", tempo: "60 min",
+      objetivo: "Transformar bens, salário e dívida em um número só: o capital líquido no dia da partida.",
+      mapa: ["Comprovação","Custo de saída","Colchão","Dívida","Bens","Capital líquido"],
+      minimo: "Liste 5 itens para vender, com preço.",
+      recupere: {"p":"Na conta da mudança, a comprovação financeira é:","op":["O preço da passagem de ida","O limite do cartão de crédito","Dinheiro que você mostra no extrato, sem precisar gastar","O custo dos primeiros 3 meses"],"c":2,"por":"Comprovação é o valor que o governo quer ver na conta. Cartão não vale. Passagem e colchão são outros números da conta."},
+      entenda: [
+        { t: "Três números diferentes", html: "<ol><li><b>Comprovação financeira</b>: o que o governo quer ver no extrato (ex.: Irlanda pede € 833 por mês de estadia). Você não gasta, só mostra.</li><li><b>Custo de saída</b>: passaporte, documentos, seguro, passagem, primeira hospedagem.</li><li><b>Colchão de chegada</b>: 3 meses de custo de vida no destino + uma passagem de volta guardada.</li></ol><p>Passagem barata não é mudança viável. A conta que importa: <b>capital líquido ≥ comprovação + custo de saída + colchão</b>.</p>" },
+        { t: "A dívida do cartão", html: "<p>Cartão no rotativo é a dívida mais cara que existe no Brasil. Prioridade: quitar ou negociar <b>antes</b> de sair. Nome negativado dificulta conta, cartão e uma eventual volta. Isto é orientação geral, não consultoria financeira.</p>" },
+        { t: "Vender bens sem perder dinheiro", html: "<ul><li>Liste tudo agora, com preço de mercado (veja anúncios iguais).</li><li>Venda primeiro o que você não usa; o que usa todo dia (cama, notebook) fica para janeiro.</li><li>Conte só 70% do valor estimado no plano: desconto e itens encalhados são normais.</li></ul>" }
+      ],
+      faca: [
+        { id: "din_hoje", tipo: "numero", rotulo: "Dinheiro guardado hoje (R$)" },
+        { id: "din_mes", tipo: "numero", rotulo: "Quanto consigo guardar por mês (R$)" },
+        { id: "din_meses", tipo: "numero", rotulo: "Meses até a partida", dica: "De novembro a janeiro são 3." },
+        { id: "din_divida", tipo: "numero", rotulo: "Dívidas a quitar antes de sair (R$)" },
+        { id: "din_contas", tipo: "numero", rotulo: "Contas até sair: aluguel, multa, contas finais (R$)" },
+        { id: "din_saida", tipo: "numero", rotulo: "Custo de saída estimado (R$)", dica: "Passaporte + documentos + seguro + passagem de ida + 2 semanas de hospedagem." },
+        { id: "cot_eur", tipo: "numero", rotulo: "Cotação do euro hoje (R$ por € 1)", dica: "Veja no Google ou no app do banco (\"euro hoje\"). Use o valor de venda." },
+        { id: "cot_usd", tipo: "numero", rotulo: "Cotação do dólar hoje (R$ por US$ 1)" },
+        { id: "din_meta", tipo: "numero", rotulo: "Meta da rota A em reais (R$)", dica: "Comprovação exigida + colchão de 3 meses + passagem de volta. O botão abaixo preenche a comprovação mínima da rota A; some o colchão e a volta." },
+        { id: "bens", tipo: "widget", widget: "bens", rotulo: "Inventário dos bens para vender e o resultado" },
+      ],
+      saida: "Seu capital líquido no embarque e quanto falta para a meta da rota A."
+    },
+    {
+      id: "cronograma", n: 5, titulo: "Cronograma reverso até 07/02", tempo: "30 min",
+      objetivo: "Trabalhar de trás para frente: cada marco tem uma data-limite e uma decisão.",
+      mapa: ["Data final","Caminho crítico","11 marcos","4 decisões","Agenda"],
+      minimo: "Coloque só os 4 marcos de decisão na agenda.",
+      recupere: {"p":"Qual destas ações só pode vir DEPOIS de escolher a rota?","op":["Pedir o passaporte","Avisar o locador","Listar os bens","Emitir antecedentes criminais"],"c":1,"por":"Avisar o locador não tem volta. Passaporte, lista de bens e antecedentes servem para qualquer rota."},
+      entenda: [
+        { t: "Planejamento reverso", html: "<p>Comece pela data final e pergunte: <i>o que precisa estar pronto antes disso?</i> Repita até chegar em hoje. Os marcos com <b>decisão</b> são pontos de Go/No-Go: se não estiver pronto, você troca de rota ou adia, em vez de empurrar o problema.</p>" },
+        { t: "O caminho crítico", html: "<p>São as tarefas que atrasam tudo se atrasarem: <b>passaporte → visto/autorização → passagem</b>. Dinheiro e venda de bens rodam em paralelo. Nada que não tem volta (avisar o locador, comprar passagem) antes do marco que o libera.</p>" }
+      ],
+      faca: [
+        { id: "marcos", tipo: "widget", widget: "marcos", rotulo: "Revisei os marcos e marquei os que já fiz" },
+        { id: "agenda", tipo: "check", rotulo: "Coloquei os marcos de decisão na minha agenda" }
+      ],
+      saida: "Um calendário com 11 marcos e 4 pontos de decisão."
+    },
+    {
+      id: "decisao", n: 6, titulo: "Go/No-Go e planos A, B e C", tempo: "30 min",
+      objetivo: "Definir ANTES, com a cabeça fria, quais condições precisam estar cumpridas para comprar a passagem.",
+      mapa: ["Regras antes","7 críticos","Plano A","Plano B","Plano C"],
+      minimo: "Escreva só o gatilho que faz você trocar para o plano B.",
+      recupere: {"p":"Em 25/01, o passaporte ainda não chegou. O que o Go/No-Go manda fazer?","op":["Comprar a passagem e torcer","No-Go: trocar para o plano B ou C","Ir como turista e regularizar lá","Adiar sem data"],"c":1,"por":"Passaporte é critério crítico. Faltou um crítico, é No-Go. Adiar vale, mas com data (plano C)."},
+      entenda: [
+        { t: "Por que decidir as regras antes", html: "<p>Perto da data, a vontade de ir faz tudo parecer resolvido. Critérios escritos antes protegem você de embarcar sem documento ou sem colchão. Se um crítico estiver faltando em 25/01, a resposta é <b>No-Go</b>: troca para o plano B ou C.</p>" },
+        { t: "Os três planos", html: "<ul><li><b>A</b>: a rota principal, saindo até 07/02.</li><li><b>B</b>: outra rota que cabe na mesma janela (ex.: Mercosul, se a A depender de vaga).</li><li><b>C</b>: adiar com data definida (ex.: julho de 2027), guardando dinheiro e mirando a próxima janela (PVT, NZ em outubro). Adiar não é desistir.</li></ul>" }
+      ],
+      faca: [
+        { id: "gonogo", tipo: "widget", widget: "gonogo", rotulo: "Passei pelos critérios de Go/No-Go" },
+        { id: "plano_a", tipo: "longo", rotulo: "Plano A: rota, destino, data e o que precisa acontecer" },
+        { id: "plano_b", tipo: "longo", rotulo: "Plano B e o gatilho que me faz trocar para ele" },
+        { id: "plano_c", tipo: "longo", rotulo: "Plano C: nova data e o que faço até lá" }
+      ],
+      saida: "Planos A, B e C escritos e uma regra clara para comprar (ou não) a passagem."
+    },
+    {
+      id: "fontes", n: 7, titulo: "Crivo de fontes e golpes", tempo: "20 min",
+      objetivo: "Saber em quem confiar quando os conteúdos se contradizem (e eles vão se contradizer).",
+      mapa: ["Escada da confiança","Viés de sobrevivência","Sinais de golpe","Fonte oficial"],
+      minimo: "Abra só o site oficial da sua rota A.",
+      recupere: {"p":"Um vídeo antigo diz: “entra em Portugal como turista e regulariza lá”. O que você faz?","op":["Confia, porque tem muitas visualizações","Pergunta nos comentários","Confere no site oficial: essa via acabou com a Lei 61/2025","Paga uma consultoria para garantir"],"c":2,"por":"A regra está no site do governo. Relato antigo e popular não muda a lei."},
+      entenda: [
+        { t: "A escada da confiança", html: "<ol><li><b>Site oficial do governo do destino</b>: é a regra.</li><li><b>Consulado/embaixada</b>: como pedir, aqui do Brasil.</li><li><b>Advogado ou consultoria</b>: útil, mas vende serviço.</li><li><b>Blog de agência</b>: vende curso ou intercâmbio; números costumam ser otimistas.</li><li><b>YouTube, Reddit, grupos</b>: mostram a vida real, não a regra. Ótimo para custos do dia a dia e erros comuns.</li></ol><p>Desconfie de relato antigo: a lei de Portugal, por exemplo, mudou em 2025. Relato de quem “deu certo” sofre <b>viés de sobrevivência</b>: quem voltou quebrado raramente grava vídeo.</p>" },
+        { t: "Sinais de golpe", html: "<ul><li>“Vaga garantida” ou “acesso antecipado” a visto (o Working Holiday do Japão é gratuito e não tem intermediário oficial).</li><li>Empresa que cobra para te contratar.</li><li>Pagar aluguel antes de ver o imóvel ou por transferência para pessoa física desconhecida.</li><li>“Vai de turista e resolve lá”.</li></ul>" },
+        { t: "Sobre o canal Vida Infinda", html: "<p>Não encontrei um canal com esse nome exato. Existe o <b>Via Infinda</b>, de viagem. Seja qual for, use os relatos como inspiração e pistas, e confira cada regra no site oficial antes de agir.</p>" }
+      ],
+      faca: [
+        { id: "canais", tipo: "texto", rotulo: "Canais e comunidades que vou acompanhar (e por quê)" },
+        { id: "fonte_oficial", tipo: "check", rotulo: "Abri o site oficial da minha rota A e conferi os requisitos" }
+      ],
+      saida: "Uma lista curta de fontes confiáveis e o hábito de checar na fonte oficial."
+    }
+  ],
+
+  /* Rotas. cabe: sim | talvez | nao (até 07/02/2027). */
+  rotas: [
+    { id: "mercosul", nome: "Mercosul: Argentina, Uruguai ou Paraguai", grupo: "Residência por acordo", cabe: "sim", idioma: "Espanhol",
+      req: "Só a nacionalidade brasileira. Na Argentina: residência temporária de 2 anos, pedida online (RaDEX) já no país, com direito a trabalhar.",
+      custo: "Argentina: 50 UMSM = ARS 50.000 (cerca de US$ 32, out/2026), mais certidões e traduções.",
+      prazo: "Semanas. Dá para entrar e pedir no país.", obs: "Mais rápida e barata. Salários locais baixos: combina muito com renda remota em dólar." },
+    { id: "japao", nome: "Working Holiday Japão", grupo: "Working Holiday", cabe: "talvez", idioma: "Japonês (inglês ajuda)",
+      req: "18 a 30 anos, morar no Brasil, primeira vez no programa. Programa novo: começa em 01/12/2026.",
+      custo: "Visto gratuito. Exige seguro, reserva financeira e passagem de volta (valores a definir pelos consulados).",
+      prazo: "Pedido no consulado a partir de 01/12. Depois de emitido, entrar em até 3 meses. Fica até 12 meses.", obs: "Número de vagas do primeiro ano ainda não divulgado (nov/2026). Uma vez só na vida. O visto não pode ser prorrogado nem convertido em outro no Japão." },
+    { id: "franca", comprova: [2500, "EUR"], nome: "PVT França (Visto Férias-Trabalho)", grupo: "Working Holiday", cabe: "talvez", idioma: "Francês",
+      req: "18 a 30 anos, sem dependentes, passaporte válido por pelo menos 1 ano e 3 meses.",
+      custo: "Visto gratuito. Comprovação de cerca de € 2.500 + seguro + passagem.",
+      prazo: "Campanha costuma abrir em 1º de janeiro, com agendamentos limitados. Fica 12 meses.", obs: "Apertado para fevereiro: depende de conseguir agendamento logo no começo de janeiro." },
+    { id: "alemanha", comprova: [2000, "EUR"], nome: "Working Holiday Alemanha", grupo: "Working Holiday", cabe: "talvez", idioma: "Alemão (inglês ajuda)",
+      req: "18 a 30 anos, seguro de 12 meses, passagem de volta ou dinheiro para ela.",
+      custo: "Taxa consular € 75. Comprovação de cerca de € 2.000.",
+      prazo: "Agendamento passa de 40 dias em 2026 + processamento de cerca de 6 semanas.", obs: "Não permite trabalhar como autônomo/freelancer." },
+    { id: "irlanda", comprova: [6665, "EUR"], nome: "Irlanda: estudo de inglês + trabalho (Stamp 2)", grupo: "Estudo e trabalho", cabe: "talvez", idioma: "Inglês",
+      req: "Curso de inglês de 25 semanas em escola credenciada. Brasileiro não precisa de visto: a comprovação é feita no registro, já lá.",
+      custo: "€ 833 por mês de estadia (€ 6.665 para 8 meses) em conta + curso + seguro. Estimativa de agências: cerca de € 11 mil no total.",
+      prazo: "Cabe se o dinheiro existir: matrícula em semanas.", obs: "Trabalho de 20 h/semana (40 h nas férias). O gargalo é o dinheiro, não o prazo." },
+    { id: "espanha", comprova: [7200, "EUR"], nome: "Espanha: visto de estudante", grupo: "Estudo e trabalho", cabe: "talvez", idioma: "Espanhol",
+      req: "Matrícula + 100% do IPREM: € 600 por mês de curso. Seguro saúde privado.",
+      custo: "€ 7.200 para 12 meses de comprovação + curso + taxas.",
+      prazo: "Matrícula + consulado: apertado para fevereiro.", obs: "Trabalho de até 30 h/semana só para universidade e formação profissional. Escola de idiomas não dá trabalho automático." },
+    { id: "contrato", nome: "Emprego com contrato e visto de trabalho", grupo: "Trabalho", cabe: "talvez", idioma: "Do país",
+      req: "Uma empresa te contrata antes e o visto sai pelo contrato. Portugal: visto D1 pedido no Brasil, salário de pelo menos € 920.",
+      custo: "Baixo em taxas; o custo é conseguir a vaga.",
+      prazo: "Só cabe se a vaga sair até dezembro.", obs: "Use a mesma busca da vaga gringa e filtre por “visa sponsorship”." },
+    { id: "australia", nome: "Work and Holiday Austrália (462)", grupo: "Working Holiday", cabe: "nao", idioma: "Inglês",
+      req: "18 a 30 anos. Brasil com teto de 500 vagas no ano 2026–27.",
+      custo: "Taxa do visto + comprovação (confira em Home Affairs).",
+      prazo: "Status do Brasil: PAUSADO (página oficial atualizada em 12/10/2026). Novo ano do programa começa em 01/07/2027.", obs: "Acompanhe a página de status. Não conte com ela para fevereiro." },
+    { id: "nz", comprova: [4200, "NZD"], nome: "Working Holiday Nova Zelândia", grupo: "Working Holiday", cabe: "nao", idioma: "Inglês",
+      req: "18 a 30 anos, NZD 4.200 em conta.",
+      custo: "Taxa do visto + NZD 4.200.",
+      prazo: "As 300 vagas de 2026 abriram em 10/10/2026. Próxima janela: cerca de outubro de 2027.", obs: "Ótimo para o plano C." },
+    { id: "cidadania", nome: "Cidadania europeia por descendência", grupo: "Cidadania", cabe: "nao", idioma: "Varia",
+      req: "Ter antepassado europeu e conseguir a documentação.",
+      custo: "Varia muito (certidões, traduções, processo).",
+      prazo: "Meses a anos.", obs: "Não cabe em fevereiro, mas se existir, comece já: muda todo o longo prazo." }
+  ],
+
+  criterios: [
+    { id: "prazo", nome: "Cabe até 07/02", peso: 3 },
+    { id: "custo", nome: "Custo que eu consigo pagar", peso: 3 },
+    { id: "trabalho", nome: "Trabalho legal desde o início", peso: 2 },
+    { id: "idioma", nome: "Idioma que já falo", peso: 2 },
+    { id: "ficar", nome: "Caminho para ficar depois", peso: 2 },
+    { id: "ti", nome: "Chance de renda em TI/QA/suporte", peso: 1 }
+  ],
+
+  marcos: [
+    { id: "m1", data: "2026-11-15", t: "Diagnóstico feito e passaporte solicitado", decisao: false },
+    { id: "m2", data: "2026-11-30", t: "Rotas A e B escolhidas pela matriz", decisao: true },
+    { id: "m3", data: "2026-12-01", t: "Working Holiday Japão começa: ver regras no consulado (se for rota)", decisao: false },
+    { id: "m4", data: "2026-12-10", t: "Avisar o locador conforme o contrato (só com rota escolhida)", decisao: true },
+    { id: "m5", data: "2026-12-20", t: "Cartão quitado e 70% dos bens vendidos", decisao: false },
+    { id: "m6", data: "2027-01-01", t: "Campanha do PVT França costuma abrir (se for rota)", decisao: false },
+    { id: "m7", data: "2027-01-10", t: "Visto, matrícula ou residência encaminhados", decisao: true },
+    { id: "m8", data: "2027-01-17", t: "Prova da UFMS (se for fazer)", decisao: false },
+    { id: "m9", data: "2027-01-25", t: "Go/No-Go final: só compra a passagem se for VAI", decisao: true },
+    { id: "m10", data: "2027-01-31", t: "Entregar o apartamento", decisao: false },
+    { id: "m11", data: "2027-02-07", t: "Embarque", decisao: false }
+  ],
+
+  gonogo: [
+    { id: "pp", t: "Passaporte em mãos, válido pelo tempo que a rota exige", critico: true },
+    { id: "legal", t: "Rota confirmada no site oficial do destino", critico: true },
+    { id: "doc", t: "Visto, autorização ou matrícula aprovados (se a rota exige antes de ir)", critico: true },
+    { id: "din", t: "Capital líquido ≥ comprovação + 3 meses de custo de vida + passagem de volta", critico: true },
+    { id: "divida", t: "Dívida do cartão quitada ou negociada", critico: true },
+    { id: "casa", t: "Hospedagem das primeiras 2 a 4 semanas reservada", critico: true },
+    { id: "seguro", t: "Seguro saúde válido no destino", critico: true },
+    { id: "copias", t: "Cópias digitais de todos os documentos no Drive", critico: false },
+    { id: "renda", t: "Plano de renda para os primeiros 60 dias", critico: false },
+    { id: "rede", t: "Entrei em pelo menos 2 comunidades de brasileiros no destino", critico: false }
+  ],
+
+  fontes: [
+    { nome: "Polícia Federal: passaporte", url: "https://www.gov.br/pf/pt-br/assuntos/passaporte" },
+    { nome: "Polícia Federal: antecedentes criminais", url: "https://www.gov.br/pf/pt-br/assuntos/antecedentes-criminais" },
+    { nome: "Argentina: Dirección Nacional de Migraciones", url: "https://www.argentina.gob.ar/migraciones" },
+    { nome: "Irlanda: Immigration Service (estudo e finanças)", url: "https://www.irishimmigration.ie/coming-to-study-in-ireland/" },
+    { nome: "Portugal: Portal de Vistos (MNE)", url: "https://vistos.mne.gov.pt" },
+    { nome: "França: France-Visas", url: "https://france-visas.gouv.fr" },
+    { nome: "Alemanha: consulados no Brasil", url: "https://brasil.diplo.de" },
+    { nome: "Japão: Embaixada no Brasil", url: "https://www.br.emb-japan.go.jp" },
+    { nome: "Austrália: status das vagas do visto 462", url: "https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps" },
+    { nome: "Nova Zelândia: Working Holiday", url: "https://www.immigration.govt.nz" }
+  ]
+};
+if (typeof module !== "undefined") module.exports = PREPARA;
+
 </script>
 <script>
 /* estudaai: organizador de PDF no navegador (port de nucleo/organizar.py).
@@ -1302,6 +1670,9 @@ const ICONES = {
   revisar: '<rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/>',
   biblioteca: '<path d="M4 4h4v16H4zM10 4h4v16h-4z"/><path d="m15.5 4.8 3.8-1 3.4 15.4-3.8 1z"/>',
   progresso: '<path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/>',
+  mala: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18M12 12v2"/>',
+  prepara: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18M12 12v2"/>',
+  lapis: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
   foco: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M10 2h4M12 2v3"/>',
   mais: '<path d="M12 5v14M5 12h14"/>',
   seta: '<path d="M5 12h14M13 6l6 6-6 6"/>',
@@ -1367,6 +1738,7 @@ function carregar(doServidor) {
   st.top ||= {}; st.cards ||= {}; st.dias ||= {}; st.temasUser ||= []; st.aulasUser ||= {}; st.notas ||= {};
   st.tentativas ||= []; st.duvidas ||= []; st.respostasIA ||= [];   /* revisão com IA e dúvidas (52-revisao-ia) */
   st.foco ||= {}; st.foco.sessoes ||= []; st.foco.cats ||= []; st.foco.atual ||= null;   /* acrescentou.ai (45-foco, 78-tela-foco) */
+  st.prepara ||= {}; st.prepara.r ||= {}; st.prepara.bens ||= []; st.prepara.notas ||= {}; st.prepara.pesos ||= {}; st.prepara.concluidas ||= {}; st.prepara.marcosEd ||= {}; st.prepara.marcosExtra ||= [];   /* prepara.ai (46-prepara, 79-tela-prepara) */
   st.principal ||= "concurso"; st.novos ||= { data: "", n: 0 }; st.hoje ||= { data: "", feitos: [] };
   if (st.hoje.data !== hojeStr()) st.hoje = { data: hojeStr(), feitos: [] };
 }
@@ -1619,10 +1991,10 @@ function responderCartao(c, nota) {
    O número só cresce: cada bloco FECHADO de foco vale +1 soma. O tempo total guarda todos os segundos, à parte.
    Uma sessão: { tipo, ref, rotulo, cat, bloco (s), ini (ms), seg (s acumulados), desde (ms do trecho rodando, ou null se pausada), ultimo (ms do último sinal de atividade) }. */
 const FOCO = (() => {
-  const BLOCO = { aula: 20 * 60, cartoes: 20 * 60, ia: 20 * 60, manual: 30 * 60 };
+  const BLOCO = { aula: 20 * 60, cartoes: 20 * 60, ia: 20 * 60, prepara: 20 * 60, manual: 30 * 60 };
   const OCIOSO = 5 * 60;          /* atividades automáticas pausam depois de 5 min sem clique, tecla ou rolagem */
   const MINIMO = 60;              /* sessões com menos de 1 min não entram no histórico */
-  const NOMES = { aula: "Aulas", cartoes: "Cartões", ia: "Revisão com IA", manual: "Foco livre" };
+  const NOMES = { aula: "Aulas", cartoes: "Cartões", ia: "Revisão com IA", prepara: "prepara.ai", manual: "Foco livre" };
   const dia = ms => { const d = new Date(ms); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
 
   const novo = (tipo, ref, rotulo, agora) => ({ tipo, ref: ref || null, rotulo: rotulo || NOMES[tipo] || "", cat: null, bloco: BLOCO[tipo] || BLOCO.manual, ini: agora, seg: 0, desde: agora, ultimo: agora });
@@ -1658,6 +2030,147 @@ const FOCO = (() => {
   return { BLOCO, OCIOSO, MINIMO, NOMES, dia, novo, decorrido, pausar, retomar, atividade, verificarOcio, placar, encerrar, resumo, dur, relogio };
 })();
 if (typeof module !== "undefined") module.exports = FOCO;
+
+/* ==== js/46-prepara.js ==== */
+/* ============ prepara.ai: núcleo (sem DOM, testado em testes/prepara.test.js) ============
+   Contas do plano de mudança: capital líquido, matriz de rotas, progresso das imersões, Go/No-Go e o .md do plano.
+   O conteúdo (textos, rotas, marcos) fica em fonte/prepara-mudanca.js (const PREPARA). */
+const PREP = (() => {
+  /* "1.234,56" | "1234.56" | "R$ 2 mil" → número. Vazio → 0. */
+  function num(v) {
+    if (typeof v === "number") return isFinite(v) ? v : 0;
+    let s = String(v == null ? "" : v).trim().toLowerCase().replace(/r\$|€|us\$|\s/g, "");
+    if (!s) return 0;
+    let mult = 1; if (s.endsWith("mil")) { mult = 1000; s = s.slice(0, -3); } else if (s.endsWith("k")) { mult = 1000; s = s.slice(0, -1); }
+    if (s.includes(",")) s = s.replace(/\./g, "").replace(",", ".");
+    else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+    const n = parseFloat(s); return isFinite(n) ? n * mult : 0;
+  }
+  const brl = n => "R$ " + Math.round(n).toLocaleString("pt-BR");
+
+  /* Dinheiro disponível no dia da partida.
+     bens: [{nome, valor, vendido}] (conta tudo, vendido ou não, como estimativa; "jaVendido" separa o que já entrou). */
+  function capital(r, bens) {
+    const b = (bens || []).reduce((a, x) => a + num(x.valor), 0);
+    const jaVendido = (bens || []).filter(x => x.vendido).reduce((a, x) => a + num(x.valor), 0);
+    const entradas = num(r.din_hoje) + num(r.din_mes) * num(r.din_meses) + b;
+    const saidas = num(r.din_divida) + num(r.din_contas) + num(r.din_saida);
+    const liquido = entradas - saidas;
+    const meta = num(r.din_meta);
+    return { bens: b, jaVendido, entradas, saidas, liquido, meta, falta: meta ? Math.max(0, meta - liquido) : null };
+  }
+
+  /* Matriz de decisão: notas[rota][criterio] de 1 a 5, pesos[criterio] de 1 a 3. Rotas sem nota ficam de fora. */
+  function matriz(rotas, criterios, notas, pesos) {
+    const max = criterios.reduce((a, c) => a + 5 * (pesos[c.id] || c.peso || 1), 0);
+    return rotas.map(rt => {
+      const n = notas[rt.id] || {}; const preenchido = criterios.filter(c => n[c.id]).length;
+      const total = criterios.reduce((a, c) => a + (num(n[c.id]) || 0) * (pesos[c.id] || c.peso || 1), 0);
+      return { id: rt.id, nome: rt.nome, total, max, pct: max ? total / max : 0, preenchido, completo: preenchido === criterios.length };
+    }).filter(x => x.preenchido).sort((a, b) => b.total - a.total || a.nome.localeCompare(b.nome));
+  }
+
+  /* Uma tarefa conta como feita quando o check está marcado ou o campo tem resposta. */
+  const feita = (t, r) => t.tipo === "check" ? !!r[t.id] : t.tipo === "widget" ? !!r["w_" + t.id] : String(r[t.id] == null ? "" : r[t.id]).trim() !== "";
+  function progresso(imersao, r) {
+    const ts = imersao.faca || []; const f = ts.filter(t => feita(t, r)).length;
+    return { feitas: f, total: ts.length, p: ts.length ? f / ts.length : 0 };
+  }
+  function geral(imersoes, r, concluidas) {
+    const ps = imersoes.map(i => progresso(i, r)); const feitas = ps.reduce((a, p) => a + p.feitas, 0), total = ps.reduce((a, p) => a + p.total, 0);
+    return { feitas, total, p: total ? feitas / total : 0, concluidas: imersoes.filter(i => concluidas[i.id]).length, imersoes: imersoes.length };
+  }
+
+  /* Go/No-Go: só é "vai" se TODOS os critérios críticos estiverem marcados. */
+  function gonogo(itens, r) {
+    const crit = itens.filter(i => i.critico), faltam = crit.filter(i => !r["go_" + i.id]);
+    const extras = itens.filter(i => !i.critico && !r["go_" + i.id]);
+    return { vai: faltam.length === 0, faltam, extras, marcados: itens.filter(i => r["go_" + i.id]).length, total: itens.length };
+  }
+
+  /* Idade dentro da faixa de 18 a 30 dos programas Working Holiday para brasileiros (Japão, França, Alemanha, Austrália, NZ). */
+  function faixaWH(idade) { const n = num(idade); if (!n) return null; return n >= 18 && n <= 30; }
+
+  /* Marcos com status em relação a hoje (iso "AAAA-MM-DD"). */
+  function marcos(lista, hojeIso, r) {
+    return lista.map(m => ({ ...m, feito: !!r["m_" + m.id], passou: m.data < hojeIso, dias: Math.round((Date.parse(m.data) - Date.parse(hojeIso)) / 864e5) }));
+  }
+  /* Marcos editáveis: os padrão com as trocas dela (marcosEd[id] = {data, t}) + os que ela criou (marcosExtra), em ordem de data. */
+  function listaMarcos(P, est) {
+    const ed = est.marcosEd || {};
+    const base = P.marcos.map(m => ed[m.id] ? { ...m, ...ed[m.id], editado: true } : { ...m });
+    const extra = (est.marcosExtra || []).map(m => ({ decisao: false, ...m, proprio: true }));
+    return base.concat(extra).sort((a, b) => a.data < b.data ? -1 : a.data > b.data ? 1 : 0);
+  }
+
+  /* Rota A/B guardam o id da rota; texto antigo (livre) continua aparecendo como foi escrito. */
+  function rotaNome(rotas, v) { const x = rotas.find(r => r.id === v); return x ? x.nome : String(v == null ? "" : v); }
+  /* Comprovação mínima da rota em reais. Sem cotação daquela moeda, reais = null (nunca chuta câmbio). */
+  const COTACAO = { EUR: "cot_eur", USD: "cot_usd" };
+  function metaRota(rota, r) {
+    if (!rota || !rota.comprova) return null;
+    const [valor, moeda] = rota.comprova, cot = COTACAO[moeda] ? num(r[COTACAO[moeda]]) : 0;
+    return { valor, moeda, reais: cot ? Math.round(valor * cot) : null };
+  }
+
+  /* Lembrete semanal na Início: só depois que ela começou, e 7 dias depois da última revisão dos marcos. */
+  function revisaoVencida(est, hojeIso) {
+    const comecou = Object.values(est.r || {}).some(v => v !== "" && v !== false && v != null) || Object.values(est.concluidas || {}).some(Boolean);
+    if (!comecou) return false;
+    if (!est.revisado) return true;
+    return (Date.parse(hojeIso) - Date.parse(est.revisado)) / 864e5 >= 7;
+  }
+
+  /* Pedido para a IA do app revisar o plano (usa a mesma cadeia da revisão: assinatura → APIs → Gemini → chat). */
+  function promptIA(P, est, hojeIso) {
+    return `Você é uma consultora de mudança internacional, honesta e direta. Revise o plano abaixo de uma brasileira de Campo Grande/MS (área de TI: QA e suporte) que quer sair do Brasil de forma LEGAL até ${P.meta.dataBR}, com pouco dinheiro.
+
+Responda em português do Brasil, em Markdown, com blocos curtos e nesta ordem:
+1. **Os 3 maiores riscos** do plano (o que pode dar errado e quando), do mais grave ao menos grave.
+2. **Contas que não fecham**: compare o capital líquido com a comprovação da rota A + colchão de 3 meses + passagem de volta.
+3. **Datas apertadas**: marcos que dependem de algo que ela não controla (vaga, agendamento, consulado).
+4. **O que eu faria nesta semana**: no máximo 3 ações, cada uma com o site oficial onde conferir.
+
+Regras: não invente regra de imigração, valor ou prazo. Se não tiver certeza, diga "não tenho certeza" e mande conferir no site oficial do governo do destino. Os dados foram conferidos em ${P.meta.verificadoBR}; se souber de mudança posterior, avise.
+
+---
+
+${markdown(P, est, hojeIso)}`;
+  }
+
+  /* O plano inteiro em Markdown, para guardar, imprimir ou mandar para uma IA revisar. */
+  function markdown(P, est, hojeIso) {
+    const r = est.r || {}, L = [];
+    const v = x => String(x == null ? "" : x).trim();
+    L.push(`# Meu plano de mudança (prepara.ai)`, ``, `Gerado em ${hojeIso}. Meta: sair do Brasil até ${P.meta.dataBR}. Informações verificadas em ${P.meta.verificadoBR}; confira sempre na fonte oficial.`, ``);
+    L.push(`## A pergunta que estou respondendo`, ``, P.pergunta.texto, ``);
+    for (const im of P.imersoes) {
+      const linhas = (im.faca || []).filter(t => t.tipo !== "widget").map(t => {
+        if (t.tipo === "check") return `- [${r[t.id] ? "x" : " "}] ${t.rotulo}`;
+        const resp = v(r[t.id]); const op = t.opcoes && t.opcoes.find(o => o[0] === resp);
+        const txt = t.tipo === "rota" ? rotaNome(P.rotas, resp) : op ? op[1] : resp;
+        return `- **${t.rotulo}** ${resp ? txt : "_(sem resposta)_"}`;
+      });
+      if (!linhas.length) continue;
+      L.push(`## ${im.n}. ${im.titulo}${est.concluidas && est.concluidas[im.id] ? " ✔" : ""}`, ``, ...linhas, ``);
+    }
+    const c = capital(r, est.bens);
+    L.push(`## Dinheiro`, ``, `- Bens para vender: ${brl(c.bens)} (já vendido: ${brl(c.jaVendido)})`, `- Entradas até a partida: ${brl(c.entradas)}`, `- Saídas (dívidas, contas, custo de saída): ${brl(c.saidas)}`, `- **Capital líquido no embarque: ${brl(c.liquido)}**`);
+    if (c.meta) L.push(`- Meta da rota: ${brl(c.meta)} · ${c.falta ? "faltam " + brl(c.falta) : "meta atingida"}`);
+    if ((est.bens || []).length) L.push(``, `| Item | Valor | Vendido |`, `|---|---|---|`, ...est.bens.map(b => `| ${v(b.nome) || "-"} | ${brl(num(b.valor))} | ${b.vendido ? "sim" : "não"} |`));
+    L.push(``);
+    const rk = matriz(P.rotas, P.criterios, est.notas || {}, est.pesos || {});
+    if (rk.length) L.push(`## Ranking das rotas (minha matriz)`, ``, ...rk.map((x, i) => `${i + 1}. ${x.nome}: ${x.total}/${x.max} (${Math.round(x.pct * 100)}%)${x.completo ? "" : " · notas incompletas"}`), ``);
+    const g = gonogo(P.gonogo, r);
+    L.push(`## Go/No-Go`, ``, g.vai ? `**VAI.** Todos os critérios críticos estão cumpridos.` : `**AINDA NÃO.** Faltam: ${g.faltam.map(i => i.t).join("; ")}.`, ``);
+    L.push(`## Marcos`, ``, ...marcos(listaMarcos(P, est), hojeIso, r).map(m => `- [${m.feito ? "x" : " "}] ${m.data.slice(8, 10)}/${m.data.slice(5, 7)}: ${m.t}`), ``);
+    L.push(`## Fontes oficiais`, ``, ...P.fontes.map(f => `- [${f.nome}](${f.url})`), ``);
+    return L.join("\n");
+  }
+
+  return { num, brl, capital, matriz, feita, progresso, geral, gonogo, faixaWH, marcos, listaMarcos, rotaNome, metaRota, revisaoVencida, promptIA, markdown };
+})();
+if (typeof module !== "undefined") module.exports = PREP;
 
 /* ==== js/50-ia.js ==== */
 /* ============ IA: pedido, geração, validação e importação de aulas ============ */
@@ -1973,7 +2486,7 @@ async function copiarTexto(txt) {
 /* ==== js/60-roteador.js ==== */
 /* ============ roteador ============ */
 /* Abas do topo (no celular viram a barra de baixo). "Novo tema" é uma ação dentro de Temas, não uma aba. */
-const ROTAS = [["inicio", "Início"], ["temas", "Temas"], ["revisar", "Revisar"], ["biblioteca", "Biblioteca"], ["foco", "Foco"], ["progresso", "Progresso"]];
+const ROTAS = [["inicio", "Início"], ["temas", "Temas"], ["revisar", "Revisar"], ["biblioteca", "Biblioteca"], ["foco", "Foco"], ["prepara", "Prepara"], ["progresso", "Progresso"]];
 const abaDaRota = r => r.startsWith("tema-") || r.startsWith("aula-") || r === "novo" ? "temas" : (ROTAS.find(([id]) => r.startsWith(id)) || ["inicio"])[0];
 function topo(rota) {
   const fila = filaCartoes("todos").length; const aba = abaDaRota(rota);
@@ -1982,7 +2495,7 @@ function topo(rota) {
   const prova = diasAte("2027-01-17");
   $("#chips").innerHTML = (prova >= 0 ? `<span class="chip" title="Prova da UFMS em 17/01/2027">${ico("calendario")}<b>${prova}</b><span class="l">dias para a prova</span></span>` : "")
     + `<span class="chip ${seq ? "quente" : ""}" title="Dias seguidos com estudo">${ico("chama")}<b>${seq}</b><span class="l">${seq === 1 ? "dia seguido" : "dias seguidos"}</span></span>`
-    + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + chipFoco();
+    + chipPrepara() + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + chipFoco();
   if (MODO === "nuvem") marcarSync();
 }
 function rotear() {
@@ -1991,6 +2504,7 @@ function rotear() {
   focoRota(h); topo(h); window.scrollTo(0, 0);
   const app = $("#app");
   if (h.startsWith("tema-")) return telaTema(app, h.slice(5));
+  if (h === "prepara" || h.startsWith("prepara-")) return telaPrepara(app, h.slice(8) || null);
   if (h === "ia" || h === "ia-duvidas") return telaIA(app, h === "ia-duvidas");
   if (h.startsWith("aula-")) { const resto = h.slice(5); const m = resto.match(/^(.*?)(?:-(mapa|lembre|aprenda|pratique|teste|explique|feito))?$/); return telaAula(app, m[1], m[2] || "mapa"); }
   ({ temas: telaTemas, biblioteca: telaBiblioteca, revisar: telaRevisar, novo: telaNovo, progresso: telaProgresso, foco: telaFoco }[h] || telaInicio)(app);
@@ -2055,6 +2569,7 @@ function telaInicio(app) {
     ${atalhoIA("#ia", "var(--ac)", "brilho", "Revisão com IA", pendentesIA().length, n => n ? `${n} ${n === 1 ? "aula aguardando" : "aulas aguardando"} correção` : "Registre as respostas no fim da aula", "Revisar")}
     ${atalhoIA("#ia-duvidas", "var(--teal)", "busca", "Dúvidas da semana", duvidasAbertas().length, n => n ? `${n} ${n === 1 ? "dúvida anotada" : "dúvidas anotadas"} para pesquisar` : "Anote curiosidades no fim de cada aula", "Gerar .md")}
   </section>
+  ${lembretePrepara()}
   <section>
     <div class="row entre titulo-sec"><h2>Seus temas</h2><a class="link" href="#temas">Ver todos ${ico("dir")}</a></div>
     <div class="temas">${[principal, ...temas.filter(t => t !== principal)].map(t => tileTema(t)).join("")}</div>
@@ -2394,6 +2909,7 @@ function telaProgresso(app) {
     <section class="card grid" style="gap:14px"><h3>Por tema</h3>${todosTemas().map(t => { const p = progressoTema(t); const tops = topicos(t).map(x => st.top[x.id]).filter(Boolean); const ac = tops.reduce((s, x) => s + x.ac, 0), tot = tops.reduce((s, x) => s + x.tot, 0);
       return `<div style="--c:${t.cor}"><div class="row entre"><span class="row">${iconeTema(t, "sm")}<b>${esc(t.nome)}</b></span><span class="sub" style="font-variant-numeric:tabular-nums">${p.v}/${p.n} tópicos · acerto ${tot ? Math.round(100 * ac / tot) + "%" : "—"}</span></div><div class="bar"><i style="width:${p.p * 100}%"></i></div></div>`; }).join("")}</section>
     ${secaoFocoProgresso()}
+    ${secaoPreparaProgresso()}
     ${MODO === "nuvem" ? `<section class="card grid" style="gap:10px"><h3>${ico("nuvem")} Sincronização entre aparelhos</h3><p class="sub">O progresso é salvo sozinho na sua conta poucos segundos depois de cada ação, e é puxado quando você volta para a página. Para forçar: <b>Sincronizar agora</b> pega a versão mais recente (deste aparelho ou da nuvem). <b>Usar a versão da nuvem</b> descarta o que estiver só neste aparelho.</p><div class="row"><button class="btn pri" id="sincr">Sincronizar agora</button><button class="btn ghost" id="remoto">Usar a versão da nuvem</button><span class="sub" id="sstat">${ultimoSync ? "Última sincronização: " + ultimoSync.toLocaleTimeString("pt-BR") : ""}</span></div></section>` : ""}
     <section class="card grid g2"><div class="grid" style="gap:10px"><h3>Backup</h3><p class="sub">Seu progresso fica neste navegador. Copie o backup e guarde no Google Drive ou no Obsidian. Para restaurar, cole ao lado.</p><div class="row"><button class="btn pri" id="exp">Copiar backup</button></div><textarea id="exptxt" readonly style="min-height:90px" placeholder="O backup aparece aqui"></textarea></div>
     <div class="grid" style="gap:10px"><h3>Restaurar</h3><textarea id="imptxt" style="min-height:130px" placeholder="Cole aqui um backup do estudaai"></textarea><div class="row"><button class="btn" id="imp">Restaurar backup</button></div></div></section>`;
@@ -2487,6 +3003,7 @@ function atividadeDaRota(h) {
     return a ? { tipo: "aula", ref: m[1], rotulo: a.titulo, tema: info ? info.tema.id : null, fim: m[2] === "feito" } : null; }
   if (h === "revisar") return { tipo: "cartoes", ref: "cartoes", rotulo: "Revisão de cartões" };
   if (h === "ia") return { tipo: "ia", ref: "ia", rotulo: "Revisão com IA" };
+  if (h.startsWith("prepara-") && typeof PREPARA !== "undefined") { const im = PREPARA.imersoes.find(i => i.id === h.slice(8)); if (im) return { tipo: "prepara", ref: im.id, rotulo: "Imersão " + im.n + ": " + im.titulo }; }
   return null;
 }
 const sessaoFoco = () => st.foco.atual || focoAuto;
@@ -2643,12 +3160,276 @@ function secaoFocoProgresso() {
   const manuais = FOCO.resumo(regs.filter(x => x.tipo === "manual")).cat;
   const semCat = regs.filter(x => x.tipo === "manual" && !x.cat); if (semCat.length) manuais["__sem"] = FOCO.resumo(semCat).total;
   const corCat = k => (st.foco.cats.find(c => c.id === k) || {}).cor || "var(--mu2)";
-  const COR_TIPO = { aula: "var(--ac)", cartoes: "var(--teal)", ia: "#a98bf0", manual: "var(--ok)" };
+  const COR_TIPO = { aula: "var(--ac)", cartoes: "var(--teal)", ia: "#a98bf0", prepara: PREPARA.meta.cor, manual: "var(--ok)" };
   return `<section class="card grid" style="gap:16px"><div class="row entre"><h3>${ico("foco")} acrescentou.ai</h3><a class="link" href="#foco">Abrir o contador ${ico("dir")}</a></div>
     <div class="grid g3"><div class="bloco"><div class="grande" style="--c:var(--ok)">+${r.total.somas}</div><span class="sub">somas no total</span></div><div class="bloco"><div class="grande" style="--c:var(--teal)">${FOCO.dur(r.total.seg)}</div><span class="sub">de foco registrado</span></div><div class="bloco"><div class="grande" style="--c:var(--warn)">+${s7}</div><span class="sub">somas nos últimos 7 dias</span></div></div>
     <div class="grid g2" style="gap:22px"><div class="grid" style="gap:12px"><h3>Por atividade</h3>${barras(r.tipo, k => FOCO.NOMES[k] || k, k => COR_TIPO[k] || "var(--ac)")}</div>
     <div class="grid" style="gap:12px"><h3>Foco livre por categoria</h3>${barras(manuais, k => k === "__sem" ? "Sem categoria" : nomeCat(k), corCat)}</div></div>
     <p class="sub">${ico("nuvem")} ${syncTxt}</p></section>`;
+}
+
+/* ==== js/79-tela-prepara.js ==== */
+/* ============ prepara.ai: imersões para montar o plano de mudança ============
+   #prepara = mapa das imersões e painel do plano · #prepara-<id> = uma imersão (Entenda → Faça → Saída).
+   Conteúdo em PREPARA (fonte/prepara-mudanca.js), contas em PREP (46-prepara.js), respostas em st.prepara. */
+const PCOR = () => PREPARA.meta.cor;
+const pr = () => st.prepara;
+function telaPrepara(app, id) {
+  const im = id && PREPARA.imersoes.find(i => i.id === id);
+  if (im) return telaImersao(app, im);
+  const g = PREP.geral(PREPARA.imersoes, pr().r, pr().concluidas), dias = diasAte(PREPARA.meta.data);
+  const proxima = PREPARA.imersoes.find(i => !pr().concluidas[i.id]);
+  app.innerHTML = `<div style="--c:${PCOR()};gap:28px" class="grid">
+    <header class="cab"><div><span class="eyebrow">prepara.ai</span><h1>Plano para sair do Brasil</h1>
+      <p class="sub">Imersões de 20 a 90 min: você para, aprende como funciona e já preenche o seu plano. Meta: embarcar até <b>${PREPARA.meta.dataBR}</b>.</p></div>
+      <div class="row"><button class="btn" id="pia">${ico("brilho")}Pedir à IA para achar riscos</button><button class="btn ghost" id="pbaixar">${ico("baixar")}Baixar meu plano (.md)</button></div></header>
+    <section class="prep-topo">
+      <div class="card prep-conta"><div class="grande">${Math.max(0, dias)}</div><span class="sub">${dias === 1 ? "dia" : "dias"} até ${PREPARA.meta.dataBR}</span></div>
+      <div class="card prep-conta"><div class="grande">${g.concluidas}/${g.imersoes}</div><span class="sub">imersões concluídas</span><div class="bar"><i style="width:${g.p * 100}%"></i></div><span class="sub" style="font-size:13px">${g.feitas} de ${g.total} tarefas</span></div>
+      ${proxima ? `<a class="card prep-prox" href="#prepara-${proxima.id}"><span class="eyebrow">Próxima imersão</span><b>${proxima.n}. ${esc(proxima.titulo)}</b><span class="sub">${proxima.tempo} · ${esc(proxima.objetivo)}</span><span class="btn pri">${ico("play")}Começar</span></a>`
+        : `<div class="card prep-prox"><span class="eyebrow">Tudo concluído</span><b>Seu plano está montado.</b><span class="sub">Revise os marcos toda semana e baixe o .md atualizado.</span></div>`}
+    </section>
+    <section class="card prep-pergunta"><span class="eyebrow">A pergunta, lapidada</span>
+      <p class="riscado">${esc(PREPARA.pergunta.original)}</p><p class="nova">${esc(PREPARA.pergunta.texto)}</p>
+      <ul>${PREPARA.pergunta.porque.map(x => `<li>${limparHTML(x)}</li>`).join("")}</ul></section>
+    <section><h2 class="titulo-sec">Imersões</h2><div class="prep-trilha">${PREPARA.imersoes.map(cardImersao).join("")}</div></section>
+    <section class="grid g2">${painelPlano()}</section>
+    ${pr().ia ? `<section class="card prep-ia"><div class="row entre"><h3>${ico("brilho")} Riscos apontados pela IA</h3><span class="sub">${fmt(pr().ia.data)} · ${esc(NOME_IA[pr().ia.provedor] || pr().ia.provedor)}</span></div><div class="prep-txt md">${mdParaHTML(pr().ia.md)}</div>
+      <p class="sub" style="font-size:13px">A IA erra. Toda regra, valor ou prazo citado aqui precisa ser conferido na fonte oficial (imersão 7).</p></section>` : ""}</div>`;
+  $("#pbaixar").onclick = baixarPlano;
+  $("#pia").onclick = () => revisarPlanoIA(app);
+}
+/* Revisão do plano pela IA do app (mesma cadeia da revisão das aulas). Sem IA disponível: copia o pedido e abre o chat. */
+async function revisarPlanoIA(app) {
+  const prompt = PREP.promptIA(PREPARA, pr(), hojeStr()), b = $("#pia");
+  if (!cadeiaIA("revisao").length) return copiarEAbrir(prompt, chatPreferido());
+  b.disabled = true; b.innerHTML = `${ico("brilho")}A IA está lendo o seu plano...`;
+  try {
+    const r = await iaTexto(prompt, "revisao"); const md = String(r.texto || "").trim(); if (!md) throw new Error("A resposta veio vazia.");
+    pr().ia = { data: hojeStr(), provedor: r.provedor, md }; marcarDia(1); salvar(); toast("Revisão pronta"); telaPrepara(app, null);
+    const el = $(".prep-ia"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (e) {
+    toast((e && e.message) || "A IA não respondeu. Copiei o pedido para você colar no chat."); copiarEAbrir(prompt, chatPreferido());
+    b.disabled = false; b.innerHTML = `${ico("brilho")}Pedir à IA para achar riscos`;
+  }
+}
+function cardImersao(im) {
+  const p = PREP.progresso(im, pr().r), ok = pr().concluidas[im.id];
+  return `<a class="card prep-im ${ok ? "ok" : ""}" href="#prepara-${im.id}"><span class="prep-n">${ok ? ico("check") : im.n}</span>
+    <div><b>${esc(im.titulo)}</b><span class="sub">${im.tempo} · ${p.feitas}/${p.total} tarefas</span><div class="bar fino"><i style="width:${p.p * 100}%"></i></div></div>${ico("dir")}</a>`;
+}
+/* Resumo vivo do plano: idade × Working Holiday, ranking, dinheiro, Go/No-Go. */
+function painelPlano() {
+  const r = pr().r, wh = PREP.faixaWH(r.idade), c = PREP.capital(r, pr().bens);
+  const rk = PREP.matriz(PREPARA.rotas, PREPARA.criterios, pr().notas, pr().pesos), go = PREP.gonogo(PREPARA.gonogo, r);
+  const linha = (rot, val, cls = "") => `<div class="row entre prep-linha"><span class="sub">${rot}</span><b class="${cls}">${val}</b></div>`;
+  return `<div class="card grid" style="gap:10px"><h3>${ico("mala")} Meu plano agora</h3>
+      ${linha("Rota A", r.rota_a ? esc(PREP.rotaNome(PREPARA.rotas, r.rota_a)) : "a definir")}
+      ${linha("Rota B", r.rota_b ? esc(PREP.rotaNome(PREPARA.rotas, r.rota_b)) : "a definir")}
+      ${linha("Working Holiday (18 a 30 anos)", wh == null ? "preencha a idade" : wh ? "dentro da faixa" : "fora da faixa", wh == null ? "" : wh ? "t-ok" : "t-bad")}
+      ${linha("Capital líquido no embarque", PREP.brl(c.liquido), c.liquido < 0 ? "t-bad" : "")}
+      ${c.meta ? linha("Falta para a meta da rota A", c.falta ? PREP.brl(c.falta) : "meta atingida", c.falta ? "t-warn" : "t-ok") : ""}
+      ${linha("Go/No-Go", go.vai ? "VAI" : `ainda não (${go.faltam.length} críticos)`, go.vai ? "t-ok" : "t-warn")}</div>
+    <div class="card grid" style="gap:10px"><h3>${ico("alvo")} Ranking das rotas</h3>
+      ${rk.length ? rk.slice(0, 5).map(x => `<div><div class="row entre"><span>${esc(x.nome)}</span><span class="sub" style="font-variant-numeric:tabular-nums">${x.total}/${x.max}</span></div><div class="bar"><i style="width:${x.pct * 100}%"></i></div></div>`).join("")
+        : `<p class="sub">Dê notas às rotas na imersão 3 para ver o ranking aqui.</p><a class="link" href="#prepara-caminhos">Abrir o mapa dos caminhos ${ico("dir")}</a>`}</div>`;
+}
+function baixarPlano() { baixarArquivo(`plano-mudanca-${hojeStr()}.md`, PREP.markdown(PREPARA, pr(), hojeStr()), undefined, "Plano baixado"); }
+
+/* ---------- uma imersão ---------- */
+function telaImersao(app, im) {
+  const i = PREPARA.imersoes.indexOf(im), ant = PREPARA.imersoes[i - 1], prox = PREPARA.imersoes[i + 1];
+  app.innerHTML = `<div style="--c:${PCOR()}" class="grid prep-imersao">
+    <a class="migalha" href="#prepara">${ico("voltar")}prepara.ai</a>
+    <header class="cab"><div><span class="eyebrow">Imersão ${im.n} de ${PREPARA.imersoes.length} · ${im.tempo}</span><h1>${esc(im.titulo)}</h1><p class="sub">${esc(im.objetivo)}</p></div>
+      <div class="prep-prog" id="pprog"></div></header>
+    <section class="card prep-mapa" aria-label="Mapa da imersão"><span class="eyebrow">O mapa desta imersão</span>
+      <ol>${(im.mapa || []).map((m, k) => `<li><span class="prep-n sm">${k + 1}</span>${esc(m)}</li>`).join("")}</ol>
+      ${im.minimo ? `<p class="prep-min">${ico("chama")}<span><b>Dia ruim?</b> Faça só isto (10 min): ${esc(im.minimo)}</span></p>` : ""}</section>
+    <ol class="prep-passos"><li><a href="#p-entenda">${ico("ler")}Entenda</a></li>${im.recupere ? `<li><a href="#p-recupere">${ico("brilho")}Recupere</a></li>` : ""}<li><a href="#p-faca">${ico("check")}Faça</a></li><li><a href="#p-saida">${ico("estrela")}Saída</a></li></ol>
+    <section id="p-entenda" class="grid" style="gap:12px"><h2 class="titulo-sec">Entenda</h2>${im.entenda.map(b => `<article class="card prep-bloco"><h3>${esc(b.t)}</h3><div class="prep-txt">${limparHTML(b.html)}</div></article>`).join("")}
+      ${im.id === "caminhos" ? `<div class="prep-rotas">${PREPARA.rotas.map(cardRota).join("")}</div><p class="sub" style="font-size:13px">Conferido em ${PREPARA.meta.verificadoBR}. Regras mudam: antes de pagar qualquer coisa, abra a fonte oficial na imersão 7.</p>` : ""}
+      ${im.id === "fontes" ? `<article class="card prep-bloco"><h3>Fontes oficiais</h3><ul class="prep-fontes">${PREPARA.fontes.map(f => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.nome)}</a></li>`).join("")}</ul></article>` : ""}</section>
+    ${im.recupere ? `<section id="p-recupere" class="card prep-quiz" aria-live="polite"></section>` : ""}
+    <section id="p-faca" class="card grid" style="gap:16px"><h2 class="titulo-sec">Faça</h2><div class="grid" style="gap:18px" id="pfaca">${im.faca.map(campoTarefa).join("")}</div></section>
+    <section id="p-saida" class="card prep-saida"><span class="eyebrow">O que você leva desta imersão</span><p>${esc(im.saida)}</p>
+      <div class="row"><button class="btn pri" id="pconc">${ico("check")}${pr().concluidas[im.id] ? "Concluída (desmarcar)" : "Concluir imersão"}</button></div></section>
+    <nav class="row entre">${ant ? `<a class="btn ghost" href="#prepara-${ant.id}">${ico("voltar")}${esc(ant.titulo)}</a>` : `<span></span>`}${prox ? `<a class="btn" href="#prepara-${prox.id}">${esc(prox.titulo)}${ico("seta")}</a>` : `<a class="btn" href="#prepara">Voltar ao plano${ico("seta")}</a>`}</nav></div>`;
+  ligarCampos(im); desenharQuiz(im);
+  if (im.id === "cronograma") { pr().revisado = hojeStr(); salvar(); }   /* abrir o cronograma conta como a revisão semanal dos marcos */
+  $("#pconc").onclick = () => { pr().concluidas[im.id] = !pr().concluidas[im.id]; salvar();
+    if (pr().concluidas[im.id]) { marcarDia(1); toast(`Imersão ${im.n} concluída`); location.hash = prox ? "#prepara-" + prox.id : "#prepara"; } else telaImersao(app, im); };
+  progImersao(im);
+}
+/* Recupere: 1 pergunta no meio da imersão. Errou → dica e mais uma tentativa; na segunda, mostra a certa e o porquê. */
+function desenharQuiz(im) {
+  const el = $("#p-recupere"), q = im.recupere; if (!el || !q) return;
+  const k = "q_" + im.id, est = pr().r[k] || { t: 0, e: null, ok: false }, fim = est.ok || est.t >= 2;
+  const cls = i => !est.t ? "" : i === q.c && fim ? "certa" : i === est.e && !est.ok ? "errada" : "";
+  el.innerHTML = `<h2 class="titulo-sec">${ico("brilho")} Recupere, sem olhar acima</h2><p class="prep-q">${esc(q.p)}</p>
+    <div class="prep-ops">${q.op.map((o, i) => `<button type="button" class="prep-op ${cls(i)}" data-op="${i}" ${fim ? "disabled" : ""}><span class="l">${"ABCDE"[i]}</span>${esc(o)}</button>`).join("")}</div>
+    ${est.ok ? `<p class="prep-fb ok">${ico("check")}<span><b>Isso.</b> ${esc(q.por)}</span></p>`
+      : est.t === 1 ? `<p class="prep-fb warn"><span><b>Quase.</b> Volte ao bloco "Entenda", releia só o título que tem a ver com a pergunta e tente mais uma vez.</span></p>`
+      : est.t >= 2 ? `<p class="prep-fb bad"><span><b>A certa é a ${"ABCDE"[q.c]}.</b> ${esc(q.por)}</span></p>` : ""}
+    ${fim ? `<button type="button" class="btn sm ghost" id="qrefazer">Refazer depois</button>` : ""}`;
+  el.querySelectorAll("[data-op]").forEach(b => b.onclick = () => { const i = +b.dataset.op; pr().r[k] = { t: est.t + 1, e: i, ok: i === q.c }; salvar(); desenharQuiz(im); });
+  const rf = $("#qrefazer"); if (rf) rf.onclick = () => { delete pr().r[k]; salvar(); desenharQuiz(im); };
+}
+function progImersao(im) { const el = $("#pprog"); if (!el) return; const p = PREP.progresso(im, pr().r); el.innerHTML = `<span class="sub">${p.feitas}/${p.total} tarefas</span><div class="bar"><i style="width:${p.p * 100}%"></i></div>`; }
+const CABE = { sim: ["ok", "Cabe até 07/02"], talvez: ["med", "Depende de vaga ou prazo"], nao: ["bad", "Não cabe nesta janela"] };
+function cardRota(rt) {
+  const [cls, txt] = CABE[rt.cabe];
+  return `<article class="card prep-rota"><div class="row entre"><span class="pill">${esc(rt.grupo)}</span><span class="pill ${cls}">${txt}</span></div><h3>${esc(rt.nome)}</h3>
+    <dl><dt>Requisito</dt><dd>${esc(rt.req)}</dd><dt>Custo</dt><dd>${esc(rt.custo)}</dd><dt>Prazo</dt><dd>${esc(rt.prazo)}</dd><dt>Idioma</dt><dd>${esc(rt.idioma)}</dd></dl><p class="sub">${esc(rt.obs)}</p></article>`;
+}
+
+/* ---------- campos das tarefas ---------- */
+function campoTarefa(t) {
+  const r = pr().r, v = r[t.id] == null ? "" : r[t.id], dica = t.dica ? `<span class="sub prep-dica">${esc(t.dica)}</span>` : "";
+  if (t.tipo === "check") return `<label class="prep-check"><input type="checkbox" data-k="${t.id}" ${v ? "checked" : ""}><span>${esc(t.rotulo)}</span></label>`;
+  if (t.tipo === "escolha") return `<fieldset class="prep-campo"><legend>${esc(t.rotulo)}</legend><div class="row">${t.opcoes.map(([val, rot]) => `<button type="button" class="btn sm cat ${v === val ? "on" : ""}" data-esc="${t.id}" data-v="${val}" aria-pressed="${v === val}">${esc(rot)}</button>`).join("")}</div>${dica}</fieldset>`;
+  if (t.tipo === "widget") return `<div class="prep-campo"><span class="prep-rot">${esc(t.rotulo)}</span><div id="w-${t.widget}"></div></div>`;
+  const id = "f-" + t.id;
+  if (t.tipo === "rota") {   /* lista das rotas, agrupada pelo "cabe até 07/02"; texto antigo vira uma opção para não sumir */
+    const grupo = (c, rot) => `<optgroup label="${rot}">${PREPARA.rotas.filter(x => x.cabe === c).map(x => `<option value="${x.id}" ${v === x.id ? "selected" : ""}>${esc(x.nome)}</option>`).join("")}</optgroup>`;
+    const livre = v && !PREPARA.rotas.some(x => x.id === v) ? `<option value="${esc(v)}" selected>${esc(v)}</option>` : "";
+    return `<div class="prep-campo"><label class="prep-rot" for="${id}">${esc(t.rotulo)}</label><select id="${id}" data-k="${t.id}"><option value="">Escolha a rota</option>${livre}${grupo("sim", "Cabe até 07/02")}${grupo("talvez", "Depende de vaga ou prazo")}${grupo("nao", "Não cabe nesta janela (plano C)")}</select>${dica}</div>`;
+  }
+  const ctrl = t.tipo === "longo" ? `<textarea id="${id}" data-k="${t.id}">${esc(v)}</textarea>`
+    : `<input type="text" id="${id}" data-k="${t.id}" value="${esc(v)}" ${t.tipo === "numero" ? 'inputmode="decimal"' : ""}>`;
+  return `<div class="prep-campo"><label class="prep-rot" for="${id}">${esc(t.rotulo)}</label>${ctrl}${dica}${t.id === "din_meta" ? `<div id="w-meta" aria-live="polite"></div>` : ""}</div>`;
+}
+/* Meta sugerida: comprovação mínima da rota A convertida pela cotação que ela digitou. Um clique preenche a meta. */
+function desenharMeta() {
+  const el = $("#w-meta"); if (!el) return; const r = pr().r, rota = PREPARA.rotas.find(x => x.id === r.rota_a), m = PREP.metaRota(rota, r);
+  const sim = { EUR: "€", USD: "US$", NZD: "NZD" };
+  el.innerHTML = !rota ? `<p class="sub prep-dica">Escolha a rota A na imersão 3 para ver a comprovação mínima aqui.</p>`
+    : !m ? `<p class="sub prep-dica">${esc(rota.nome)}: sem valor fixo de comprovação. Monte a meta com custo de saída + colchão de 3 meses + passagem de volta.</p>`
+    : m.reais == null ? `<p class="sub prep-dica">${esc(rota.nome)} pede ${sim[m.moeda]} ${m.valor.toLocaleString("pt-BR")}. ${m.moeda === "EUR" ? "Preencha a cotação do euro acima para converter." : "Converta pela cotação do dia."}</p>`
+    : `<div class="prep-sug"><span>Comprovação da rota A: <b>${sim[m.moeda]} ${m.valor.toLocaleString("pt-BR")} ≈ ${PREP.brl(m.reais)}</b>. Só o mínimo do governo: some o colchão e a volta.</span><button type="button" class="btn sm" id="usarmeta">Usar ${PREP.brl(m.reais)} como base</button></div>`;
+  const b = $("#usarmeta"); if (b) b.onclick = () => { r.din_meta = String(m.reais); const f = $("#f-din_meta"); if (f) f.value = r.din_meta; salvar(); desenharBens(); progImersao(PREPARA.imersoes.find(x => x.id === "dinheiro")); toast("Meta preenchida. Some o colchão e a passagem de volta."); };
+}
+function ligarCampos(im) {
+  const box = $("#pfaca"), r = pr().r;
+  box.querySelectorAll("[data-k]").forEach(el => {
+    const ev = el.type === "checkbox" || el.tagName === "SELECT" ? "change" : "input";
+    el.addEventListener(ev, () => { r[el.dataset.k] = el.type === "checkbox" ? el.checked : el.value; salvar(); progImersao(im); if (im.id === "dinheiro") { desenharBens(); desenharMeta(); } });
+  });
+  desenharMeta();
+  box.querySelectorAll("[data-esc]").forEach(b => b.onclick = () => { const k = b.dataset.esc; r[k] = r[k] === b.dataset.v ? "" : b.dataset.v; salvar();
+    box.querySelectorAll(`[data-esc="${k}"]`).forEach(x => { const on = x.dataset.v === r[k]; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on); }); progImersao(im); });
+  if ($("#w-bens")) desenharBens();
+  if ($("#w-matriz")) desenharMatriz();
+  if ($("#w-marcos")) desenharMarcos();
+  if ($("#w-gonogo")) desenharGonogo();
+}
+const marcarWidget = (k, v) => { pr().r["w_" + k] = v; };
+
+/* ---------- widget: inventário de bens + resultado do dinheiro ---------- */
+function desenharBens() {
+  const el = $("#w-bens"); if (!el) return; const bens = pr().bens, c = PREP.capital(pr().r, bens);
+  el.innerHTML = `<div class="prep-bens">${bens.length ? bens.map((b, i) => `<div class="row prep-bem"><label class="sr" for="bn${i}">Item</label><input type="text" id="bn${i}" data-bem="${i}" data-campo="nome" value="${esc(b.nome || "")}" placeholder="Item">
+      <label class="sr" for="bv${i}">Valor</label><input type="text" id="bv${i}" data-bem="${i}" data-campo="valor" value="${esc(b.valor || "")}" placeholder="R$" inputmode="decimal" class="prep-valor">
+      <label class="prep-check sm"><input type="checkbox" data-bem="${i}" data-campo="vendido" ${b.vendido ? "checked" : ""}><span>vendido</span></label>
+      <button class="btn sm ghost" data-tirar="${i}" aria-label="Remover item">${ico("lixo")}</button></div>`).join("") : `<p class="sub">Nenhum item ainda. Comece pelos maiores: notebook, celular, móveis, eletrodomésticos.</p>`}</div>
+    <div class="row"><button class="btn sm" id="bmais">${ico("mais")}Adicionar item</button></div>
+    <div class="grid g3 prep-res"><div class="bloco"><div class="grande">${PREP.brl(c.bens)}</div><span class="sub">em bens (${PREP.brl(c.jaVendido)} já vendido)</span></div>
+      <div class="bloco"><div class="grande" style="--c:${c.liquido < 0 ? "var(--bad)" : "var(--ok)"}">${PREP.brl(c.liquido)}</div><span class="sub">capital líquido no embarque</span></div>
+      <div class="bloco"><div class="grande" style="--c:var(--warn)">${c.meta ? (c.falta ? PREP.brl(c.falta) : "ok") : "—"}</div><span class="sub">${c.meta ? (c.falta ? "faltam para a meta" : "meta atingida") : "preencha a meta da rota"}</span></div></div>
+    <p class="sub" style="font-size:13px">Conta: guardado hoje + (guardo por mês × meses) + bens − dívidas − contas − custo de saída. Dica: no plano, conte 70% do valor dos bens.</p>`;
+  el.querySelectorAll("[data-bem]").forEach(inp => inp.addEventListener(inp.type === "checkbox" ? "change" : "change", () => {
+    const b = bens[+inp.dataset.bem]; b[inp.dataset.campo] = inp.type === "checkbox" ? inp.checked : inp.value; salvar(); desenharBens(); }));
+  el.querySelectorAll("[data-tirar]").forEach(b => b.onclick = () => { bens.splice(+b.dataset.tirar, 1); marcarWidget("bens", bens.length > 0); salvar(); desenharBens(); });
+  $("#bmais").onclick = () => { bens.push({ nome: "", valor: "", vendido: false }); marcarWidget("bens", true); salvar(); desenharBens(); const ult = el.querySelectorAll('[data-campo="nome"]'); ult[ult.length - 1].focus(); };
+  const im = PREPARA.imersoes.find(x => x.id === "dinheiro"); progImersao(im);
+}
+
+/* ---------- widget: matriz de decisão ---------- */
+function desenharMatriz() {
+  const el = $("#w-matriz"); if (!el) return; const P = PREPARA, notas = pr().notas, pesos = pr().pesos;
+  const rotas = P.rotas.filter(rt => rt.cabe !== "nao");
+  el.innerHTML = `<p class="sub">Nota de 1 (ruim) a 5 (ótimo) para cada rota que sobrou. O peso diz o quanto o critério importa para você (1 a 3).</p>
+    <div class="prep-mtz-wrap"><table class="prep-mtz"><thead><tr><th>Rota</th>${P.criterios.map(c => `<th>${esc(c.nome)}<label class="sr" for="pp-${c.id}">Peso de ${esc(c.nome)}</label><select id="pp-${c.id}" data-peso="${c.id}">${[1, 2, 3].map(n => `<option ${(pesos[c.id] || c.peso) === n ? "selected" : ""}>${n}</option>`).join("")}</select></th>`).join("")}</tr></thead>
+    <tbody>${rotas.map(rt => `<tr><th scope="row">${esc(rt.nome)}</th>${P.criterios.map(c => { const v = (notas[rt.id] || {})[c.id] || ""; return `<td><label class="sr" for="n-${rt.id}-${c.id}">${esc(rt.nome)}: ${esc(c.nome)}</label><select id="n-${rt.id}-${c.id}" data-nota="${rt.id}" data-crit="${c.id}"><option value="">–</option>${[1, 2, 3, 4, 5].map(n => `<option ${+v === n ? "selected" : ""}>${n}</option>`).join("")}</select></td>`; }).join("")}</tr>`).join("")}</tbody></table></div>
+    <div id="mtz-rank" class="grid" style="gap:8px"></div>`;
+  el.querySelectorAll("[data-nota]").forEach(s => s.onchange = () => { (notas[s.dataset.nota] ||= {})[s.dataset.crit] = s.value ? +s.value : 0; marcarWidget("matriz", true); salvar(); rankMatriz(); });
+  el.querySelectorAll("[data-peso]").forEach(s => s.onchange = () => { pesos[s.dataset.peso] = +s.value; salvar(); rankMatriz(); });
+  rankMatriz();
+}
+function rankMatriz() {
+  const el = $("#mtz-rank"); if (!el) return; const rk = PREP.matriz(PREPARA.rotas, PREPARA.criterios, pr().notas, pr().pesos);
+  el.innerHTML = rk.length ? `<span class="eyebrow">Seu ranking</span>` + rk.map((x, i) => `<div><div class="row entre"><span>${i + 1}. ${esc(x.nome)}${x.completo ? "" : ` <span class="pill med">notas incompletas</span>`}</span><span class="sub" style="font-variant-numeric:tabular-nums">${x.total}/${x.max}</span></div><div class="bar"><i style="width:${x.pct * 100}%"></i></div></div>`).join("") : "";
+  progImersao(PREPARA.imersoes.find(x => x.id === "caminhos"));
+}
+
+/* ---------- widget: marcos do cronograma ---------- */
+let marcoEditando = null;   /* id do marco aberto para edição ("novo" = criando um) */
+function desenharMarcos() {
+  const el = $("#w-marcos"); if (!el) return; const r = pr().r, P = pr();
+  P.marcosEd ||= {}; P.marcosExtra ||= [];
+  const form = (m, novo) => `<li class="prep-marco-ed"><form class="row" data-form="${novo ? "novo" : m.id}">
+      <label class="sr" for="md-${m.id}">Data</label><input type="date" id="md-${m.id}" name="data" value="${m.data}" required min="2026-01-01" max="2027-12-31">
+      <label class="sr" for="mt-${m.id}">O que precisa estar pronto</label><input type="text" id="mt-${m.id}" name="t" value="${esc(m.t)}" required placeholder="O que precisa estar pronto">
+      <button class="btn sm pri" type="submit">${ico("check")}Salvar</button><button class="btn sm ghost" type="button" data-cancelar>Cancelar</button>
+      ${novo ? "" : m.proprio ? `<button class="btn sm ghost" type="button" data-apagar="${m.id}" aria-label="Apagar marco">${ico("lixo")}</button>` : m.editado ? `<button class="btn sm ghost" type="button" data-restaurar="${m.id}">Voltar ao padrão</button>` : ""}</form></li>`;
+  const lista = PREP.marcos(PREP.listaMarcos(PREPARA, P), hojeStr(), r);
+  el.innerHTML = `<ol class="prep-marcos">${lista.map(m => m.id === marcoEditando ? form(m) : `<li class="${m.feito ? "feito" : m.passou ? "atrasado" : ""} ${m.decisao ? "decisao" : ""}">
+      <label class="prep-check"><input type="checkbox" data-marco="${m.id}" ${m.feito ? "checked" : ""}><span><b class="prep-data">${fmt(m.data)}</b> ${esc(m.t)}${m.proprio ? ` <span class="pill">meu</span>` : m.editado ? ` <span class="pill">editado</span>` : ""}</span></label>
+      <span class="sub prep-quando">${m.decisao ? `<span class="pill ac">decisão</span> ` : ""}${m.feito ? "feito" : m.dias < 0 ? "atrasado" : m.dias === 0 ? "hoje" : `em ${m.dias} d`}
+        <button class="btn sm ghost ico-so" type="button" data-editar="${m.id}" aria-label="Editar marco: ${esc(m.t)}">${ico("lapis")}</button></span></li>`).join("")}
+      ${marcoEditando === "novo" ? form({ id: "novo", data: hojeStr(), t: "" }, true) : ""}</ol>
+    ${marcoEditando ? "" : `<div class="row"><button class="btn sm" type="button" id="mnovo">${ico("mais")}Acrescentar um marco meu</button></div>`}`;
+  const redesenhar = () => { marcarWidget("marcos", true); salvar(); desenharMarcos(); };
+  el.querySelectorAll("[data-marco]").forEach(c => c.onchange = () => { r["m_" + c.dataset.marco] = c.checked; pr().revisado = hojeStr(); redesenhar(); });
+  el.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => { marcoEditando = b.dataset.editar; desenharMarcos(); const i = el.querySelector("form input[name=t]"); if (i) i.focus(); });
+  el.querySelectorAll("[data-cancelar]").forEach(b => b.onclick = () => { marcoEditando = null; desenharMarcos(); });
+  el.querySelectorAll("[data-restaurar]").forEach(b => b.onclick = () => { delete P.marcosEd[b.dataset.restaurar]; marcoEditando = null; redesenhar(); });
+  el.querySelectorAll("[data-apagar]").forEach(b => b.onclick = () => { P.marcosExtra = P.marcosExtra.filter(m => m.id !== b.dataset.apagar); delete r["m_" + b.dataset.apagar]; marcoEditando = null; redesenhar(); });
+  el.querySelectorAll("[data-form]").forEach(f => f.onsubmit = e => {
+    e.preventDefault(); const data = f.data.value, t = f.t.value.trim(); if (!data || !t) return;
+    const id = f.dataset.form;
+    if (id === "novo") P.marcosExtra.push({ id: "x" + Date.now().toString(36), data, t, decisao: false });
+    else if (P.marcosExtra.some(m => m.id === id)) Object.assign(P.marcosExtra.find(m => m.id === id), { data, t });
+    else P.marcosEd[id] = { data, t };
+    marcoEditando = null; toast("Marco salvo"); redesenhar();
+  });
+  const n = $("#mnovo"); if (n) n.onclick = () => { marcoEditando = "novo"; desenharMarcos(); const i = el.querySelector("form input[name=t]"); if (i) i.focus(); };
+  progImersao(PREPARA.imersoes.find(x => x.id === "cronograma"));
+}
+
+/* ---------- widget: Go/No-Go ---------- */
+function desenharGonogo() {
+  const el = $("#w-gonogo"); if (!el) return; const r = pr().r, g = PREP.gonogo(PREPARA.gonogo, r);
+  el.innerHTML = `<div class="prep-go ${g.vai ? "vai" : ""}"><b>${g.vai ? "VAI: pode comprar a passagem" : "AINDA NÃO"}</b><span class="sub">${g.vai ? "Todos os critérios críticos estão cumpridos." : `Faltam ${g.faltam.length} critérios críticos. Sem eles, a passagem espera.`}</span></div>
+    <ul class="prep-golista">${PREPARA.gonogo.map(i => `<li><label class="prep-check"><input type="checkbox" data-go="${i.id}" ${r["go_" + i.id] ? "checked" : ""}><span>${esc(i.t)}${i.critico ? ` <span class="pill bad">crítico</span>` : ""}</span></label></li>`).join("")}</ul>`;
+  el.querySelectorAll("[data-go]").forEach(c => c.onchange = () => { r["go_" + c.dataset.go] = c.checked; marcarWidget("gonogo", true); salvar(); desenharGonogo(); });
+  progImersao(PREPARA.imersoes.find(x => x.id === "decisao"));
+}
+
+/* ---------- fora da aba: chip do topo, lembrete na Início e bloco no Progresso ---------- */
+const preparaComecou = () => PREP.revisaoVencida({ r: pr().r, concluidas: pr().concluidas }, hojeStr());   /* sem "revisado" = só diz se ela já começou */
+/* Chip com os dias até o embarque: só aparece depois que ela começou o prepara.ai (sem poluir o topo de quem não usa). */
+function chipPrepara() {
+  if (!preparaComecou()) return ""; const d = diasAte(PREPARA.meta.data); if (d < 0) return "";
+  return `<a class="chip prep" href="#prepara" title="Embarque planejado para ${PREPARA.meta.dataBR}" style="--c:${PCOR()}">${ico("mala")}<b>${d}</b><span class="l">${d === 1 ? "dia para o embarque" : "dias para o embarque"}</span></a>`;
+}
+/* Lembrete semanal: revisar os marcos (abrir o cronograma marca como revisado). */
+function lembretePrepara() {
+  if (!PREP.revisaoVencida(pr(), hojeStr())) return "";
+  const prox = PREP.marcos(PREP.listaMarcos(PREPARA, pr()), hojeStr(), pr().r).find(m => !m.feito && m.dias >= 0);
+  return `<section aria-label="Lembrete do prepara.ai"><a class="tile atalho" href="#prepara-cronograma" style="--c:${PCOR()}"><div class="topo"><span class="ico-t">${ico("mala")}</span>
+    <div class="nome"><h3>Revisão semanal do plano</h3><span class="meta">${prox ? `Próximo marco: ${fmt(prox.data)}, ${esc(prox.t)} (${prox.dias === 0 ? "hoje" : "em " + prox.dias + " d"})` : "Confira os marcos do cronograma"}</span></div>
+    <span class="btn sm pri">Revisar (5 min)${ico("seta")}</span></div></a></section>`;
+}
+function secaoPreparaProgresso() {
+  if (!preparaComecou()) return "";
+  const g = PREP.geral(PREPARA.imersoes, pr().r, pr().concluidas), f = FOCO.resumo(st.foco.sessoes.filter(x => x.tipo === "prepara")).total;
+  const acertos = PREPARA.imersoes.filter(i => (pr().r["q_" + i.id] || {}).ok).length, respondidas = PREPARA.imersoes.filter(i => pr().r["q_" + i.id]).length;
+  return `<section class="card grid" style="gap:16px;--c:${PCOR()}"><div class="row entre"><h3>${ico("mala")} prepara.ai</h3><a class="link" href="#prepara">Abrir o plano ${ico("dir")}</a></div>
+    <div class="grid g3"><div class="bloco"><div class="grande">${g.concluidas}/${g.imersoes}</div><span class="sub">imersões concluídas</span></div>
+      <div class="bloco"><div class="grande" style="--c:var(--teal)">${FOCO.dur(f.seg)}</div><span class="sub">de foco nas imersões (+${f.somas})</span></div>
+      <div class="bloco"><div class="grande" style="--c:var(--warn)">${acertos}/${respondidas}</div><span class="sub">perguntas "Recupere" certas</span></div></div>
+    <div class="row entre"><span class="sub">${g.feitas} de ${g.total} tarefas do plano</span></div><div class="bar"><i style="width:${g.p * 100}%"></i></div></section>`;
 }
 
 /* ==== js/81-audio.js ==== */

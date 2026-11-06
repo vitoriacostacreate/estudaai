@@ -10,6 +10,7 @@ function atividadeDaRota(h) {
     return a ? { tipo: "aula", ref: m[1], rotulo: a.titulo, tema: info ? info.tema.id : null, fim: m[2] === "feito" } : null; }
   if (h === "revisar") return { tipo: "cartoes", ref: "cartoes", rotulo: "Revisão de cartões" };
   if (h === "ia") return { tipo: "ia", ref: "ia", rotulo: "Revisão com IA" };
+  if (h.startsWith("prepara-") && typeof PREPARA !== "undefined") { const im = PREPARA.imersoes.find(i => i.id === h.slice(8)); if (im) return { tipo: "prepara", ref: im.id, rotulo: "Imersão " + im.n + ": " + im.titulo }; }
   return null;
 }
 const sessaoFoco = () => st.foco.atual || focoAuto;
@@ -166,7 +167,7 @@ function secaoFocoProgresso() {
   const manuais = FOCO.resumo(regs.filter(x => x.tipo === "manual")).cat;
   const semCat = regs.filter(x => x.tipo === "manual" && !x.cat); if (semCat.length) manuais["__sem"] = FOCO.resumo(semCat).total;
   const corCat = k => (st.foco.cats.find(c => c.id === k) || {}).cor || "var(--mu2)";
-  const COR_TIPO = { aula: "var(--ac)", cartoes: "var(--teal)", ia: "#a98bf0", manual: "var(--ok)" };
+  const COR_TIPO = { aula: "var(--ac)", cartoes: "var(--teal)", ia: "#a98bf0", prepara: PREPARA.meta.cor, manual: "var(--ok)" };
   return `<section class="card grid" style="gap:16px"><div class="row entre"><h3>${ico("foco")} acrescentou.ai</h3><a class="link" href="#foco">Abrir o contador ${ico("dir")}</a></div>
     <div class="grid g3"><div class="bloco"><div class="grande" style="--c:var(--ok)">+${r.total.somas}</div><span class="sub">somas no total</span></div><div class="bloco"><div class="grande" style="--c:var(--teal)">${FOCO.dur(r.total.seg)}</div><span class="sub">de foco registrado</span></div><div class="bloco"><div class="grande" style="--c:var(--warn)">+${s7}</div><span class="sub">somas nos últimos 7 dias</span></div></div>
     <div class="grid g2" style="gap:22px"><div class="grid" style="gap:12px"><h3>Por atividade</h3>${barras(r.tipo, k => FOCO.NOMES[k] || k, k => COR_TIPO[k] || "var(--ac)")}</div>

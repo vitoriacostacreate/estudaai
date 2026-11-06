@@ -49,6 +49,7 @@ function telaInicio(app) {
     ${atalhoIA("#ia", "var(--ac)", "brilho", "Revisão com IA", pendentesIA().length, n => n ? `${n} ${n === 1 ? "aula aguardando" : "aulas aguardando"} correção` : "Registre as respostas no fim da aula", "Revisar")}
     ${atalhoIA("#ia-duvidas", "var(--teal)", "busca", "Dúvidas da semana", duvidasAbertas().length, n => n ? `${n} ${n === 1 ? "dúvida anotada" : "dúvidas anotadas"} para pesquisar` : "Anote curiosidades no fim de cada aula", "Gerar .md")}
   </section>
+  ${lembretePrepara()}
   <section>
     <div class="row entre titulo-sec"><h2>Seus temas</h2><a class="link" href="#temas">Ver todos ${ico("dir")}</a></div>
     <div class="temas">${[principal, ...temas.filter(t => t !== principal)].map(t => tileTema(t)).join("")}</div>

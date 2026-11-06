@@ -502,3 +502,112 @@ button.link[disabled] { opacity: .45; cursor: not-allowed; }
 @media (max-width: 1400px) { .chipbar:has(.foco) .chip .l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
 @media (max-width: 420px) { .chip.foco .t { display: none; } }
 @media (max-width: 720px) { .placar { bottom: 84px; } nav.tabs a { min-width: 52px; padding-inline: 4px; } .foco-lista select { max-width: 40%; } }
+
+/* ---------- prepara.ai (79-tela-prepara) ---------- */
+.prep-topo { display: grid; grid-template-columns: minmax(150px, .5fr) minmax(200px, .7fr) minmax(0, 1.4fr); gap: 16px; }
+.prep-conta { display: grid; gap: 6px; align-content: center; }
+.prep-prox { display: grid; gap: 6px; text-decoration: none; color: var(--tx); border-color: var(--c-line); background: linear-gradient(135deg, var(--c-soft), transparent 70%), var(--s1); }
+.prep-prox b { font-family: var(--fd); font-size: 18px; }
+.prep-prox .btn { justify-self: start; margin-top: 6px; }
+.prep-pergunta { display: grid; gap: 10px; }
+.prep-pergunta .riscado { color: var(--mu2); text-decoration: line-through; text-decoration-color: var(--line2); }
+.prep-pergunta .nova { font-family: var(--fd); font-size: 19px; font-weight: 700; line-height: 1.35; color: var(--tx); border-left: 3px solid var(--c); padding-left: 14px; max-width: 75ch; }
+.prep-pergunta ul { margin: 4px 0 0; padding-left: 20px; display: grid; gap: 6px; color: var(--tx2); max-width: 80ch; }
+.prep-trilha { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.prep-im { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; text-decoration: none; color: var(--tx); padding: 16px 18px; }
+.prep-im:hover { border-color: var(--c-line); }
+.prep-im > div { display: grid; gap: 4px; min-width: 0; }
+.prep-im .sub { font-size: 13px; }
+.prep-im > .i { color: var(--mu2); }
+.prep-n { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--c-soft); color: var(--c); font-family: var(--fd); font-weight: 800; }
+.prep-im.ok .prep-n { background: rgba(79, 207, 134, .15); color: var(--ok); }
+.prep-linha { border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.prep-linha:last-child { border-bottom: 0; }
+.prep-linha b { text-align: right; }
+.t-ok { color: var(--ok); } .t-bad { color: var(--bad); } .t-warn { color: var(--warn); }
+.prep-imersao { gap: 24px; }
+.prep-prog { display: grid; gap: 6px; min-width: 180px; }
+.prep-passos { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.prep-passos a { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--c-line); color: var(--c); text-decoration: none; font-weight: 600; font-size: 14px; }
+.prep-bloco { display: grid; gap: 10px; }
+.prep-txt { display: grid; gap: 10px; color: var(--tx2); max-width: 80ch; }
+.prep-txt ul, .prep-txt ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.prep-txt table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+.prep-txt th, .prep-txt td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.prep-txt th { color: var(--mu); font-weight: 600; font-size: 13px; }
+.prep-rotas { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.prep-rota { display: grid; gap: 10px; align-content: start; padding: 18px; }
+.prep-rota dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; font-size: 14px; }
+.prep-rota dt { color: var(--mu); font-weight: 600; }
+.prep-rota dd { margin: 0; color: var(--tx2); }
+.prep-rota > .sub { font-size: 13.5px; }
+.prep-campo { display: grid; gap: 8px; border: 0; padding: 0; margin: 0; min-width: 0; }
+.prep-campo legend, .prep-rot { font-weight: 600; color: var(--tx); padding: 0; margin-bottom: 2px; }
+.prep-dica { font-size: 13px; }
+.prep-check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.prep-check input { accent-color: var(--c); width: 20px; height: 20px; flex: none; margin-top: 2px; }
+.prep-check.sm { align-items: center; font-size: 13px; color: var(--mu); }
+.prep-check.sm input { width: 16px; height: 16px; margin: 0; }
+.prep-saida { display: grid; gap: 12px; border-color: var(--c-line); }
+.prep-bens { display: grid; gap: 8px; }
+.prep-bem input[type=text] { flex: 1; min-width: 140px; width: auto; }
+.prep-bem input.prep-valor { flex: 0 1 130px; min-width: 100px; }
+.prep-res .grande { font-size: 22px; }
+.prep-mtz-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r2); }
+.prep-mtz { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 13.5px; }
+.prep-mtz th, .prep-mtz td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.prep-mtz thead th { color: var(--mu); font-weight: 600; vertical-align: bottom; }
+.prep-mtz thead select { margin-top: 6px; }
+.prep-mtz tbody th { font-weight: 600; min-width: 170px; }
+.prep-mtz select { padding: 6px 8px; min-width: 56px; }
+.prep-marcos { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.prep-marcos li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px; border-radius: var(--r2); background: var(--s2); border-left: 3px solid var(--line2); }
+.prep-marcos li.decisao { border-left-color: var(--c); }
+.prep-marcos li.feito { opacity: .6; }
+.prep-marcos li.atrasado:not(.feito) { border-left-color: var(--bad); }
+.prep-data { font-variant-numeric: tabular-nums; color: var(--c); margin-right: 4px; }
+.prep-quando { font-size: 13px; white-space: nowrap; }
+.prep-go { display: grid; gap: 4px; padding: 14px 16px; border-radius: var(--r2); background: rgba(242, 163, 91, .1); border: 1px solid rgba(242, 163, 91, .35); }
+.prep-go b { font-family: var(--fd); font-size: 18px; color: var(--warn); }
+.prep-go.vai { background: rgba(79, 207, 134, .1); border-color: rgba(79, 207, 134, .4); }
+.prep-go.vai b { color: var(--ok); }
+.prep-golista { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.prep-fontes { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+@media (max-width: 860px) { .prep-topo { grid-template-columns: 1fr 1fr; } .prep-prox { grid-column: 1 / -1; } }
+@media (max-width: 520px) { .prep-marcos li { flex-direction: column; align-items: flex-start; } .prep-rota dl { grid-template-columns: 1fr; } }
+/* 7 abas (com o Prepara): abaixo de 1360 px os chips do topo mostram só ícone + número, para não estourar a largura. */
+@media (max-width: 1360px) and (min-width: 721px) { .chipbar .chip .l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .top .in { gap: 18px; } }
+/* prepara.ai, adaptado ao perfil (perfil/perfil-aprendizagem.md): mapa antes do detalhe, recuperação no meio, versão de dia ruim. */
+a.chip { text-decoration: none; }
+a.chip:hover { border-color: var(--c-line, var(--line2)); }
+a.chip .i { color: var(--c); }
+.prep-mapa { display: grid; gap: 12px; border-color: var(--c-line); }
+.prep-mapa ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.prep-mapa li { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 999px; background: var(--s2); font-weight: 600; font-size: 14px; }
+.prep-n.sm { width: 24px; height: 24px; border-radius: 999px; font-size: 13px; }
+.prep-min { display: flex; gap: 10px; align-items: flex-start; margin: 0; padding: 10px 12px; border-radius: var(--r2); background: rgba(242, 163, 91, .08); color: var(--tx2); font-size: 14px; }
+.prep-min .i { color: var(--warn); flex: none; margin-top: 2px; }
+.prep-quiz { display: grid; gap: 12px; border-color: var(--c-line); background: linear-gradient(135deg, var(--c-soft), transparent 60%), var(--s1); }
+.prep-q { margin: 0; font-family: var(--fd); font-size: 18px; font-weight: 700; line-height: 1.35; max-width: 70ch; }
+.prep-ops { display: grid; gap: 8px; }
+.prep-op { display: flex; gap: 12px; align-items: center; text-align: left; width: 100%; padding: 10px 14px; border-radius: var(--r2); border: 1px solid var(--line); background: var(--s2); color: var(--tx); font: inherit; cursor: pointer; }
+.prep-op:hover:not(:disabled) { border-color: var(--c-line); }
+.prep-op:disabled { cursor: default; }
+.prep-op .l { width: 26px; height: 26px; flex: none; border-radius: 8px; display: grid; place-items: center; background: var(--s1); font-weight: 800; color: var(--mu); }
+.prep-op.certa { border-color: rgba(79, 207, 134, .6); background: rgba(79, 207, 134, .1); }
+.prep-op.certa .l { color: var(--ok); }
+.prep-op.errada { border-color: rgba(255, 125, 134, .6); background: rgba(255, 125, 134, .08); }
+.prep-op.errada .l { color: var(--bad); }
+.prep-fb { display: flex; gap: 10px; align-items: flex-start; margin: 0; padding: 10px 12px; border-radius: var(--r2); max-width: 80ch; }
+.prep-fb.ok { background: rgba(79, 207, 134, .1); } .prep-fb.ok .i { color: var(--ok); flex: none; }
+.prep-fb.warn { background: rgba(242, 163, 91, .1); } .prep-fb.bad { background: rgba(255, 125, 134, .08); }
+.prep-quiz .btn.ghost { justify-self: start; }
+.prep-sug { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: var(--r2); background: var(--c-soft); font-size: 14px; }
+.prep-marco-ed { background: var(--s2); border-radius: var(--r2); padding: 10px 12px; border-left: 3px solid var(--c); }
+.prep-marco-ed form { gap: 8px; width: 100%; }
+.prep-marco-ed input[type=date] { width: auto; }
+.prep-marco-ed input[type=text] { flex: 1; min-width: 180px; width: auto; }
+.btn.ico-so { padding: 4px 6px; margin-left: 4px; vertical-align: middle; }
+.prep-ia { display: grid; gap: 12px; border-color: var(--c-line); }
+/* Com o contador de foco ligado, o chip do embarque sai do topo até 1400 px (o foco é o que importa naquela hora; o número continua na aba Prepara). */
+@media (max-width: 1400px) { .chipbar:has(.foco) .chip.prep { display: none; } }
