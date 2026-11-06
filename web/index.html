@@ -1197,7 +1197,7 @@ const PREPARA = {
       recupere: {"p":"Qual destas respostas fecha de uma vez todos os Working Holiday?","op":["Inglês intermediário","Não ter renda remota","Morar em Campo Grande","Ter 31 anos na data do pedido"],"c":3,"por":"Os Working Holiday para brasileiros aceitam só de 18 a 30 anos. Idioma e renda pesam, mas não eliminam."},
       entenda: [
         { t: "Por que começar por você, e não pelo país", html: "<p>Os programas mais baratos têm <b>idade máxima</b> (Working Holiday: 18 a 30 anos). A rota mais fácil da Europa é a <b>cidadania por descendência</b>. O idioma decide onde você consegue o primeiro emprego. São quatro variáveis que mudam o mapa inteiro:</p><ul><li><b>Idade</b>: abre ou fecha os Working Holiday.</li><li><b>Passaporte</b>: sem ele quase nada anda (exceto Mercosul).</li><li><b>Ascendência europeia</b>: pode valer mais que qualquer visto.</li><li><b>Dinheiro líquido</b>: o mínimo exigido muda de R$ 1 mil a mais de R$ 60 mil.</li></ul>" },
-        { t: "O conflito de datas", html: "<p>A prova da UFMS é em <b>17/01/2027</b>, em Campo Grande. A meta é estar no avião em <b>08/02/2027</b>. Se você passar, a posse é aqui. Decida agora o que o concurso é no seu plano, para não dividir a energia sem perceber.</p>" }
+        { t: "O conflito de datas", html: "<p>A prova da UFMS é em <b>17/01/2027</b>, em Campo Grande. A meta é estar no avião em <b>08/02/2027</b>. Se você passar, a posse é aqui. Decida até <b>10/11</b> (prazo da isenção) o que o concurso é no seu plano, para não dividir a energia sem perceber.</p>" }
       ],
       faca: [
         { id: "idade", tipo: "numero", rotulo: "Sua idade hoje", dica: "Working Holiday aceita 18 a 30 anos na data do pedido." },
@@ -1209,7 +1209,7 @@ const PREPARA = {
         { id: "renda_remota", tipo: "escolha", rotulo: "Renda remota (em dólar ou não)", opcoes: [["tenho", "Já tenho"], ["buscando", "Estou buscando"], ["nao", "Não tenho"]], dica: "Renda que vai junto na mala é o maior redutor de risco de qualquer rota." },
         { id: "aluguel", tipo: "texto", rotulo: "Contrato do apartamento: prazo de aviso e multa", dica: "Leia a cláusula de rescisão. Só avise o locador DEPOIS de escolher a rota (marco de 10/12)." },
         { id: "carreira_alvo", tipo: "escolha", rotulo: "Que trabalho eu quero ter previsto ao embarcar", opcoes: [["qa", "QA / testes"], ["suporte", "Suporte técnico"], ["web", "Dev web"], ["ia", "IA e dados"], ["qualquer", "Qualquer legal enquanto me estabeleço"]], dica: "É o trabalho da ponte. A carreira dos sonhos pode ser o passo 3." },
-        { id: "concurso", tipo: "escolha", rotulo: "O concurso UFMS no meu plano", opcoes: [["faco", "Faço a prova em 17/01 e decido depois do resultado"], ["faco_saio", "Faço a prova, mas a mudança vem primeiro"], ["largo", "Paro o concurso e foco 100% na mudança"]] },
+        { id: "concurso", tipo: "escolha", rotulo: "O concurso UFMS no meu plano", opcoes: [["isencao", "Não vou prestar por agora; estudo até 10/11 (prazo da isenção) caso mude de ideia"], ["faco", "Faço a prova em 17/01 e decido depois do resultado"], ["faco_saio", "Faço a prova, mas a mudança vem primeiro"], ["largo", "Paro o concurso e foco 100% na mudança"]] },
         { id: "idioma_alvo", tipo: "escolha", rotulo: "Preferência de idioma do país", opcoes: [["en", "Inglês"], ["es", "Espanhol"], ["qualquer", "Qualquer um, se a rota for boa"]] }
       ],
       saida: "Um retrato seu em 10 respostas. A tela inicial do prepara.ai passa a mostrar quais rotas combinam com sua idade."
@@ -1419,6 +1419,7 @@ const PREPARA = {
   ],
 
   marcos: [
+    { id: "m0", data: "2026-11-10", t: "Prazo da isenção da UFMS: decidir de vez se presta o concurso", decisao: true },
     { id: "m1", data: "2026-11-15", t: "Diagnóstico feito, passaporte pedido e currículo em inglês e espanhol", decisao: false },
     { id: "m2", data: "2026-11-30", t: "Rotas A e B escolhidas pela matriz", decisao: true },
     { id: "m3", data: "2026-12-01", t: "Working Holiday Japão começa: ver regras no consulado (se for rota)", decisao: false },
