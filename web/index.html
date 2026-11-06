@@ -444,6 +444,9 @@ details.resp-ia[open] { display: grid; gap: 14px; }
 .md .cita { border-left: 3px solid var(--c-line); padding-left: 12px; color: var(--tx2); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .g3-ia { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+button.link { background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+button.link[disabled] { opacity: .45; cursor: not-allowed; }
+.outros-chats { font-size: 14px; display: inline-flex; gap: 6px; align-items: center; }
 
 </style>
 </head>
@@ -1592,15 +1595,15 @@ Para temas práticos (instrumento, idioma, esporte), inclua nos blocos um exerc�
 async function modalGerar(tid) {
   const info = acharTopico(tid); const pr = await pedidoAula(tid);
   abrirModal(`<div class="eyebrow">${esc(info.tema.nome)}</div><h2>${esc(info.top.t)}</h2>
-    <p class="sub"><b>1.</b> Copie o pedido e cole no Claude (ou em outra IA). <b>2.</b> Copie a resposta (o JSON) e cole abaixo. <b>3.</b> Importe: a aula aparece com mapa, perguntas, conteúdo, jogo, teste e Feynman.</p>
+    <p class="sub"><b>1.</b> Copie o pedido: o chat abre sozinho, é só colar (Ctrl+V). <b>2.</b> Copie a resposta (o JSON) e cole abaixo. <b>3.</b> Importe: a aula aparece com mapa, perguntas, conteúdo, jogo, teste e Feynman.</p>
     ${MODO === "nuvem" && NUVEM && NUVEM.sample ? `<div class="row"><button class="btn pri" id="agora">${ico("brilho")}Gerar agora com o Claude</button><span class="sub" id="agst"></span></div><p class="sub" style="margin:0">ou faça manualmente:</p>` : ""}
-    <pre class="prompt" id="ptxt">${esc(pr)}</pre><div class="row"><button class="btn ${MODO === "nuvem" ? "" : "pri"}" id="copiar">Copiar pedido</button></div>
+    <pre class="prompt" id="ptxt">${esc(pr)}</pre><div class="row"><button class="btn ${MODO === "nuvem" ? "" : "pri"}" id="copiar">Copiar e abrir no ${CHATS[chatPreferido()][0]}</button></div>
     <label for="json">Cole aqui a resposta da IA</label><textarea id="json" style="min-height:140px" placeholder='{"titulo": "...", ...}'></textarea><div id="erro" class="sub"></div>
     <div class="row"><button class="btn" data-fechar>Fechar</button><button class="btn pri" id="importar">Importar aula</button></div>`, m => {
     if ($("#agora", m)) $("#agora", m).onclick = async () => { const b = $("#agora", m); b.disabled = true; $("#agst", m).textContent = "Gerando… pode levar até 1 minuto";
       try { guardarAula(tid, await iaGerar(pr)); fecharModal(); toast("Aula pronta!"); location.hash = "aula-" + tid; }
       catch (e) { $("#agst", m).textContent = e.message; b.disabled = false; } };
-    $("#copiar", m).onclick = async () => { try { await navigator.clipboard.writeText(pr); toast("Pedido copiado"); } catch (e) { const r = document.createRange(); r.selectNodeContents($("#ptxt", m)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("Selecionado: aperte Ctrl+C"); } };
+    $("#copiar", m).onclick = () => copiarEAbrir(pr, chatPreferido());
     $("#importar", m).onclick = () => { try { guardarAula(tid, $("#json", m).value); fecharModal(); toast("Aula importada!"); location.hash = "aula-" + tid; } catch (e) { $("#erro", m).innerHTML = `<span style="color:var(--bad)">${esc(e.message)}</span>`; } };
   });
 }
@@ -1773,27 +1776,39 @@ ${lista.map((d, i) => `${i + 1}. **${d.texto}**${d.origem ? `\n   _(estudando: $
 `;
 }
 
-/* ---------- IA disponível e envio ---------- */
-function provedoresIA() {
-  if (MODO === "nuvem" && NUVEM && NUVEM.sample) return ["conta"];
-  if (MODO === "local") return INFO.provedores || (INFO.ia ? ["anthropic"] : []);
+/* ---------- IA disponível e envio ----------
+   Regra: APIs pagas (melhor modelo para a atividade) → Gemini grátis → copiar e abrir no chat.
+   No modo local quem escolhe e tenta a próxima quando uma falha é o servidor (nucleo/ia.py). */
+function cadeiaIA(atividade) {
+  if (MODO === "nuvem" && NUVEM && NUVEM.sample) return [{ provedor: "conta", modelo: "", gratis: false }];
+  if (MODO === "local") return (INFO.cadeia || {})[atividade] || [];
   return [];
 }
-async function iaTexto(prompt, provedor) {
-  if (provedor === "conta") {
+const descreverCadeia = c => c.map(o => `${NOME_IA[o.provedor]}${o.gratis ? " grátis" : ""}`).concat("chat").join(" → ");
+/* Último degrau: copia o pedido e abre o chat no navegador (usa a assinatura dela ou a versão grátis). */
+const CHATS = { claude: ["Claude", "https://claude.ai/new"], chatgpt: ["ChatGPT", "https://chatgpt.com/"], gemini: ["Gemini", "https://gemini.google.com/app"] };
+const chatPreferido = () => CHATS[st.chatPreferido] ? st.chatPreferido : "claude";
+async function copiarEAbrir(txt, chat) {
+  st.chatPreferido = chat; salvar();
+  try { await navigator.clipboard.writeText(txt); } catch (e) { return copiarTexto(txt); }
+  window.open(CHATS[chat][1], "_blank", "noopener");
+  toast(`Pedido copiado. No ${CHATS[chat][0]}, cole com Ctrl+V e envie.`);
+}
+async function iaTexto(prompt, atividade) {
+  if (MODO === "nuvem" && NUVEM && NUVEM.sample) {
+    const provedor = "conta";
     let r; try { r = await NUVEM.sample.json(prompt + `\n\nIMPORTANTE: devolva um JSON {"markdown": "<a resposta inteira em Markdown>"}.`, { modelTier: "complex" }); }
     catch (e) { throw new Error(e && e.code === "rate_limited" ? "Muitos pedidos seguidos. Espere um pouco." : (e && e.message) || "A IA não respondeu."); }
     if (typeof r === "string") { try { r = JSON.parse(r); } catch (e) { return { provedor, texto: r }; } }
     return { provedor, texto: (r && (r.markdown || r.md)) || JSON.stringify(r) };
   }
-  if (MODO !== "local") throw new Error("IA indisponível: use Copiar pedido ou Baixar .md.");
-  const r = await api("/api/ia/texto", { method: "POST", ...json({ prompt, provedor }) });
-  return { provedor: r.provedor, texto: r.texto };
+  if (MODO !== "local") throw new Error("IA indisponível: use Copiar e abrir no chat.");
+  return api("/api/ia/texto", { method: "POST", ...json({ prompt, atividade }) });   /* {provedor, modelo, gratis, texto, falhas} */
 }
 /* Guarda a resposta da IA e marca o que foi revisado/pesquisado. */
-function guardarRespostaIA(tipo, provedor, md, ids) {
+function guardarRespostaIA(tipo, provedor, md, ids, modelo = "") {
   md = String(md || "").trim(); if (!md) throw new Error("A resposta está vazia.");
-  const r = { id: novoId(), tipo, data: hojeStr(), provedor, md, ids };
+  const r = { id: novoId(), tipo, data: hojeStr(), provedor, modelo, md, ids };
   st.respostasIA.unshift(r);
   if (tipo === "revisao") st.tentativas.forEach(t => { if (ids.includes(t.id)) t.revisao = r.id; });
   else st.duvidas.forEach(d => { if (ids.includes(d.id)) d.enviada = hojeStr(); });
@@ -2210,9 +2225,7 @@ function telaBiblioteca(app) {
       <input type="file" id="arq" accept="application/pdf,.pdf" multiple hidden></label></section>
     <section class="card grid" style="gap:12px"><div class="row" style="justify-content:space-between"><h2>Seus PDFs <span class="sub">(${BIB.docs.length})</span></h2><input type="text" id="busca" placeholder="Buscar em todos os PDFs…" style="max-width:340px" aria-label="Buscar nos PDFs"></div><div id="res"></div>
       ${BIB.docs.length ? `<div class="grid g2">${BIB.docs.slice().reverse().map(d => { const t = tema(d.tema); return `<div class="bloco grid" style="gap:8px;border-left:5px solid ${t ? t.cor : "var(--ac)"}"><b>${esc(d.titulo)}</b><span class="sub" style="font-size:14px">${d.paginas} páginas · ${d.secoes} seções (${esc(d.origem)}) · ${BIB.cartoes.filter(c => c.doc === d.id).length} cartões · ${esc(d.importado)}</span><span class="sub" style="font-size:14px">Tema: ${esc(t ? t.nome : d.tema)}</span><div class="row"><a class="btn sm pri" href="#tema-${d.tema}">Estudar</a><a class="btn sm ghost" href="${urlPDF(d.id, 1)}" target="_blank" rel="noopener">Ver PDF</a><button class="btn sm ghost" data-apagar="${d.id}">Remover</button></div></div>`; }).join("")}</div>` : `<p class="sub">Nenhum PDF ainda. Teste com <code>exemplos/apostila-exemplo.pdf</code>.</p>`}</section>
-    ${MODO === "nuvem" ? `<section class="card"><h3>IA ${INFO.ia ? '<span class="pill ok">Claude da sua conta</span>' : '<span class="pill">indisponível nesta visualização</span>'}</h3><p class="sub">Na versão na nuvem, "Melhorar com IA" e "Gerar com IA" usam o próprio Claude, sem chave de API. Na primeira vez, o Claude pede sua permissão.</p></section>` : `<section class="card grid" style="gap:14px"><div class="grid" style="gap:8px"><h3>IA (opcional) ${(INFO.provedores || []).length ? (INFO.provedores || []).map(p => `<span class="pill ok">${esc(NOME_IA[p])}</span>`).join(" ") : '<span class="pill">desligada</span>'}</h3><p class="sub">Sem chave, tudo funciona com "copiar pedido": você cola numa IA e traz a resposta. Com chave, o estudaai manda sozinho. <b>Gerar aula</b> usa o Claude; a <b>Revisão com IA</b> e a pesquisa das dúvidas usam a que estiver ligada (Claude → ChatGPT → Gemini), com busca na internet. As chaves ficam só em <code>dados/config.json</code>, no seu PC.</p></div>
-    <div class="grid g3-ia">${[["anthropic", "Claude (Anthropic)", "sk-ant-…", "anthropic_api_key", "modelo"], ["openai", "ChatGPT (OpenAI)", "sk-…", "openai_api_key", "modelo_openai"], ["gemini", "Gemini (Google)", "AIza…", "gemini_api_key", "modelo_gemini"]].map(([p, nome, ph, ck, cm]) => `<div class="bloco grid" style="gap:8px"><b>${nome} ${(INFO.provedores || []).includes(p) ? '<span class="pill ok">ligada</span>' : ""}</b><label for="k-${p}">Chave da API</label><input type="text" id="k-${p}" data-campo="${ck}" placeholder="${(INFO.provedores || []).includes(p) ? "•••• salva (deixe vazio para manter)" : ph}" autocomplete="off" style="-webkit-text-security:disc"><label for="m-${p}">Modelo</label><input type="text" id="m-${p}" data-campo="${cm}" value="${esc(INFO[cm] || "")}"></div>`).join("")}</div>
-    <div class="row"><button class="btn pri" id="salvarcfg">Salvar</button></div></section>`}`;
+    ${MODO === "nuvem" ? `<section class="card"><h3>IA ${INFO.ia ? '<span class="pill ok">Claude da sua conta</span>' : '<span class="pill">indisponível nesta visualização</span>'}</h3><p class="sub">Na versão na nuvem, "Melhorar com IA" e "Gerar com IA" usam o próprio Claude, sem chave de API. Na primeira vez, o Claude pede sua permissão.</p></section>` : `<section class="card grid" style="gap:14px">${blocoIA()}</section>`}`;
   const zona = $("#zona"), inp = $("#arq");
   const enviar = async files => {
     const lista = [...files].filter(f => /\.pdf$/i.test(f.name)); if (!lista.length) { toast("Escolha arquivos .pdf"); return; }
@@ -2233,9 +2246,22 @@ function telaBiblioteca(app) {
   let tb; $("#busca").oninput = e => { clearTimeout(tb); tb = setTimeout(async () => { const q = e.target.value; if (q.length < 3) { $("#res").innerHTML = ""; return; } const r = buscarTexto(q); $("#res").innerHTML = r.length ? `<div class="grid" style="gap:8px">${r.map(x => `<a class="passo" href="#aula-${x.topico}" style="text-decoration:none;color:inherit"><span class="n">${x.ocorrencias}</span><span>${esc(x.titulo)}<small>${esc(x.trecho)}</small></span></a>`).join("")}</div>` : `<p class="sub">Nada encontrado para "${esc(q)}".</p>`; }, 250); };
   if ($("#salvarcfg")) $("#salvarcfg").onclick = async () => {
     const corpo = {}; app.querySelectorAll("[data-campo]").forEach(i => { if (i.value.trim() || !/_key$/.test(i.dataset.campo)) corpo[i.dataset.campo] = i.value.trim(); });   /* chave vazia = manter a salva */
+    corpo.gemini_plano = $("#gem-pago").checked ? "pago" : "gratis";
     try { const r = await api("/api/config", { method: "POST", ...json(corpo) }); INFO = { ...INFO, ...(await api("/api/info")) }; toast(r.provedores.length ? "IA ligada: " + r.provedores.map(p => NOME_IA[p]).join(", ") : "Configuração salva"); telaBiblioteca(app); }
     catch (e) { toast(e.message); }
   };
+}
+
+/* Biblioteca → IA (modo local): mostra a ordem que o estudaai vai tentar; chaves à mão só para quem preferir. */
+function blocoIA() {
+  const provs = INFO.provedores || []; const cad = (INFO.cadeia || {}).revisao || [];
+  const CAMPOS_IA = [["anthropic", "Claude (Anthropic) · pago", "sk-ant-…", "anthropic_api_key", "modelo"], ["openai", "ChatGPT (OpenAI) · pago", "sk-…", "openai_api_key", "modelo_openai"], ["gemini", "Gemini (Google) · grátis ou pago", "AIza…", "gemini_api_key", "modelo_gemini"]];
+  return `<div class="grid" style="gap:8px"><h3>IA ${provs.length ? provs.map(p => `<span class="pill ok">${esc(NOME_IA[p])}</span>`).join(" ") : '<span class="pill">desligada</span>'}</h3>
+    <p class="sub"><b>Jeito fácil:</b> feche esta aba, dê dois cliques em <code>CONFIGURAR-IA.bat</code> (na pasta do estudaai) e só copie cada chave: o script percebe, testa e salva. Não precisa reiniciar.</p>
+    <p class="sub">Ordem automática: ${cad.length ? cad.map(o => `<b>${esc(NOME_IA[o.provedor])}</b> <small>(${esc(o.modelo)}${o.gratis ? ", grátis" : ""})</small>`).join(" → ") + " → " : ""}<b>copiar e abrir no chat</b>. Se uma IA falhar (sem crédito, limite), o estudaai passa para a próxima sozinho.</p></div>
+    <details class="colar"><summary>Colar as chaves à mão</summary>
+    <div class="grid g3-ia">${CAMPOS_IA.map(([p, nome, ph, ck, cm]) => `<div class="bloco grid" style="gap:8px"><b>${nome} ${provs.includes(p) ? '<span class="pill ok">ligada</span>' : ""}</b><label for="k-${p}">Chave da API</label><input type="text" id="k-${p}" data-campo="${ck}" placeholder="${provs.includes(p) ? "•••• salva (vazio mantém)" : ph}" autocomplete="off" style="-webkit-text-security:disc"><label for="m-${p}">Modelo</label><input type="text" id="m-${p}" data-campo="${cm}" value="${esc(INFO[cm] || "")}" placeholder="automático: o melhor para cada atividade">${p === "gemini" ? `<label class="row" style="gap:8px;font-weight:400"><input type="checkbox" id="gem-pago" ${INFO.gemini_plano === "pago" ? "checked" : ""}>Meu Gemini da API é pago</label>` : ""}</div>`).join("")}</div>
+    <div class="row"><button class="btn pri" id="salvarcfg">Salvar</button></div></details>`;
 }
 
 /* ==== js/76-tela-progresso.js ==== */
@@ -2261,39 +2287,37 @@ function telaProgresso(app) {
 /* ==== js/77-tela-ia.js ==== */
 /* ============ REVISÃO COM IA (#ia) e DÚVIDAS (#ia-duvidas) ============ */
 function telaIA(app, focoDuvidas) {
-  const pend = pendentesIA(); const duv = duvidasAbertas(); const provs = provedoresIA();
-  const marcadas = new Set(pend.map(t => t.id));
-  const opcoes = provs.map(p => `<option value="${p}">${esc(NOME_IA[p] || p)}</option>`).join("");
-  const seletor = id => provs.length > 1 ? `<select id="${id}" class="ia-sel" aria-label="Qual IA">${opcoes}</select>` : "";
-  const semIA = MODO === "local" ? `Nenhuma IA ligada. Coloque uma chave (Claude, ChatGPT ou Gemini) em <a href="#biblioteca">Biblioteca → IA</a>, ou copie o pedido e cole numa IA com busca na internet.`
-    : MODO === "nuvem" ? "O Claude da sua conta não está disponível nesta visualização: copie o pedido ou baixe o .md."
-    : "No modo arquivo, copie o pedido ou baixe o .md e cole numa IA com busca na internet (Claude, ChatGPT, Gemini).";
-  const acoes = (pre, n, rotulo) => `<div class="row">
-      ${provs.length ? `${seletor(pre + "-prov")}<button class="btn pri" id="${pre}-enviar" ${n ? "" : "disabled"}>${ico("brilho")}${rotulo}${provs.length === 1 ? " com " + esc(NOME_IA[provs[0]]) : ""}</button>` : ""}
-      <button class="btn ${provs.length ? "" : "pri"}" id="${pre}-copiar" ${n ? "" : "disabled"}>Copiar pedido</button>
-      <button class="btn ghost" id="${pre}-baixar" ${n ? "" : "disabled"}>${ico("baixar")}Baixar .md</button>
-      <span class="sub" id="${pre}-st" aria-live="polite"></span></div>
-    ${provs.length ? "" : `<p class="sub">${semIA}</p>`}
-    <details class="colar"><summary>Já tenho a resposta da IA: colar aqui</summary><textarea id="${pre}-resp" style="min-height:140px" placeholder="Cole a resposta inteira (Markdown)…"></textarea><div class="row"><button class="btn" id="${pre}-guardar">Guardar resposta</button></div></details>`;
+  const pend = pendentesIA(); const duv = duvidasAbertas();
+  const marcadas = new Set(pend.map(t => t.id)); const chat = chatPreferido();
+  const semIA = MODO === "local" ? `Para a IA corrigir sozinha: dois cliques em <code>CONFIGURAR-IA.bat</code>, na pasta do estudaai (o Gemini é grátis).`
+    : MODO === "nuvem" ? "O Claude da sua conta não está disponível nesta visualização." : "No modo arquivo, a correção é pelo chat.";
+  /* Um botão principal: a IA automática, se houver; senão, copiar e abrir no chat. Nada de escolher provedor. */
+  const acoes = (pre, n, rotulo, atividade) => { const cad = cadeiaIA(atividade); return `<div class="row">
+      ${cad.length ? `<button class="btn pri" id="${pre}-enviar" ${n ? "" : "disabled"}>${ico("brilho")}${rotulo} com IA</button>` : ""}
+      <button class="btn ${cad.length ? "" : "pri"}" id="${pre}-chat" ${n ? "" : "disabled"}>Copiar e abrir no ${CHATS[chat][0]}</button>
+      <span class="sub outros-chats">ou ${Object.keys(CHATS).filter(c => c !== chat).map(c => `<button class="link" data-chat="${c}" data-pre="${pre}" ${n ? "" : "disabled"}>${CHATS[c][0]}</button>`).join(" · ")}</span>
+      <button class="btn ghost sm" id="${pre}-baixar" ${n ? "" : "disabled"}>${ico("baixar")}.md</button></div>
+    <p class="sub" id="${pre}-st" aria-live="polite">${cad.length ? `Ordem automática: ${esc(descreverCadeia(cad))}. Se uma falhar, passa para a próxima sozinha.` : semIA}</p>
+    <details class="colar"><summary>Já tenho a resposta do chat: colar aqui</summary><textarea id="${pre}-resp" style="min-height:140px" placeholder="Cole a resposta inteira (Markdown)…"></textarea><div class="row"><button class="btn" id="${pre}-guardar">Guardar resposta</button></div></details>`; };
 
   app.innerHTML = `<header class="cab"><div><h1>Revisão com IA</h1><p class="sub">Faça quantas aulas quiser, registre as respostas e mande tudo de uma vez: a IA confere com o material que você estudou e com fontes da internet, e devolve a correção do seu jeito.</p></div></header>
   <section class="card ia-bloco" style="--c:var(--ac)">
     <div class="row entre"><h2>${ico("revisar")}Respostas aguardando revisão</h2><span class="pill ${pend.length ? "ac" : ""}">${pend.length}</span></div>
     ${pend.length ? `<ul class="fila-ia">${pend.map(t => `<li><label><input type="checkbox" data-t="${t.id}" checked><span class="txt"><b>${esc(t.titulo)}</b><small>${esc(t.tema)} · ${fmt(t.data)} · ${t.ac} de ${t.quiz.length} certas${t.tot < t.quiz.length ? ` · ${t.quiz.length - t.tot} em branco` : ""}</small></span></label><button class="btn sm ghost" data-del-t="${t.id}" aria-label="Tirar da fila">${ico("lixo")}</button></li>`).join("")}</ul>`
       : `<p class="sub">Nada na fila. No fim de cada aula, toque em <b>Registrar respostas</b>: elas aparecem aqui.</p>`}
-    ${acoes("rev", pend.length, "Revisar")}
+    ${acoes("rev", pend.length, "Revisar", "revisao")}
   </section>
   <section class="card ia-bloco" id="duvidas" style="--c:var(--teal)">
     <div class="row entre"><h2>${ico("busca")}Dúvidas para pesquisar</h2><span class="pill ${duv.length ? "ac" : ""}">${duv.length}</span></div>
     <p class="sub">O seu "dump" da semana: tudo o que deu curiosidade. Gere o arquivo .md e mande para uma IA pesquisar e resumir com mapa, exemplos e autoteste.</p>
     <div class="row nova-duv"><input type="text" id="nova-duv" placeholder="Anotar uma dúvida nova…" aria-label="Nova dúvida"><button class="btn" id="add-duv">${ico("mais")}Anotar</button></div>
     ${duv.length ? `<ul class="duvidas">${duv.map(d => `<li><span>${esc(d.texto)}<small>${d.origem ? esc(d.origem) + " · " : ""}${fmt(d.data)}</small></span><button class="btn sm ghost" data-del-d="${d.id}" aria-label="Apagar dúvida">${ico("lixo")}</button></li>`).join("")}</ul>` : ""}
-    ${acoes("duv", duv.length, "Pesquisar")}
+    ${acoes("duv", duv.length, "Pesquisar", "duvidas")}
     ${duv.length ? `<div class="row"><button class="btn sm ghost" id="duv-enviadas">${ico("check")}Já mandei: limpar a lista</button></div>` : ""}
   </section>
   <section class="grid" style="gap:12px">
     <h2>Respostas da IA</h2>
-    ${st.respostasIA.length ? st.respostasIA.map((r, i) => `<details class="card resp-ia" ${i === 0 ? "open" : ""}><summary><span class="pill ${r.tipo === "revisao" ? "ac" : "ok"}">${r.tipo === "revisao" ? "Revisão" : "Dúvidas"}</span><b>${fmt(r.data)}</b><span class="sub">${r.ids.length} ${r.tipo === "revisao" ? (r.ids.length === 1 ? "aula" : "aulas") : (r.ids.length === 1 ? "dúvida" : "dúvidas")} · ${esc(NOME_IA[r.provedor] || r.provedor)}</span></summary>
+    ${st.respostasIA.length ? st.respostasIA.map((r, i) => `<details class="card resp-ia" ${i === 0 ? "open" : ""}><summary><span class="pill ${r.tipo === "revisao" ? "ac" : "ok"}">${r.tipo === "revisao" ? "Revisão" : "Dúvidas"}</span><b>${fmt(r.data)}</b><span class="sub">${r.ids.length} ${r.tipo === "revisao" ? (r.ids.length === 1 ? "aula" : "aulas") : (r.ids.length === 1 ? "dúvida" : "dúvidas")} · ${esc(NOME_IA[r.provedor] || r.provedor)}${r.modelo ? ` <small>(${esc(r.modelo)})</small>` : ""}</span></summary>
       <div class="md">${mdParaHTML(r.md)}</div>
       <div class="row"><button class="btn sm ghost" data-baixar-r="${r.id}">${ico("baixar")}Baixar .md</button><button class="btn sm ghost" data-del-r="${r.id}">${ico("lixo")}Apagar</button></div></details>`).join("")
       : `<p class="sub">As correções e pesquisas aparecem aqui e ficam guardadas.</p>`}
@@ -2304,16 +2328,20 @@ function telaIA(app, focoDuvidas) {
     : { lista: () => duv, pedido: l => promptDuvidas(l), arquivo: "duvidas", tipo: "duvidas" };
   for (const pre of ["rev", "duv"]) {
     const d = de(pre); const vazio = () => { const l = d.lista(); if (!l.length) toast(pre === "rev" ? "Marque pelo menos uma aula." : "Anote uma dúvida primeiro."); return l; };
-    $(`#${pre}-copiar`).onclick = () => { const l = vazio(); if (l.length) copiarTexto(d.pedido(l)); };
+    $(`#${pre}-chat`).onclick = () => { const l = vazio(); if (l.length) copiarEAbrir(d.pedido(l), chat); };
+    app.querySelectorAll(`[data-chat][data-pre="${pre}"]`).forEach(b => b.onclick = () => { const l = vazio(); if (l.length) { copiarEAbrir(d.pedido(l), b.dataset.chat); telaIA(app, pre === "duv"); } });
     $(`#${pre}-baixar`).onclick = () => { const l = vazio(); if (l.length) baixarArquivo(`estudaai-${d.arquivo}-${hojeStr()}.md`, d.pedido(l), undefined, "Arquivo .md gerado: anexe numa IA com busca na internet"); };
     $(`#${pre}-guardar`).onclick = () => { const l = vazio(); if (!l.length) return; try { guardarRespostaIA(d.tipo, "manual", $(`#${pre}-resp`).value, l.map(x => x.id)); toast("Resposta guardada"); telaIA(app); } catch (e) { toast(e.message); } };
     const env = $(`#${pre}-enviar`);
     if (env) env.onclick = async () => {
-      const l = vazio(); if (!l.length) return;
-      const prov = $(`#${pre}-prov`) ? $(`#${pre}-prov`).value : provs[0]; const stt = $(`#${pre}-st`);
-      env.disabled = true; stt.textContent = `${NOME_IA[prov]} está lendo e buscando na internet… pode levar alguns minutos.`;
-      try { const r = await iaTexto(d.pedido(l), prov); guardarRespostaIA(d.tipo, r.provedor, r.texto, l.map(x => x.id)); toast("Correção pronta!"); telaIA(app); }
-      catch (e) { stt.textContent = e.message; env.disabled = false; }
+      const l = vazio(); if (!l.length) return; const stt = $(`#${pre}-st`);
+      env.disabled = true; stt.textContent = "A IA está lendo e buscando na internet… pode levar alguns minutos.";
+      try {
+        const r = await iaTexto(d.pedido(l), d.tipo); guardarRespostaIA(d.tipo, r.provedor, r.texto, l.map(x => x.id), r.modelo);
+        toast(`Pronto, feito por ${NOME_IA[r.provedor]}${r.falhas && r.falhas.length ? ` (${r.falhas.length} antes falhou)` : ""}`); telaIA(app);
+      } catch (e) {   /* nenhuma IA respondeu: o último degrau é o chat */
+        stt.innerHTML = `${esc(e.message)}<br><b>Use "Copiar e abrir no ${CHATS[chat][0]}"</b>: cola e envia lá.`; env.disabled = false; $(`#${pre}-chat`).classList.add("pri");
+      }
     };
   }
   app.querySelectorAll("[data-t]").forEach(c => c.onchange = () => { c.checked ? marcadas.add(c.dataset.t) : marcadas.delete(c.dataset.t); });

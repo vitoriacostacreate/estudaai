@@ -1,10 +1,12 @@
 """Testes do servidor local: armazém de arquivos, índice, proteção CSRF e migração do formato antigo."""
+import io
 import json
 import os
 import sys
 import tempfile
 import threading
 import unittest
+import urllib.error
 import urllib.request
 from unittest import mock
 from http.server import ThreadingHTTPServer
@@ -123,7 +125,7 @@ SEM_CHAVES = {k: "" for k in ("ANTHROPIC_API_KEY", "OPENAI_API_KEY", "GEMINI_API
 
 @mock.patch.dict(os.environ, SEM_CHAVES)
 class TestIA(unittest.TestCase):
-    """Revisão com IA: escolha do provedor e leitura da resposta de cada API (rede simulada)."""
+    """Cadeia de IAs: pagas (melhor modelo por atividade) → Gemini grátis; se uma falha, tenta a próxima. Rede simulada."""
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -135,59 +137,101 @@ class TestIA(unittest.TestCase):
     def chaves(self, **kw):
         (self.d / "config.json").write_text(json.dumps(kw), encoding="utf-8")
 
-    def chamar(self, resposta, provedor=None):
-        enviados = []
+    def rede(self, *respostas):
+        """Simula a internet: cada chamada devolve a próxima resposta (dict) ou levanta o erro (Exception)."""
+        fila, enviados = list(respostas), []
 
         def falso(req, timeout=None):
-            enviados.append((req.full_url, json.loads(req.data)))
-            return FakeResp(resposta)
-        with mock.patch("urllib.request.urlopen", falso):
-            return servidor.ia.gerar_texto(self.d, "revise", provedor), enviados
+            enviados.append((req.full_url, json.loads(req.data) if req.data else None))
+            r = fila.pop(0)
+            if isinstance(r, Exception):
+                raise r
+            return FakeResp(r)
+        return mock.patch("urllib.request.urlopen", falso), enviados
 
     def test_sem_chave_avisa(self):
-        self.assertEqual(servidor.ia.provedores(self.d), [])
+        self.assertEqual(servidor.ia.cadeia(self.d, "revisao"), [])
         with self.assertRaises(RuntimeError):
             servidor.ia.gerar_texto(self.d, "x")
 
-    def test_ordem_de_preferencia(self):
-        self.chaves(gemini_api_key="g", openai_api_key="o")
-        self.assertEqual(servidor.ia.provedores(self.d), ["openai", "gemini"])
-        self.assertFalse(servidor.ia.disponivel(self.d))      # gerar aula continua só com o Claude
+    def test_pagas_primeiro_e_gratis_por_ultimo(self):
+        self.chaves(gemini_api_key="g", openai_api_key="o", anthropic_api_key="a")
+        c = servidor.ia.cadeia(self.d, "revisao")
+        self.assertEqual([(x["provedor"], x["gratis"]) for x in c], [("anthropic", False), ("openai", False), ("gemini", True)])
+        self.assertEqual(c[0]["modelo"], "claude-opus-5-5")
+        self.assertEqual(c[2]["modelo"], servidor.ia.MODELO_GRATIS)
+        self.assertEqual(servidor.ia.cadeia(self.d, "duvidas")[0]["modelo"], "claude-sonnet-5-5")   # melhor modelo por atividade
+
+    def test_gemini_pago_entra_com_o_modelo_melhor(self):
+        self.chaves(gemini_api_key="g", gemini_plano="pago")
+        self.assertEqual(servidor.ia.cadeia(self.d, "revisao"), [{"provedor": "gemini", "modelo": "gemini-2.5-pro", "gratis": False}])
+
+    def test_modelo_fixado_vale_mais_que_a_tabela(self):
+        self.chaves(anthropic_api_key="a", modelo="claude-x")
+        self.assertEqual(servidor.ia.cadeia(self.d, "aula")[0]["modelo"], "claude-x")
+
+    def test_falha_passa_para_a_proxima(self):
+        self.chaves(anthropic_api_key="a", gemini_api_key="g")
+        sem_credito = urllib.error.HTTPError("u", 400, "credit", {}, io.BytesIO(b'{"error": {"message": "credit balance is too low"}}'))
+        patch, env = self.rede(sem_credito, {"candidates": [{"content": {"parts": [{"text": "ok grátis"}]}}]})
+        with patch:
+            r = servidor.ia.gerar_texto(self.d, "revise")
+        self.assertEqual((r["provedor"], r["gratis"], r["texto"]), ("gemini", True, "ok grátis"))
+        self.assertIn("credit balance", r["falhas"][0])
+        self.assertEqual(env[1][1]["tools"], [{"google_search": {}}])
+
+    def test_todas_falham(self):
+        self.chaves(openai_api_key="o")
+        patch, _ = self.rede(urllib.error.URLError("sem rede"))
+        with patch, self.assertRaises(RuntimeError) as e:
+            servidor.ia.gerar_texto(self.d, "x")
+        self.assertIn("ChatGPT", str(e.exception))
 
     def test_claude_com_busca_e_pause_turn(self):
         self.chaves(anthropic_api_key="a")
-        respostas = iter([{"stop_reason": "pause_turn", "content": [{"type": "text", "text": "parte 1 "}]},
-                          {"stop_reason": "end_turn", "content": [{"type": "server_tool_use"}, {"type": "text", "text": "parte 2"}]}])
-        enviados = []
-
-        def falso(req, timeout=None):
-            enviados.append(json.loads(req.data))
-            return FakeResp(next(respostas))
-        with mock.patch("urllib.request.urlopen", falso):
-            prov, txt = servidor.ia.gerar_texto(self.d, "revise")
-        self.assertEqual((prov, txt), ("anthropic", "parte 1 parte 2"))
-        self.assertEqual(enviados[0]["tools"][0]["name"], "web_search")
-        self.assertEqual(enviados[1]["messages"][-1]["role"], "assistant")
+        patch, env = self.rede({"stop_reason": "pause_turn", "content": [{"type": "text", "text": "parte 1 "}]},
+                               {"stop_reason": "end_turn", "content": [{"type": "server_tool_use"}, {"type": "text", "text": "parte 2"}]})
+        with patch:
+            r = servidor.ia.gerar_texto(self.d, "revise")
+        self.assertEqual(r["texto"], "parte 1 parte 2")
+        self.assertEqual(env[0][1]["tools"][0]["name"], "web_search")
+        self.assertEqual(env[1][1]["messages"][-1]["role"], "assistant")
 
     def test_openai(self):
         self.chaves(openai_api_key="o")
-        (prov, txt), env = self.chamar({"output": [{"type": "web_search_call"}, {"type": "message", "content": [{"type": "output_text", "text": "ok gpt"}]}]})
-        self.assertEqual((prov, txt), ("openai", "ok gpt"))
+        patch, env = self.rede({"output": [{"type": "web_search_call"}, {"type": "message", "content": [{"type": "output_text", "text": "ok gpt"}]}]})
+        with patch:
+            r = servidor.ia.gerar_texto(self.d, "revise", "duvidas")
+        self.assertEqual((r["provedor"], r["texto"]), ("openai", "ok gpt"))
         self.assertIn("/v1/responses", env[0][0])
         self.assertEqual(env[0][1]["tools"], [{"type": "web_search"}])
 
-    def test_gemini(self):
-        self.chaves(gemini_api_key="g", modelo_gemini="gemini-x")
-        (prov, txt), env = self.chamar({"candidates": [{"content": {"parts": [{"text": "ok "}, {"text": "gemini"}]}}]})
-        self.assertEqual((prov, txt), ("gemini", "ok gemini"))
-        self.assertIn("models/gemini-x:generateContent", env[0][0])
+    def test_aula_sem_json_tenta_a_proxima(self):
+        self.chaves(anthropic_api_key="a", openai_api_key="o")
+        patch, env = self.rede({"stop_reason": "end_turn", "content": [{"type": "text", "text": "desculpe, não consigo"}]},
+                               {"output_text": '{"titulo": "T"}'})
+        with patch:
+            self.assertEqual(servidor.ia.gerar_aula(self.d, "aula"), {"titulo": "T"})
+        self.assertNotIn("tools", env[0][1])                                # aula não usa busca
 
-    def test_provedor_sem_chave(self):
-        self.chaves(openai_api_key="o")
-        with self.assertRaises(RuntimeError):
-            servidor.ia.gerar_texto(self.d, "x", "gemini")
+    def test_validar_chave(self):
+        patch, env = self.rede({"data": []})
+        with patch:
+            servidor.ia.validar_chave("gemini", "AIza-teste")
+        self.assertIn("/v1beta/models", env[0][0])
+        recusada = urllib.error.HTTPError("u", 401, "no", {}, io.BytesIO(b"{}"))
+        patch, _ = self.rede(recusada)
+        with patch, self.assertRaises(RuntimeError):
+            servidor.ia.validar_chave("openai", "sk-x")
 
-    def test_rota_texto_valida_pedido(self):
+    def test_reconhece_chave_copiada(self):
+        import configurar_ia
+        self.assertEqual(configurar_ia.achar_chave("gemini", "  AIzaSyA1234567890abcdefghijklmnopqrstu \n"), "AIzaSyA1234567890abcdefghijklmnopqrstu")
+        self.assertEqual(configurar_ia.achar_chave("anthropic", "sk-ant-api03-" + "x" * 30), "sk-ant-api03-" + "x" * 30)
+        self.assertIsNone(configurar_ia.achar_chave("openai", "sk-ant-api03-" + "x" * 30))   # chave do Claude não vale como OpenAI
+        self.assertEqual(configurar_ia.achar_chave("openai", "sk-proj-" + "y" * 40), "sk-proj-" + "y" * 40)
+
+    def test_rota_texto(self):
         Handler = servidor.Handler
         antigo, Handler.dados = Handler.dados, self.d
         srv = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
@@ -195,20 +239,19 @@ class TestIA(unittest.TestCase):
         url = f"http://127.0.0.1:{srv.server_port}"
         try:
             self.assertEqual(pedir(url + "/api/ia/texto", "POST", b'{"prompt": ""}', "application/json")[0], 400)
-            self.assertEqual(pedir(url + "/api/ia/texto", "POST", b'{"prompt": "x", "provedor": "outro"}', "application/json")[0], 400)
+            self.assertEqual(pedir(url + "/api/ia/texto", "POST", b'{"prompt": "x", "atividade": "outra"}', "application/json")[0], 400)
             st, corpo = pedir(url + "/api/ia/texto", "POST", b'{"prompt": "x"}', "application/json")
             self.assertEqual(st, 500)
-            self.assertIn("Nenhuma IA", json.loads(corpo)["erro"])
-            st, corpo = pedir(url + "/api/config", "POST", b'{"openai_api_key": "o", "modelo_openai": "gpt-x"}', "application/json")
-            self.assertEqual(json.loads(corpo)["provedores"], ["openai"])
+            self.assertIn("CONFIGURAR-IA", json.loads(corpo)["erro"])
+            st, corpo = pedir(url + "/api/config", "POST", b'{"gemini_api_key": "g"}', "application/json")
+            self.assertEqual(json.loads(corpo)["provedores"], ["gemini"])
             info = json.loads(pedir(url + "/api/info")[1])
-            self.assertEqual((info["provedores"], info["modelo_openai"]), (["openai"], "gpt-x"))
-            self.assertNotIn("openai_api_key", info)                      # a chave nunca volta para o navegador
+            self.assertEqual(info["cadeia"]["revisao"][0]["gratis"], True)
+            self.assertNotIn("gemini_api_key", info)                       # a chave nunca volta para o navegador
         finally:
             srv.shutdown()
             srv.server_close()
             Handler.dados = antigo
-
 
 if __name__ == "__main__":
     unittest.main()

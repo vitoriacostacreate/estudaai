@@ -61,7 +61,11 @@ O navegador abre em **http://127.0.0.1:8765**. Vá em **Biblioteca** e arraste u
 > O PDF é lido no próprio navegador (pdf.js), então **importar** precisa de internet. Estudar funciona offline.
 
 ### IA (opcional)
-Em **Biblioteca → IA**, cole uma chave da [API da Anthropic](https://console.anthropic.com/). Ela fica só em `dados/config.json`, no seu computador. Você também pode usar a variável `ANTHROPIC_API_KEY`.
+**Windows:** dois cliques em **`CONFIGURAR-IA.bat`** (o `ESTUDAAI.bat` oferece isso sozinho na primeira vez). Ele abre a página de cada chave; você cria e **copia**, e o script percebe, testa e salva em `dados/config.json`. Enter pula. Mac/Linux: `python configurar_ia.py`.
+
+Ordem automática, por atividade (aula, revisão, dúvidas): **APIs pagas** com o melhor modelo para a tarefa (Claude, depois ChatGPT) → **Gemini grátis** (Google AI Studio) → **copiar e abrir no chat** (sua assinatura ou a versão grátis). Se uma falhar (sem crédito, limite), passa para a próxima sozinha. A tabela fica em `CADEIA`, em `nucleo/ia.py`.
+
+> Assinatura (Claude Pro, ChatGPT Plus) não inclui a API: a API é crédito pré-pago à parte. Com só a assinatura, use "Copiar e abrir no chat".
 
 ## 🗂️ Onde ficam as coisas
 
@@ -69,7 +73,8 @@ Em **Biblioteca → IA**, cole uma chave da [API da Anthropic](https://console.a
 estudaai/
 ├── ESTUDAAI.bat / estudaai.sh   ← abrir
 ├── servidor.py                  ← servidor local: só guarda arquivos (biblioteca padrão do Python)
-├── nucleo/ia.py                 ← repassa pedidos à IA: aula (Claude), revisão e dúvidas (Claude, ChatGPT ou Gemini, com busca na web), opcional
+├── nucleo/ia.py                 ← cadeia de IAs (pagas → Gemini grátis), com busca na web e troca automática se uma falhar
+├── configurar_ia.py             ← liga as IAs: abre a página da chave, detecta a chave copiada, testa e salva
 ├── web/index.html               ← o app (gerado; não edite à mão)
 ├── fonte/                       ← código do app → python fonte/build.py
 │   ├── app.html + estilo.css    ← casca da página e visual

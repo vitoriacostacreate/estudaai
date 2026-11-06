@@ -48,15 +48,15 @@ Para temas práticos (instrumento, idioma, esporte), inclua nos blocos um exerc�
 async function modalGerar(tid) {
   const info = acharTopico(tid); const pr = await pedidoAula(tid);
   abrirModal(`<div class="eyebrow">${esc(info.tema.nome)}</div><h2>${esc(info.top.t)}</h2>
-    <p class="sub"><b>1.</b> Copie o pedido e cole no Claude (ou em outra IA). <b>2.</b> Copie a resposta (o JSON) e cole abaixo. <b>3.</b> Importe: a aula aparece com mapa, perguntas, conteúdo, jogo, teste e Feynman.</p>
+    <p class="sub"><b>1.</b> Copie o pedido: o chat abre sozinho, é só colar (Ctrl+V). <b>2.</b> Copie a resposta (o JSON) e cole abaixo. <b>3.</b> Importe: a aula aparece com mapa, perguntas, conteúdo, jogo, teste e Feynman.</p>
     ${MODO === "nuvem" && NUVEM && NUVEM.sample ? `<div class="row"><button class="btn pri" id="agora">${ico("brilho")}Gerar agora com o Claude</button><span class="sub" id="agst"></span></div><p class="sub" style="margin:0">ou faça manualmente:</p>` : ""}
-    <pre class="prompt" id="ptxt">${esc(pr)}</pre><div class="row"><button class="btn ${MODO === "nuvem" ? "" : "pri"}" id="copiar">Copiar pedido</button></div>
+    <pre class="prompt" id="ptxt">${esc(pr)}</pre><div class="row"><button class="btn ${MODO === "nuvem" ? "" : "pri"}" id="copiar">Copiar e abrir no ${CHATS[chatPreferido()][0]}</button></div>
     <label for="json">Cole aqui a resposta da IA</label><textarea id="json" style="min-height:140px" placeholder='{"titulo": "...", ...}'></textarea><div id="erro" class="sub"></div>
     <div class="row"><button class="btn" data-fechar>Fechar</button><button class="btn pri" id="importar">Importar aula</button></div>`, m => {
     if ($("#agora", m)) $("#agora", m).onclick = async () => { const b = $("#agora", m); b.disabled = true; $("#agst", m).textContent = "Gerando… pode levar até 1 minuto";
       try { guardarAula(tid, await iaGerar(pr)); fecharModal(); toast("Aula pronta!"); location.hash = "aula-" + tid; }
       catch (e) { $("#agst", m).textContent = e.message; b.disabled = false; } };
-    $("#copiar", m).onclick = async () => { try { await navigator.clipboard.writeText(pr); toast("Pedido copiado"); } catch (e) { const r = document.createRange(); r.selectNodeContents($("#ptxt", m)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("Selecionado: aperte Ctrl+C"); } };
+    $("#copiar", m).onclick = () => copiarEAbrir(pr, chatPreferido());
     $("#importar", m).onclick = () => { try { guardarAula(tid, $("#json", m).value); fecharModal(); toast("Aula importada!"); location.hash = "aula-" + tid; } catch (e) { $("#erro", m).innerHTML = `<span style="color:var(--bad)">${esc(e.message)}</span>`; } };
   });
 }

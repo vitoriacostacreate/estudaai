@@ -155,27 +155,39 @@ ${lista.map((d, i) => `${i + 1}. **${d.texto}**${d.origem ? `\n   _(estudando: $
 `;
 }
 
-/* ---------- IA disponível e envio ---------- */
-function provedoresIA() {
-  if (MODO === "nuvem" && NUVEM && NUVEM.sample) return ["conta"];
-  if (MODO === "local") return INFO.provedores || (INFO.ia ? ["anthropic"] : []);
+/* ---------- IA disponível e envio ----------
+   Regra: APIs pagas (melhor modelo para a atividade) → Gemini grátis → copiar e abrir no chat.
+   No modo local quem escolhe e tenta a próxima quando uma falha é o servidor (nucleo/ia.py). */
+function cadeiaIA(atividade) {
+  if (MODO === "nuvem" && NUVEM && NUVEM.sample) return [{ provedor: "conta", modelo: "", gratis: false }];
+  if (MODO === "local") return (INFO.cadeia || {})[atividade] || [];
   return [];
 }
-async function iaTexto(prompt, provedor) {
-  if (provedor === "conta") {
+const descreverCadeia = c => c.map(o => `${NOME_IA[o.provedor]}${o.gratis ? " grátis" : ""}`).concat("chat").join(" → ");
+/* Último degrau: copia o pedido e abre o chat no navegador (usa a assinatura dela ou a versão grátis). */
+const CHATS = { claude: ["Claude", "https://claude.ai/new"], chatgpt: ["ChatGPT", "https://chatgpt.com/"], gemini: ["Gemini", "https://gemini.google.com/app"] };
+const chatPreferido = () => CHATS[st.chatPreferido] ? st.chatPreferido : "claude";
+async function copiarEAbrir(txt, chat) {
+  st.chatPreferido = chat; salvar();
+  try { await navigator.clipboard.writeText(txt); } catch (e) { return copiarTexto(txt); }
+  window.open(CHATS[chat][1], "_blank", "noopener");
+  toast(`Pedido copiado. No ${CHATS[chat][0]}, cole com Ctrl+V e envie.`);
+}
+async function iaTexto(prompt, atividade) {
+  if (MODO === "nuvem" && NUVEM && NUVEM.sample) {
+    const provedor = "conta";
     let r; try { r = await NUVEM.sample.json(prompt + `\n\nIMPORTANTE: devolva um JSON {"markdown": "<a resposta inteira em Markdown>"}.`, { modelTier: "complex" }); }
     catch (e) { throw new Error(e && e.code === "rate_limited" ? "Muitos pedidos seguidos. Espere um pouco." : (e && e.message) || "A IA não respondeu."); }
     if (typeof r === "string") { try { r = JSON.parse(r); } catch (e) { return { provedor, texto: r }; } }
     return { provedor, texto: (r && (r.markdown || r.md)) || JSON.stringify(r) };
   }
-  if (MODO !== "local") throw new Error("IA indisponível: use Copiar pedido ou Baixar .md.");
-  const r = await api("/api/ia/texto", { method: "POST", ...json({ prompt, provedor }) });
-  return { provedor: r.provedor, texto: r.texto };
+  if (MODO !== "local") throw new Error("IA indisponível: use Copiar e abrir no chat.");
+  return api("/api/ia/texto", { method: "POST", ...json({ prompt, atividade }) });   /* {provedor, modelo, gratis, texto, falhas} */
 }
 /* Guarda a resposta da IA e marca o que foi revisado/pesquisado. */
-function guardarRespostaIA(tipo, provedor, md, ids) {
+function guardarRespostaIA(tipo, provedor, md, ids, modelo = "") {
   md = String(md || "").trim(); if (!md) throw new Error("A resposta está vazia.");
-  const r = { id: novoId(), tipo, data: hojeStr(), provedor, md, ids };
+  const r = { id: novoId(), tipo, data: hojeStr(), provedor, modelo, md, ids };
   st.respostasIA.unshift(r);
   if (tipo === "revisao") st.tentativas.forEach(t => { if (ids.includes(t.id)) t.revisao = r.id; });
   else st.duvidas.forEach(d => { if (ids.includes(d.id)) d.enviada = hojeStr(); });

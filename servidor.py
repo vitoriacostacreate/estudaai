@@ -132,9 +132,10 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         p = urlparse(self.path).path
         if p == "/api/info":
-            cfg = ia.config(self.dados)
+            cfg = ia.config(self.dados)            # nunca devolve as chaves, só quais existem
             return self._json({"versao": VERSAO, "ia": ia.disponivel(self.dados), "provedores": ia.provedores(self.dados),
-                               "modelo": cfg["modelo"], "modelo_openai": cfg["modelo_openai"], "modelo_gemini": cfg["modelo_gemini"]})
+                               "cadeia": {a: ia.cadeia(self.dados, a) for a in ia.CADEIA}, "gemini_plano": cfg["gemini_plano"],
+                               **{k: cfg[k] for k in ("modelo", "modelo_openai", "modelo_gemini")}})
         if p == "/api/estado":
             return self._json(ler_json(self.dados / "estado.json", {}))
         if p == "/api/biblioteca":
@@ -198,14 +199,13 @@ class Handler(SimpleHTTPRequestHandler):
             except Exception as e:  # noqa: BLE001
                 return self._json({"erro": str(e)}, 500)
         if p == "/api/ia/texto":                             # revisão das respostas e pesquisa das dúvidas (Markdown)
-            prompt, prov = corpo.get("prompt"), corpo.get("provedor")
+            prompt, atividade = corpo.get("prompt"), corpo.get("atividade", "revisao")
             if not isinstance(prompt, str) or not prompt.strip():
                 return self._json({"erro": "Pedido vazio."}, 400)
-            if prov is not None and prov not in ia.PROVEDORES:
-                return self._json({"erro": "Provedor desconhecido."}, 400)
+            if atividade not in ("revisao", "duvidas"):
+                return self._json({"erro": "Atividade desconhecida."}, 400)
             try:
-                usado, texto = ia.gerar_texto(self.dados, prompt, prov, busca=corpo.get("busca", True) is not False)
-                return self._json({"ok": True, "provedor": usado, "texto": texto})
+                return self._json({"ok": True, **ia.gerar_texto(self.dados, prompt, atividade)})
             except Exception as e:  # noqa: BLE001
                 return self._json({"erro": str(e)}, 500)
         cfg = ler_json(self.dados / "config.json", {})

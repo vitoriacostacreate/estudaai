@@ -435,3 +435,6 @@ details.resp-ia[open] { display: grid; gap: 14px; }
 .md .cita { border-left: 3px solid var(--c-line); padding-left: 12px; color: var(--tx2); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .g3-ia { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+button.link { background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+button.link[disabled] { opacity: .45; cursor: not-allowed; }
+.outros-chats { font-size: 14px; display: inline-flex; gap: 6px; align-items: center; }
