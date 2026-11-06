@@ -14,8 +14,12 @@ As chaves nunca saem do computador, exceto na chamada para a API de cada empresa
 """
 from __future__ import annotations
 
+import glob
 import json
 import os
+import shutil
+import subprocess
+import tempfile
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -26,10 +30,13 @@ PROVEDORES = {
     "openai": ("openai_api_key", "OPENAI_API_KEY", "modelo_openai"),
     "gemini": ("gemini_api_key", "GEMINI_API_KEY", "modelo_gemini"),
 }
-CAMPOS = [c for p in PROVEDORES.values() for c in (p[0], p[2])] + ["gemini_plano", "modelo_gemini_gratis", "modelo_gemini_pro"]
+CAMPOS = [c for p in PROVEDORES.values() for c in (p[0], p[2])] + ["gemini_plano", "modelo_gemini_gratis", "modelo_gemini_pro", "usar_assinatura_claude"]
 
 # Melhor modelo de cada provedor para cada atividade (o primeiro da lista é tentado primeiro).
 # aula: JSON longo e didático · revisao: rigor e checagem de fatos · duvidas: pesquisa e resumo.
+# Antes de tudo: a assinatura do Claude (a mesma conta do Claude Code), sem chave e sem crédito de API.
+# Gasta do limite de uso do plano. Desligar: "usar_assinatura_claude": "nao" no config.json.
+ASSINATURA = {"aula": "opus", "revisao": "opus", "duvidas": "sonnet"}
 CADEIA = {
     "aula":    [("anthropic", "claude-opus-5-5"), ("openai", "gpt-5"), ("gemini", "gemini-2.5-pro")],
     "revisao": [("anthropic", "claude-opus-5-5"), ("openai", "gpt-5"), ("gemini", "gemini-2.5-pro")],
@@ -39,7 +46,7 @@ MODELO_GRATIS = "gemini-2.5-flash"      # o que a camada gratuita do Google AI S
 BUSCA = {"aula": False, "revisao": True, "duvidas": True}
 LIMITE = {"aula": 20000, "revisao": 80000, "duvidas": 40000}
 SAIDA = {"aula": 8000, "revisao": 12000, "duvidas": 12000}
-NOME = {"anthropic": "Claude", "openai": "ChatGPT", "gemini": "Gemini"}
+NOME = {"assinatura": "Claude (sua assinatura)", "anthropic": "Claude API", "openai": "ChatGPT", "gemini": "Gemini"}
 
 # Onde pegar cada chave e como reconhecê-la (usado pelo configurar_ia.py).
 PAGINA_CHAVE = {
@@ -65,10 +72,27 @@ def config(dados: Path) -> dict:
     return cfg
 
 
+def claude_code() -> str | None:
+    """Acha o Claude Code instalado (no PATH ou dentro da extensão do VS Code), já logado na conta dela."""
+    if (exe := shutil.which("claude")):
+        return exe
+    casa = Path.home()
+    nome = "claude.exe" if os.name == "nt" else "claude"
+    candidatos = [str(casa / ".local" / "bin" / nome)]
+    for pasta in (".vscode", ".vscode-insiders", ".cursor"):
+        candidatos += glob.glob(str(casa / pasta / "extensions" / "anthropic.claude-code-*" / "resources" / "native-binary" / nome))
+    achados = [c for c in candidatos if os.path.isfile(c)]
+    return max(achados, key=os.path.getmtime) if achados else None   # a versão mais nova da extensão
+
+
+def _assinatura_ligada(cfg: dict) -> str | None:
+    return None if cfg.get("usar_assinatura_claude") == "nao" else claude_code()
+
+
 def provedores(dados: Path) -> list[str]:
-    """Provedores com chave, na ordem de preferência (Claude → ChatGPT → Gemini)."""
+    """IAs disponíveis, na ordem de preferência (assinatura do Claude → Claude API → ChatGPT → Gemini)."""
     cfg = config(dados)
-    return [p for p, (chave, *_) in PROVEDORES.items() if cfg.get(chave)]
+    return (["assinatura"] if _assinatura_ligada(cfg) else []) + [p for p, (chave, *_) in PROVEDORES.items() if cfg.get(chave)]
 
 
 def disponivel(dados: Path) -> bool:
@@ -79,6 +103,8 @@ def cadeia(dados: Path, atividade: str) -> list[dict]:
     """Ordem real de tentativa para a atividade: pagas (melhor modelo primeiro) → gratuita."""
     cfg = config(dados)
     pagas, gratis = [], []
+    if _assinatura_ligada(cfg):
+        pagas.append({"provedor": "assinatura", "modelo": ASSINATURA[atividade], "gratis": False})
     for prov, modelo in CADEIA[atividade]:
         if not cfg[PROVEDORES[prov][0]]:
             continue
@@ -158,7 +184,32 @@ def _gemini(chave: str, modelo: str, prompt: str, busca: bool, max_tokens: int) 
 
 AVISO_SEM_BUSCA = ("> ⚠️ **Sem busca na web nesta resposta**: a camada grátis do Gemini não liberou a busca do Google. "
                    "Trate os fatos como \"não verificados na web\" e confira na fonte o que for importante.\n\n")
-CHAMAR = {"anthropic": _anthropic, "openai": _openai, "gemini": _gemini}
+def _assinatura(exe: str, modelo: str, prompt: str, busca: bool, max_tokens: int) -> str:
+    """Roda o Claude Code em modo silencioso (-p) numa pasta vazia: usa a conta logada dela.
+    Só a busca na web fica liberada; nenhuma ferramenta de arquivo ou terminal."""
+    cmd = [exe, "-p", "--output-format", "json", "--model", modelo]
+    if busca:
+        cmd += ["--allowedTools", "WebSearch,WebFetch"]
+    with tempfile.TemporaryDirectory(prefix="estudaai-") as pasta:
+        try:
+            r = subprocess.run(cmd, input=prompt, capture_output=True, text=True, encoding="utf-8", cwd=pasta, timeout=900,
+                               creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        except subprocess.TimeoutExpired:
+            raise RuntimeError("demorou mais de 15 minutos") from None
+    try:
+        j = json.loads(r.stdout)
+    except json.JSONDecodeError:
+        raise RuntimeError((r.stderr or r.stdout or "sem resposta").strip()[:300]) from None
+    if j.get("is_error"):
+        raise RuntimeError(str(j.get("result") or j.get("subtype") or "erro")[:300])   # ex.: limite do plano atingido
+    return j.get("result") or ""
+
+
+CHAMAR = {"assinatura": _assinatura, "anthropic": _anthropic, "openai": _openai, "gemini": _gemini}
+
+
+def _credencial(cfg: dict, prov: str) -> str:
+    return claude_code() if prov == "assinatura" else cfg[PROVEDORES[prov][0]]
 
 
 def gerar_texto(dados: Path, prompt: str, atividade: str = "revisao", validar=None) -> dict:
@@ -171,7 +222,7 @@ def gerar_texto(dados: Path, prompt: str, atividade: str = "revisao", validar=No
     falhas = []
     for op in ordem:
         try:
-            txt = CHAMAR[op["provedor"]](cfg[PROVEDORES[op["provedor"]][0]], op["modelo"], prompt[:LIMITE[atividade]],
+            txt = CHAMAR[op["provedor"]](_credencial(cfg, op["provedor"]), op["modelo"], prompt[:LIMITE[atividade]],
                                          BUSCA[atividade], SAIDA[atividade]).strip()
             if not txt:
                 raise RuntimeError("respondeu vazio")

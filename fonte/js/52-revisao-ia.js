@@ -3,7 +3,7 @@
    na tela #ia junta quantas quiser e manda para uma IA (Claude, GPT ou Gemini, com busca na web)
    ou copia/baixa o pedido em .md → a resposta (Markdown) fica em st.respostasIA.
    Dúvidas anotadas no fim da aula (st.duvidas) viram um .md semanal com pedido de pesquisa. */
-const NOME_IA = { anthropic: "Claude", openai: "ChatGPT", gemini: "Gemini", conta: "Claude da sua conta", manual: "colada à mão" };
+const NOME_IA = { assinatura: "Claude (sua assinatura)", anthropic: "Claude API", openai: "ChatGPT", gemini: "Gemini", conta: "Claude da sua conta", manual: "colada à mão" };
 const LETRAS = "ABCDEFGHIJ";
 const novoId = () => sufixo(6) + Math.random().toString(36).slice(2, 6);
 

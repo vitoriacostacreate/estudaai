@@ -2,6 +2,7 @@
 import io
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import threading
@@ -130,8 +131,11 @@ class TestIA(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.d = Path(self.tmp.name)
+        self.sem_cc = mock.patch.object(servidor.ia, "claude_code", return_value=None)   # nunca chama o Claude Code real
+        self.sem_cc.start()
 
     def tearDown(self):
+        self.sem_cc.stop()
         self.tmp.cleanup()
 
     def chaves(self, **kw):
@@ -260,6 +264,39 @@ class TestIA(unittest.TestCase):
         self.assertTrue(r["texto"].endswith("revisado") and "Sem busca na web" in r["texto"])
         self.assertIn("tools", env[1][1])
         self.assertNotIn("tools", env[2][1])                               # refez sem a busca
+
+    def test_assinatura_do_claude_vem_primeiro(self):
+        self.chaves(anthropic_api_key="a", gemini_api_key="g")
+        chamadas = []
+
+        def falso_run(cmd, **kw):
+            chamadas.append((cmd, kw))
+            return subprocess.CompletedProcess(cmd, 0, json.dumps({"is_error": False, "result": "revisado pela assinatura"}), "")
+        with mock.patch.object(servidor.ia, "claude_code", return_value="C:/cc/claude.exe"), mock.patch("subprocess.run", falso_run):
+            self.assertEqual(servidor.ia.provedores(self.d)[0], "assinatura")
+            self.assertEqual([o["provedor"] for o in servidor.ia.cadeia(self.d, "revisao")], ["assinatura", "anthropic", "gemini"])
+            r = servidor.ia.gerar_texto(self.d, "revise")
+        self.assertEqual((r["provedor"], r["modelo"], r["texto"]), ("assinatura", "opus", "revisado pela assinatura"))
+        cmd, kw = chamadas[0]
+        self.assertEqual(cmd[:2], ["C:/cc/claude.exe", "-p"])
+        self.assertIn("WebSearch,WebFetch", cmd)                            # só a busca liberada
+        self.assertEqual(kw["input"], "revise")
+        self.assertNotEqual(Path(kw["cwd"]).resolve(), RAIZ.resolve())       # pasta vazia: não lê o projeto
+
+    def test_assinatura_no_limite_passa_para_a_proxima(self):
+        self.chaves(gemini_api_key="g")
+        def no_limite(cmd, **kw):
+            return subprocess.CompletedProcess(cmd, 0, json.dumps({"is_error": True, "result": "Claude usage limit reached"}), "")
+        patch, _ = self.rede({"candidates": [{"content": {"parts": [{"text": "ok grátis"}]}}]})
+        with mock.patch.object(servidor.ia, "claude_code", return_value="cc"), mock.patch("subprocess.run", no_limite), patch:
+            r = servidor.ia.gerar_texto(self.d, "x")
+        self.assertEqual(r["provedor"], "gemini")
+        self.assertIn("usage limit", r["falhas"][0])
+
+    def test_desligar_assinatura(self):
+        self.chaves(usar_assinatura_claude="nao")
+        with mock.patch.object(servidor.ia, "claude_code", return_value="cc"):
+            self.assertEqual(servidor.ia.provedores(self.d), [])
 
     def test_rota_texto(self):
         Handler = servidor.Handler

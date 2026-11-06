@@ -63,7 +63,7 @@ O navegador abre em **http://127.0.0.1:8765**. Vá em **Biblioteca** e arraste u
 ### IA (opcional)
 **Windows:** dois cliques em **`CONFIGURAR-IA.bat`** (o `ESTUDAAI.bat` oferece isso sozinho na primeira vez). Ele abre a página de cada chave; você cria e **copia**, e o script percebe, testa e salva em `dados/config.json`. Enter pula. Mac/Linux: `python configurar_ia.py`.
 
-Ordem automática, por atividade (aula, revisão, dúvidas): **APIs pagas** com o melhor modelo para a tarefa (Claude, depois ChatGPT) → **Gemini grátis** (Google AI Studio) → **copiar e abrir no chat** (sua assinatura ou a versão grátis). Se uma falhar (sem crédito, limite), passa para a próxima sozinha. A tabela fica em `CADEIA`, em `nucleo/ia.py`.
+Ordem automática, por atividade (aula, revisão, dúvidas): **sua assinatura do Claude** (se o Claude Code estiver instalado e logado: sem chave, com busca na web, gasta do limite do plano) → **APIs pagas** com o melhor modelo para a tarefa (Claude, depois ChatGPT) → **Gemini grátis** (Google AI Studio) → **copiar e abrir no chat** (sua assinatura ou a versão grátis). Se uma falhar (sem crédito, limite), passa para a próxima sozinha. A tabela fica em `CADEIA`, em `nucleo/ia.py`.
 
 > Assinatura (Claude Pro, ChatGPT Plus) não inclui a API: a API é crédito pré-pago à parte. Com só a assinatura, use "Copiar e abrir no chat".
 

@@ -159,6 +159,9 @@ def main() -> int:
     print("  Para cada IA, abro a página da chave. Você cria e COPIA a chave: eu percebo sozinho.")
     print("  Enter = pular esta IA.  Ctrl+C = sair.\n")
     for prov, titulo, passos in ROTEIRO:
+        if prov == "anthropic" and ia.claude_code():
+            print("  ▶ Claude: já ligado pela sua assinatura (o Claude Code instalado neste PC). Nada a fazer.\n")
+            continue
         print(f"  ▶ {titulo}")
         if prov in ja:
             print("    Já está ligada. Enter mantém; copie uma chave nova para trocar.")
