@@ -611,3 +611,11 @@ a.chip .i { color: var(--c); }
 .prep-ia { display: grid; gap: 12px; border-color: var(--c-line); }
 /* Com o contador de foco ligado, o chip do embarque sai do topo até 1400 px (o foco é o que importa naquela hora; o número continua na aba Prepara). */
 @media (max-width: 1400px) { .chipbar:has(.foco) .chip.prep { display: none; } }
+/* Estratégia do prepara.ai: 3 passos lado a lado (mapa do plano inteiro). */
+.prep-estr { display: grid; gap: 12px; border-color: var(--c-line); background: linear-gradient(135deg, var(--c-soft), transparent 65%), var(--s1); }
+.prep-estr h2 { margin: 0; font-family: var(--fd); }
+.prep-estr ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; counter-reset: none; }
+.prep-estr li { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 12px; border-radius: var(--r2); background: var(--s2); }
+.prep-estr li > div { display: grid; gap: 4px; }
+.prep-estr li .sub { font-size: 13.5px; }
+@media (max-width: 860px) { .prep-estr ol { grid-template-columns: 1fr; } }

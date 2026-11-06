@@ -64,11 +64,11 @@ test("conteúdo: ids únicos, marcos em ordem, rotas válidas e o .md sai inteir
   assert.strictEqual(datas[datas.length - 1], PREPARA.meta.data);
   assert.ok(PREPARA.rotas.every(r => ["sim", "talvez", "nao"].includes(r.cabe)));
   for (const t of PREPARA.imersoes.flatMap(i => i.faca)) if (t.tipo === "widget") assert.ok(["bens", "matriz", "marcos", "gonogo"].includes(t.widget));
-  const md = PREP.markdown(PREPARA, { r: { idade: "27", rota_a: "Mercosul" }, bens: [{ nome: "TV", valor: "900" }], notas: { mercosul: { prazo: 5 } }, pesos: {}, concluidas: { diagnostico: true } }, "2026-11-06");
+  const md = PREP.markdown(PREPARA, { r: { idade: "27", rota_a: "Mercosul" }, bens: [{ nome: "TV", valor: "900" }], notas: { argentina: { prazo: 5 } }, pesos: {}, concluidas: { diagnostico: true } }, "2026-11-06");
   assert.match(md, /# Meu plano de mudança/);
   assert.match(md, /Rota A \(a que vou perseguir\)\*\* Mercosul/);
   assert.match(md, /\| TV \| R\$ 900 \| não \|/);
-  assert.match(md, /1\. Mercosul: Argentina, Uruguai ou Paraguai: 15\/65/);
+  assert.match(md, /1\. Mercosul: Argentina \(Buenos Aires ou Córdoba\): 15\/65/);
   assert.match(md, /AINDA NÃO/);
 });
 
@@ -84,13 +84,13 @@ test("conteúdo: toda imersão tem mapa curto, versão mínima e pergunta de rec
 });
 
 test("rota: nome pelo id e comprovação convertida em reais pela cotação", () => {
-  assert.strictEqual(PREP.rotaNome(PREPARA.rotas, "mercosul"), "Mercosul: Argentina, Uruguai ou Paraguai");
+  assert.strictEqual(PREP.rotaNome(PREPARA.rotas, "paraguai"), "Mercosul: Paraguai (Assunção)");
   assert.strictEqual(PREP.rotaNome(PREPARA.rotas, "texto livre"), "texto livre");
   assert.strictEqual(PREP.rotaNome(PREPARA.rotas, ""), "");
   const fr = PREPARA.rotas.find(r => r.id === "franca");
   assert.deepStrictEqual(PREP.metaRota(fr, { cot_eur: "6,20" }), { valor: 2500, moeda: "EUR", reais: 15500 });
   assert.strictEqual(PREP.metaRota(fr, {}).reais, null);                         /* sem cotação: não inventa */
-  assert.strictEqual(PREP.metaRota(PREPARA.rotas.find(r => r.id === "mercosul"), { cot_eur: 6 }), null);   /* rota sem comprovação fixa */
+  assert.strictEqual(PREP.metaRota(PREPARA.rotas.find(r => r.id === "argentina"), { cot_eur: 6 }), null);   /* rota sem comprovação fixa */
   assert.strictEqual(PREP.metaRota(PREPARA.rotas.find(r => r.id === "nz"), { cot_eur: 6 }).reais, null);  /* sem cotação de NZD */
 });
 
@@ -112,6 +112,15 @@ test("lembrete semanal: só depois de começar e a cada 7 dias", () => {
 });
 
 test("pedido para a IA revisar leva o plano e pede riscos", () => {
-  const p = PREP.promptIA(PREPARA, { r: { rota_a: "mercosul" }, bens: [], notas: {}, pesos: {}, concluidas: {} }, "2026-11-06");
-  assert.match(p, /riscos/i); assert.match(p, /Mercosul: Argentina/); assert.match(p, /site oficial/);
+  const p = PREP.promptIA(PREPARA, { r: { rota_a: "uruguai" }, bens: [], notas: {}, pesos: {}, concluidas: {} }, "2026-11-06");
+  assert.match(p, /riscos/i); assert.match(p, /Mercosul: Uruguai/); assert.match(p, /site oficial/);
+  assert.match(p, /08\/02\/2027/); assert.match(p, /Trabalho previsto/); assert.match(p, /Ponte barata/); assert.match(p, /fora do comum/);
+});
+
+test("novo objetivo: no avião em 08/02, trabalho previsto é crítico e a estratégia tem 3 passos", () => {
+  assert.strictEqual(PREPARA.meta.data, "2027-02-08");
+  assert.ok(PREPARA.gonogo.find(g => g.id === "trabalho").critico, "trabalho previsto precisa ser critério crítico");
+  assert.strictEqual(PREPARA.estrategia.passos.length, 3);
+  assert.deepStrictEqual(PREPARA.imersoes.map(i => i.n), PREPARA.imersoes.map((_, k) => k + 1), "imersões numeradas em sequência");
+  assert.ok(PREPARA.rotas.filter(r => r.cabe === "sim").length >= 3, "as rotas da ponte (Mercosul) cabem na data");
 });

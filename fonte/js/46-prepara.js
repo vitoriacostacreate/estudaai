@@ -89,13 +89,15 @@ const PREP = (() => {
 
   /* Pedido para a IA do app revisar o plano (usa a mesma cadeia da revisão: assinatura → APIs → Gemini → chat). */
   function promptIA(P, est, hojeIso) {
-    return `Você é uma consultora de mudança internacional, honesta e direta. Revise o plano abaixo de uma brasileira de Campo Grande/MS (área de TI: QA e suporte) que quer sair do Brasil de forma LEGAL até ${P.meta.dataBR}, com pouco dinheiro.
+    return `Você é uma consultora de mudança internacional, honesta e direta. Revise o plano abaixo de uma brasileira de Campo Grande/MS (área de TI: QA e suporte) que quer estar no avião em ${P.meta.dataBR}, de forma LEGAL, gastando o mínimo possível, com trabalho já previsto e um caminho de carreira em TI. A estratégia dela: ${P.estrategia ? P.estrategia.titulo + " (" + P.estrategia.passos.map(p => p.t).join(" → ") + ")" : "rota barata com renda garantida"}.
 
 Responda em português do Brasil, em Markdown, com blocos curtos e nesta ordem:
 1. **Os 3 maiores riscos** do plano (o que pode dar errado e quando), do mais grave ao menos grave.
-2. **Contas que não fecham**: compare o capital líquido com a comprovação da rota A + colchão de 3 meses + passagem de volta.
-3. **Datas apertadas**: marcos que dependem de algo que ela não controla (vaga, agendamento, consulado).
-4. **O que eu faria nesta semana**: no máximo 3 ações, cada uma com o site oficial onde conferir.
+2. **Contas que não fecham**: compare o capital líquido com o custo de saída + comprovação da rota A + 2 meses de custo de vida + passagem de volta. Aponte onde dá para gastar menos sem ilegalidade.
+3. **Trabalho previsto**: o que falta para ela embarcar com renda fechada (vaga remota, local ou freelas) e se o trampolim de carreira faz sentido.
+4. **Datas apertadas**: marcos que dependem de algo que ela não controla (vaga, agendamento, consulado).
+5. **Uma ideia fora do comum** (e legal) que ela ainda não considerou.
+6. **O que eu faria nesta semana**: no máximo 3 ações, cada uma com o site oficial onde conferir.
 
 Regras: não invente regra de imigração, valor ou prazo. Se não tiver certeza, diga "não tenho certeza" e mande conferir no site oficial do governo do destino. Os dados foram conferidos em ${P.meta.verificadoBR}; se souber de mudança posterior, avise.
 

@@ -2,6 +2,7 @@
    #prepara = mapa das imersões e painel do plano · #prepara-<id> = uma imersão (Entenda → Faça → Saída).
    Conteúdo em PREPARA (fonte/prepara-mudanca.js), contas em PREP (46-prepara.js), respostas em st.prepara. */
 const PCOR = () => PREPARA.meta.cor;
+const nFontes = () => (PREPARA.imersoes.find(i => i.id === "fontes") || {}).n || "";
 const pr = () => st.prepara;
 function telaPrepara(app, id) {
   const im = id && PREPARA.imersoes.find(i => i.id === id);
@@ -9,8 +10,8 @@ function telaPrepara(app, id) {
   const g = PREP.geral(PREPARA.imersoes, pr().r, pr().concluidas), dias = diasAte(PREPARA.meta.data);
   const proxima = PREPARA.imersoes.find(i => !pr().concluidas[i.id]);
   app.innerHTML = `<div style="--c:${PCOR()};gap:28px" class="grid">
-    <header class="cab"><div><span class="eyebrow">prepara.ai</span><h1>Plano para sair do Brasil</h1>
-      <p class="sub">Imersões de 20 a 90 min: você para, aprende como funciona e já preenche o seu plano. Meta: embarcar até <b>${PREPARA.meta.dataBR}</b>.</p></div>
+    <header class="cab"><div><span class="eyebrow">prepara.ai</span><h1>Em ${PREPARA.meta.dataBR.slice(0, 5)}, no avião</h1>
+      <p class="sub">Imersões de 20 a 90 min: você para, aprende como funciona e já preenche o seu plano. Meta: no avião ou pousando lá fora em <b>${PREPARA.meta.dataBR}</b>, gastando o mínimo e com trabalho previsto.</p></div>
       <div class="row"><button class="btn" id="pia">${ico("brilho")}Pedir à IA para achar riscos</button><button class="btn ghost" id="pbaixar">${ico("baixar")}Baixar meu plano (.md)</button></div></header>
     <section class="prep-topo">
       <div class="card prep-conta"><div class="grande">${Math.max(0, dias)}</div><span class="sub">${dias === 1 ? "dia" : "dias"} até ${PREPARA.meta.dataBR}</span></div>
@@ -18,13 +19,14 @@ function telaPrepara(app, id) {
       ${proxima ? `<a class="card prep-prox" href="#prepara-${proxima.id}"><span class="eyebrow">Próxima imersão</span><b>${proxima.n}. ${esc(proxima.titulo)}</b><span class="sub">${proxima.tempo} · ${esc(proxima.objetivo)}</span><span class="btn pri">${ico("play")}Começar</span></a>`
         : `<div class="card prep-prox"><span class="eyebrow">Tudo concluído</span><b>Seu plano está montado.</b><span class="sub">Revise os marcos toda semana e baixe o .md atualizado.</span></div>`}
     </section>
+    ${cardEstrategia()}
     <section class="card prep-pergunta"><span class="eyebrow">A pergunta, lapidada</span>
       <p class="riscado">${esc(PREPARA.pergunta.original)}</p><p class="nova">${esc(PREPARA.pergunta.texto)}</p>
       <ul>${PREPARA.pergunta.porque.map(x => `<li>${limparHTML(x)}</li>`).join("")}</ul></section>
     <section><h2 class="titulo-sec">Imersões</h2><div class="prep-trilha">${PREPARA.imersoes.map(cardImersao).join("")}</div></section>
     <section class="grid g2">${painelPlano()}</section>
     ${pr().ia ? `<section class="card prep-ia"><div class="row entre"><h3>${ico("brilho")} Riscos apontados pela IA</h3><span class="sub">${fmt(pr().ia.data)} · ${esc(NOME_IA[pr().ia.provedor] || pr().ia.provedor)}</span></div><div class="prep-txt md">${mdParaHTML(pr().ia.md)}</div>
-      <p class="sub" style="font-size:13px">A IA erra. Toda regra, valor ou prazo citado aqui precisa ser conferido na fonte oficial (imersão 7).</p></section>` : ""}</div>`;
+      <p class="sub" style="font-size:13px">A IA erra. Toda regra, valor ou prazo citado aqui precisa ser conferido na fonte oficial (imersão ${nFontes()}).</p></section>` : ""}</div>`;
   $("#pbaixar").onclick = baixarPlano;
   $("#pia").onclick = () => revisarPlanoIA(app);
 }
@@ -42,6 +44,10 @@ async function revisarPlanoIA(app) {
     b.disabled = false; b.innerHTML = `${ico("brilho")}Pedir à IA para achar riscos`;
   }
 }
+/* A estratégia em 3 passos: o mapa do plano inteiro, antes das imersões. */
+const cardEstrategia = () => { const E = PREPARA.estrategia; if (!E) return "";
+  return `<section class="card prep-estr" aria-label="Estratégia"><div class="row entre"><span class="eyebrow">A estratégia</span><span class="pill ac">${esc(E.lema)}</span></div><h2>${esc(E.titulo)}</h2>
+    <ol>${E.passos.map((p, i) => `<li><span class="prep-n">${i + 1}</span><div><b>${esc(p.t)}</b><span class="sub">${esc(p.d)}</span></div></li>`).join("")}</ol></section>`; };
 function cardImersao(im) {
   const p = PREP.progresso(im, pr().r), ok = pr().concluidas[im.id];
   return `<a class="card prep-im ${ok ? "ok" : ""}" href="#prepara-${im.id}"><span class="prep-n">${ok ? ico("check") : im.n}</span>
@@ -77,7 +83,7 @@ function telaImersao(app, im) {
       ${im.minimo ? `<p class="prep-min">${ico("chama")}<span><b>Dia ruim?</b> Faça só isto (10 min): ${esc(im.minimo)}</span></p>` : ""}</section>
     <ol class="prep-passos"><li><a href="#p-entenda">${ico("ler")}Entenda</a></li>${im.recupere ? `<li><a href="#p-recupere">${ico("brilho")}Recupere</a></li>` : ""}<li><a href="#p-faca">${ico("check")}Faça</a></li><li><a href="#p-saida">${ico("estrela")}Saída</a></li></ol>
     <section id="p-entenda" class="grid" style="gap:12px"><h2 class="titulo-sec">Entenda</h2>${im.entenda.map(b => `<article class="card prep-bloco"><h3>${esc(b.t)}</h3><div class="prep-txt">${limparHTML(b.html)}</div></article>`).join("")}
-      ${im.id === "caminhos" ? `<div class="prep-rotas">${PREPARA.rotas.map(cardRota).join("")}</div><p class="sub" style="font-size:13px">Conferido em ${PREPARA.meta.verificadoBR}. Regras mudam: antes de pagar qualquer coisa, abra a fonte oficial na imersão 7.</p>` : ""}
+      ${im.id === "caminhos" ? `<div class="prep-rotas">${PREPARA.rotas.map(cardRota).join("")}</div><p class="sub" style="font-size:13px">Conferido em ${PREPARA.meta.verificadoBR}. Regras mudam: antes de pagar qualquer coisa, abra a fonte oficial na imersão ${nFontes()}.</p>` : ""}
       ${im.id === "fontes" ? `<article class="card prep-bloco"><h3>Fontes oficiais</h3><ul class="prep-fontes">${PREPARA.fontes.map(f => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.nome)}</a></li>`).join("")}</ul></article>` : ""}</section>
     ${im.recupere ? `<section id="p-recupere" class="card prep-quiz" aria-live="polite"></section>` : ""}
     <section id="p-faca" class="card grid" style="gap:16px"><h2 class="titulo-sec">Faça</h2><div class="grid" style="gap:18px" id="pfaca">${im.faca.map(campoTarefa).join("")}</div></section>
@@ -105,7 +111,7 @@ function desenharQuiz(im) {
   const rf = $("#qrefazer"); if (rf) rf.onclick = () => { delete pr().r[k]; salvar(); desenharQuiz(im); };
 }
 function progImersao(im) { const el = $("#pprog"); if (!el) return; const p = PREP.progresso(im, pr().r); el.innerHTML = `<span class="sub">${p.feitas}/${p.total} tarefas</span><div class="bar"><i style="width:${p.p * 100}%"></i></div>`; }
-const CABE = { sim: ["ok", "Cabe até 07/02"], talvez: ["med", "Depende de vaga ou prazo"], nao: ["bad", "Não cabe nesta janela"] };
+const CABE = { sim: ["ok", "Cabe até 08/02"], talvez: ["med", "Depende de vaga ou prazo"], nao: ["bad", "Não cabe nesta janela"] };
 function cardRota(rt) {
   const [cls, txt] = CABE[rt.cabe];
   return `<article class="card prep-rota"><div class="row entre"><span class="pill">${esc(rt.grupo)}</span><span class="pill ${cls}">${txt}</span></div><h3>${esc(rt.nome)}</h3>
@@ -119,10 +125,10 @@ function campoTarefa(t) {
   if (t.tipo === "escolha") return `<fieldset class="prep-campo"><legend>${esc(t.rotulo)}</legend><div class="row">${t.opcoes.map(([val, rot]) => `<button type="button" class="btn sm cat ${v === val ? "on" : ""}" data-esc="${t.id}" data-v="${val}" aria-pressed="${v === val}">${esc(rot)}</button>`).join("")}</div>${dica}</fieldset>`;
   if (t.tipo === "widget") return `<div class="prep-campo"><span class="prep-rot">${esc(t.rotulo)}</span><div id="w-${t.widget}"></div></div>`;
   const id = "f-" + t.id;
-  if (t.tipo === "rota") {   /* lista das rotas, agrupada pelo "cabe até 07/02"; texto antigo vira uma opção para não sumir */
+  if (t.tipo === "rota") {   /* lista das rotas, agrupada pelo "cabe até 08/02"; texto antigo vira uma opção para não sumir */
     const grupo = (c, rot) => `<optgroup label="${rot}">${PREPARA.rotas.filter(x => x.cabe === c).map(x => `<option value="${x.id}" ${v === x.id ? "selected" : ""}>${esc(x.nome)}</option>`).join("")}</optgroup>`;
     const livre = v && !PREPARA.rotas.some(x => x.id === v) ? `<option value="${esc(v)}" selected>${esc(v)}</option>` : "";
-    return `<div class="prep-campo"><label class="prep-rot" for="${id}">${esc(t.rotulo)}</label><select id="${id}" data-k="${t.id}"><option value="">Escolha a rota</option>${livre}${grupo("sim", "Cabe até 07/02")}${grupo("talvez", "Depende de vaga ou prazo")}${grupo("nao", "Não cabe nesta janela (plano C)")}</select>${dica}</div>`;
+    return `<div class="prep-campo"><label class="prep-rot" for="${id}">${esc(t.rotulo)}</label><select id="${id}" data-k="${t.id}"><option value="">Escolha a rota</option>${livre}${grupo("sim", "Cabe até 08/02")}${grupo("talvez", "Depende de vaga ou prazo")}${grupo("nao", "Não cabe nesta janela (plano C)")}</select>${dica}</div>`;
   }
   const ctrl = t.tipo === "longo" ? `<textarea id="${id}" data-k="${t.id}">${esc(v)}</textarea>`
     : `<input type="text" id="${id}" data-k="${t.id}" value="${esc(v)}" ${t.tipo === "numero" ? 'inputmode="decimal"' : ""}>`;

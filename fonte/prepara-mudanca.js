@@ -1,19 +1,31 @@
-/* ============ prepara.ai: conteúdo do plano "Sair do Brasil até 07/02/2027" ============
+/* ============ prepara.ai: conteúdo do plano "Em 08/02/2027 no avião ou pousando lá fora" ============
    Informações conferidas em 06/11/2026 (fontes no fim). Regras de imigração mudam: a tela sempre manda conferir no site oficial.
    Tipos de tarefa em "faca": check | texto | numero | escolha (opcoes: [[valor, rótulo]]) | rota (escolhe uma de "rotas") | longo | widget (bens, matriz, marcos, gonogo).
    Cada imersão: mapa (o todo antes do detalhe), minimo (versão de dia ruim, ~10 min), recupere (1 pergunta no meio: p, op, c = índice certo, por), entenda, faca, saida.
    rotas[].comprova: [valor, moeda] = comprovação financeira mínima exigida pelo governo (sem custo de vida). */
 const PREPARA = {
-  meta: { data: "2027-02-07", dataBR: "07/02/2027", verificado: "2026-11-06", verificadoBR: "06/11/2026", cor: "#5cc8f5" },
+  meta: { data: "2027-02-08", dataBR: "08/02/2027", verificado: "2026-11-06", verificadoBR: "06/11/2026", cor: "#5cc8f5" },
 
   pergunta: {
-    original: "Como eu saio do Brasil e começo do zero lá fora, com pouco dinheiro, até 07/02/2027?",
-    texto: "Qual rota LEGAL me deixa morar e trabalhar fora a partir de fevereiro de 2027, cabendo no dinheiro que eu consigo juntar até janeiro, e qual é o plano B se ela não fechar a tempo?",
+    original: "Como eu saio do Brasil e começo do zero lá fora, com pouco dinheiro, até fevereiro?",
+    texto: "Qual rota LEGAL e de custo baixíssimo me coloca no avião em 08/02/2027 com trabalho já previsto e um caminho de carreira em TI para crescer lá, e qual é o plano B se ela não fechar?",
     porque: [
-      "<b>Legal</b>: sair como turista e trabalhar lá é a forma mais rápida de ser deportada e ficar proibida de voltar. Toda rota aqui tem autorização de trabalho.",
-      "<b>Morar e trabalhar</b>: viajar é fácil. O que decide tudo é o documento que deixa você ficar e ter renda.",
-      "<b>Dinheiro que eu consigo juntar</b>: cada rota tem um valor mínimo exigido pelo governo. Primeiro o número, depois o país.",
-      "<b>Plano B</b>: vários vistos dependem de vagas e prazos que você não controla. Adiar com segurança também é um resultado válido."
+      "<b>Legal</b>: ousadia no destino, segurança no documento. Sair como turista para trabalhar dá deportação e proibição de voltar.",
+      "<b>Custo baixíssimo</b>: cada real conta. Rota sem comprovação alta vence rota famosa. Primeiro o número, depois o país.",
+      "<b>Trabalho previsto</b>: você não embarca para procurar emprego, embarca com renda fechada (vaga remota, vaga local ou freelas).",
+      "<b>Carreira</b>: o primeiro país pode ser uma ponte. O que importa é sair com experiência internacional em TI e um segundo passo.",
+      "<b>Plano B</b>: se a rota A travar, troca de rota, não de data. Adiar só se faltar um critério crítico."
+    ]
+  },
+
+  /* A estratégia fora do comum, mostrada no topo da aba como um mapa de 3 passos. */
+  estrategia: {
+    titulo: "Ponte barata + carreira",
+    lema: "Meter o louco no destino, nunca no documento.",
+    passos: [
+      { t: "Pousar barato", d: "Um país do Mercosul: o documento sai só com a nacionalidade, pedido lá, sem comprovação alta. Paraguai e Argentina são os mais baratos de chegar." },
+      { t: "Levar o trabalho na mala", d: "Antes de embarcar, fechar a renda: vaga remota em QA ou suporte, vaga local em empresa de TI do destino ou um pacote de freelas." },
+      { t: "Trampolim", d: "Com 1 a 2 anos de experiência internacional e espanhol, pular para Europa ou Japão por contrato com visto ou Working Holiday (até 30 anos)." }
     ]
   },
 
@@ -26,7 +38,7 @@ const PREPARA = {
       recupere: {"p":"Qual destas respostas fecha de uma vez todos os Working Holiday?","op":["Inglês intermediário","Não ter renda remota","Morar em Campo Grande","Ter 31 anos na data do pedido"],"c":3,"por":"Os Working Holiday para brasileiros aceitam só de 18 a 30 anos. Idioma e renda pesam, mas não eliminam."},
       entenda: [
         { t: "Por que começar por você, e não pelo país", html: "<p>Os programas mais baratos têm <b>idade máxima</b> (Working Holiday: 18 a 30 anos). A rota mais fácil da Europa é a <b>cidadania por descendência</b>. O idioma decide onde você consegue o primeiro emprego. São quatro variáveis que mudam o mapa inteiro:</p><ul><li><b>Idade</b>: abre ou fecha os Working Holiday.</li><li><b>Passaporte</b>: sem ele quase nada anda (exceto Mercosul).</li><li><b>Ascendência europeia</b>: pode valer mais que qualquer visto.</li><li><b>Dinheiro líquido</b>: o mínimo exigido muda de R$ 1 mil a mais de R$ 60 mil.</li></ul>" },
-        { t: "O conflito de datas", html: "<p>A prova da UFMS é em <b>17/01/2027</b>, em Campo Grande. A meta de embarque é <b>07/02/2027</b>. Se você passar, a posse é aqui. Decida agora o que o concurso é no seu plano, para não dividir a energia sem perceber.</p>" }
+        { t: "O conflito de datas", html: "<p>A prova da UFMS é em <b>17/01/2027</b>, em Campo Grande. A meta é estar no avião em <b>08/02/2027</b>. Se você passar, a posse é aqui. Decida agora o que o concurso é no seu plano, para não dividir a energia sem perceber.</p>" }
       ],
       faca: [
         { id: "idade", tipo: "numero", rotulo: "Sua idade hoje", dica: "Working Holiday aceita 18 a 30 anos na data do pedido." },
@@ -37,6 +49,7 @@ const PREPARA = {
         { id: "formacao", tipo: "texto", rotulo: "Formação e experiência que posso provar com papel", dica: "Ex.: ADS (concluído?), QA em X projetos, suporte. Diploma e carteira/contratos contam muito em visto de trabalho." },
         { id: "renda_remota", tipo: "escolha", rotulo: "Renda remota (em dólar ou não)", opcoes: [["tenho", "Já tenho"], ["buscando", "Estou buscando"], ["nao", "Não tenho"]], dica: "Renda que vai junto na mala é o maior redutor de risco de qualquer rota." },
         { id: "aluguel", tipo: "texto", rotulo: "Contrato do apartamento: prazo de aviso e multa", dica: "Leia a cláusula de rescisão. Só avise o locador DEPOIS de escolher a rota (marco de 10/12)." },
+        { id: "carreira_alvo", tipo: "escolha", rotulo: "Que trabalho eu quero ter previsto ao embarcar", opcoes: [["qa", "QA / testes"], ["suporte", "Suporte técnico"], ["web", "Dev web"], ["ia", "IA e dados"], ["qualquer", "Qualquer legal enquanto me estabeleço"]], dica: "É o trabalho da ponte. A carreira dos sonhos pode ser o passo 3." },
         { id: "concurso", tipo: "escolha", rotulo: "O concurso UFMS no meu plano", opcoes: [["faco", "Faço a prova em 17/01 e decido depois do resultado"], ["faco_saio", "Faço a prova, mas a mudança vem primeiro"], ["largo", "Paro o concurso e foco 100% na mudança"]] },
         { id: "idioma_alvo", tipo: "escolha", rotulo: "Preferência de idioma do país", opcoes: [["en", "Inglês"], ["es", "Espanhol"], ["qualquer", "Qualquer um, se a rota for boa"]] }
       ],
@@ -69,29 +82,52 @@ const PREPARA = {
       objetivo: "Conhecer todas as rotas reais para brasileiros em 2026/2027, eliminar as que não cabem e dar nota às que sobram.",
       mapa: ["Como ler os cartões","O que não é caminho","10 rotas","Matriz com pesos","Rota A e B"],
       minimo: "Dê nota só às 3 rotas de que você mais gostou.",
-      recupere: {"p":"Qual rota cabe até 07/02 só com a nacionalidade brasileira?","op":["Working Holiday Canadá","Mercosul (Argentina, Uruguai, Paraguai)","Portugal: entrar como turista e regularizar lá","Work and Holiday Austrália"],"c":1,"por":"Canadá não tem acordo com o Brasil, Portugal acabou com essa via em 2025 e a Austrália está pausada para o Brasil."},
+      recupere: {"p":"Qual rota cabe até 08/02 só com a nacionalidade brasileira?","op":["Working Holiday Canadá","Mercosul (Argentina, Uruguai, Paraguai)","Portugal: entrar como turista e regularizar lá","Work and Holiday Austrália"],"c":1,"por":"Canadá não tem acordo com o Brasil, Portugal acabou com essa via em 2025 e a Austrália está pausada para o Brasil."},
       entenda: [
-        { t: "Como ler os cartões", html: "<p>Cada rota tem o requisito que mais pesa, o custo mínimo exigido, o prazo e se <b>cabe até 07/02</b>. Verde: cabe se você agir agora. Laranja: depende de algo que você não controla. Vermelho: não cabe nesta janela, mas pode entrar no plano C.</p>" },
+        { t: "Como ler os cartões", html: "<p>Cada rota tem o requisito que mais pesa, o custo mínimo exigido, o prazo e se <b>cabe até 08/02</b>. Verde: cabe se você agir agora. Laranja: depende de algo que você não controla. Vermelho: não cabe nesta janela, mas pode entrar no plano C.</p>" },
         { t: "O que NÃO é caminho (2026)", html: "<ul><li><b>Portugal como turista e regularizar lá</b>: acabou com a Lei 61/2025 (em vigor desde 23/10/2025). O visto de procura de trabalho foi suspenso. O substituto, “procura de trabalho qualificado”, ainda aguardava regulamentação em julho de 2026.</li><li><b>Working Holiday no Canadá</b>: o Brasil não tem acordo. Quem vende isso está vendendo outra coisa.</li><li><b>Working Holiday na Irlanda</b>: o Brasil não aparece na lista oficial de países do programa. Alguns blogs dizem o contrário: confira no irishimmigration.ie antes de acreditar.</li><li><b>Worldpackers e Workaway</b>: são turismo com troca de hospedagem. Não dão permissão de trabalho e alguns países tratam a troca como trabalho.</li><li><b>Entrar como turista para trabalhar</b>: irregular em qualquer país.</li></ul>" },
-        { t: "A combinação mais forte para o seu perfil", html: "<p>Rota com residência barata + <b>renda remota</b> (a sua busca de vaga em dólar). Mercosul resolve o documento em semanas e o custo de vida é menor. O trabalho remoto resolve a renda. Juntas, reduzem o risco de chegar e ficar sem dinheiro.</p>" }
+        { t: "A estratégia: ponte barata + carreira", html: "<p>O caminho comum é escolher o país dos sonhos e juntar dinheiro por anos. O seu é outro: <b>pousar onde o documento é garantido e barato</b> (Mercosul), <b>com o trabalho já fechado</b>, e usar 1 a 2 anos lá como ponte de carreira.</p><ul><li><b>Paraguai</b>: o mais perto de Campo Grande e de custo de vida baixo.</li><li><b>Argentina</b>: residência online (RaDEX), mercado de TI grande.</li><li><b>Uruguai</b>: polo de software forte, mas custo de vida alto para a região.</li></ul><p>Working Holiday e estudo continuam no mapa como aposta ou como passo 3.</p>" }
       ],
       faca: [
         { id: "rotas_lidas", tipo: "check", rotulo: "Li todos os cartões de rota" },
         { id: "rotas_eliminadas", tipo: "texto", rotulo: "Rotas que eliminei e por quê", dica: "Ex.: Austrália (pausada), NZ (só em out/2027)." },
         { id: "matriz", tipo: "widget", widget: "matriz", rotulo: "Dei nota às rotas que sobraram" },
         { id: "rota_a", tipo: "rota", rotulo: "Rota A (a que vou perseguir)", dica: "Pela matriz, a primeira do ranking costuma ser a A. Você decide." },
-        { id: "rota_b", tipo: "rota", rotulo: "Rota B (se a A não fechar até o marco)", dica: "De preferência uma rota verde (cabe até 07/02) e que não dependa de vaga." }
+        { id: "rota_b", tipo: "rota", rotulo: "Rota B (se a A não fechar até o marco)", dica: "De preferência uma rota verde (cabe até 08/02) e que não dependa de vaga." }
       ],
       saida: "Ranking das rotas pela sua matriz, rota A e rota B escritas."
     },
     {
-      id: "dinheiro", n: 4, titulo: "Dinheiro: quanto eu terei no embarque", tempo: "60 min",
+      id: "carreira", n: 4, titulo: "Trabalho previsto antes do embarque", tempo: "60 min",
+      objetivo: "Sair do Brasil com renda fechada e um plano de carreira, e não com a esperança de achar emprego lá.",
+      mapa: ["3 tipos de trabalho previsto", "Onde buscar", "Funil semanal", "Trampolim"],
+      minimo: "Mande 3 candidaturas hoje.",
+      recupere: { p: "Qual destes conta como trabalho previsto no Go/No-Go?", op: ["Ter mandado 100 currículos", "Ter um perfil bom no LinkedIn", "Oferta assinada, contrato remoto ou freelas fechados para 60 dias", "Uma entrevista marcada"], c: 2, por: "Só conta o que já é renda garantida. Currículo, perfil e entrevista são o caminho até lá, não o resultado." },
+      entenda: [
+        { t: "Três jeitos de ter trabalho previsto", html: "<table><tr><th>Tipo</th><th>Como é</th><th>Atenção</th></tr><tr><td><b>Remoto</b></td><td>Empresa de qualquer país, você trabalha de onde estiver.</td><td>Leia o contrato: algumas vagas remotas exigem morar no Brasil.</td></tr><tr><td><b>Local</b></td><td>Empresa de TI no país de destino contrata você.</td><td>Com residência Mercosul você pode trabalhar; confira o prazo do documento.</td></tr><tr><td><b>Freelas</b></td><td>Testes, QA e suporte por projeto.</td><td>Feche os primeiros clientes antes de sair. Renda que oscila pede colchão maior.</td></tr></table>" },
+        { t: "Onde buscar", html: "<ul><li><b>LinkedIn</b> com a localização já no destino (ex.: Buenos Aires, Assunção, Montevidéu) e o título em inglês e espanhol.</li><li><b>Sites de vagas da América Latina</b> (como o Computrabajo) e as páginas de carreira das empresas de software do destino.</li><li><b>Vagas remotas</b>: Remote OK e We Work Remotely, filtrando por QA, suporte e América Latina.</li><li><b>Freelas</b>: Upwork e comunidades de QA.</li></ul><p>Sites e empresas mudam: confira se a vaga é real antes de mandar documentos (imersão 8).</p>" },
+        { t: "O funil da semana", html: "<p>Trabalho previsto é um número, não sorte. Meta sugerida: <b>5 candidaturas por dia útil</b>, em lotes curtos. Toda sexta, anote quantas foram, quantas responderam e quantas viraram entrevista. Se ninguém responde, troque o currículo, não a meta.</p>" },
+        { t: "O trampolim", html: "<p>A ponte não é o fim. Escreva já para onde você quer pular depois de 1 a 2 anos e o que precisa juntar até lá: experiência, idioma, dinheiro, idade (Working Holiday vai só até 30).</p>" }
+      ],
+      faca: [
+        { id: "cv_idiomas", tipo: "check", rotulo: "Currículo pronto em inglês e em espanhol (1 página)" },
+        { id: "linkedin_local", tipo: "check", rotulo: "LinkedIn com a localização no destino e o título em inglês" },
+        { id: "trab_tipo", tipo: "escolha", rotulo: "O trabalho que vou levar na mala", opcoes: [["remoto", "Vaga remota"], ["local", "Vaga local no destino"], ["freela", "Freelas"], ["misto", "Misto"]] },
+        { id: "cand_semana", tipo: "numero", rotulo: "Candidaturas enviadas nesta semana", dica: "Atualize toda sexta. Meta: 25." },
+        { id: "pitch", tipo: "longo", rotulo: "Meu pitch em 3 frases (quem sou, o que testo ou resolvo, por que me mudo)" },
+        { id: "trampolim", tipo: "texto", rotulo: "Trampolim: para onde quero pular em 1 a 2 anos" }
+      ],
+      saida: "Currículo nos dois idiomas, funil rodando toda semana e o tipo de trabalho que vai junto na mala."
+    },
+    {
+      id: "dinheiro", n: 5, titulo: "Dinheiro: quanto eu terei no embarque", tempo: "60 min",
       objetivo: "Transformar bens, salário e dívida em um número só: o capital líquido no dia da partida.",
       mapa: ["Comprovação","Custo de saída","Colchão","Dívida","Bens","Capital líquido"],
       minimo: "Liste 5 itens para vender, com preço.",
       recupere: {"p":"Na conta da mudança, a comprovação financeira é:","op":["O preço da passagem de ida","O limite do cartão de crédito","Dinheiro que você mostra no extrato, sem precisar gastar","O custo dos primeiros 3 meses"],"c":2,"por":"Comprovação é o valor que o governo quer ver na conta. Cartão não vale. Passagem e colchão são outros números da conta."},
       entenda: [
         { t: "Três números diferentes", html: "<ol><li><b>Comprovação financeira</b>: o que o governo quer ver no extrato (ex.: Irlanda pede € 833 por mês de estadia). Você não gasta, só mostra.</li><li><b>Custo de saída</b>: passaporte, documentos, seguro, passagem, primeira hospedagem.</li><li><b>Colchão de chegada</b>: 3 meses de custo de vida no destino + uma passagem de volta guardada.</li></ol><p>Passagem barata não é mudança viável. A conta que importa: <b>capital líquido ≥ comprovação + custo de saída + colchão</b>.</p>" },
+        { t: "Custo baixíssimo, sem gambiarra", html: "<ul><li><b>Rota sem comprovação alta</b>: no Mercosul, o maior gasto é chegar e se manter, não mostrar extrato.</li><li><b>Chegar por terra</b> também vale: para Paraguai e Argentina, compare ônibus e voo. Brasileiro entra nos países do Mercosul com RG em bom estado (confira a regra da companhia).</li><li><b>Passagem</b>: ligue o alerta de preço em dezembro. Na rota Mercosul o documento é garantido, então dá para comprar mais cedo (marco de 10/01).</li><li><b>Primeiras semanas</b>: quarto em casa compartilhada ou pensão, pago por plataforma com proteção, nunca por transferência a desconhecido.</li></ul>" },
         { t: "A dívida do cartão", html: "<p>Cartão no rotativo é a dívida mais cara que existe no Brasil. Prioridade: quitar ou negociar <b>antes</b> de sair. Nome negativado dificulta conta, cartão e uma eventual volta. Isto é orientação geral, não consultoria financeira.</p>" },
         { t: "Vender bens sem perder dinheiro", html: "<ul><li>Liste tudo agora, com preço de mercado (veja anúncios iguais).</li><li>Venda primeiro o que você não usa; o que usa todo dia (cama, notebook) fica para janeiro.</li><li>Conte só 70% do valor estimado no plano: desconto e itens encalhados são normais.</li></ul>" }
       ],
@@ -110,7 +146,7 @@ const PREPARA = {
       saida: "Seu capital líquido no embarque e quanto falta para a meta da rota A."
     },
     {
-      id: "cronograma", n: 5, titulo: "Cronograma reverso até 07/02", tempo: "30 min",
+      id: "cronograma", n: 6, titulo: "Cronograma reverso até 08/02", tempo: "30 min",
       objetivo: "Trabalhar de trás para frente: cada marco tem uma data-limite e uma decisão.",
       mapa: ["Data final","Caminho crítico","11 marcos","4 decisões","Agenda"],
       minimo: "Coloque só os 4 marcos de decisão na agenda.",
@@ -126,14 +162,14 @@ const PREPARA = {
       saida: "Um calendário com 11 marcos e 4 pontos de decisão."
     },
     {
-      id: "decisao", n: 6, titulo: "Go/No-Go e planos A, B e C", tempo: "30 min",
+      id: "decisao", n: 7, titulo: "Go/No-Go e planos A, B e C", tempo: "30 min",
       objetivo: "Definir ANTES, com a cabeça fria, quais condições precisam estar cumpridas para comprar a passagem.",
       mapa: ["Regras antes","7 críticos","Plano A","Plano B","Plano C"],
       minimo: "Escreva só o gatilho que faz você trocar para o plano B.",
       recupere: {"p":"Em 25/01, o passaporte ainda não chegou. O que o Go/No-Go manda fazer?","op":["Comprar a passagem e torcer","No-Go: trocar para o plano B ou C","Ir como turista e regularizar lá","Adiar sem data"],"c":1,"por":"Passaporte é critério crítico. Faltou um crítico, é No-Go. Adiar vale, mas com data (plano C)."},
       entenda: [
         { t: "Por que decidir as regras antes", html: "<p>Perto da data, a vontade de ir faz tudo parecer resolvido. Critérios escritos antes protegem você de embarcar sem documento ou sem colchão. Se um crítico estiver faltando em 25/01, a resposta é <b>No-Go</b>: troca para o plano B ou C.</p>" },
-        { t: "Os três planos", html: "<ul><li><b>A</b>: a rota principal, saindo até 07/02.</li><li><b>B</b>: outra rota que cabe na mesma janela (ex.: Mercosul, se a A depender de vaga).</li><li><b>C</b>: adiar com data definida (ex.: julho de 2027), guardando dinheiro e mirando a próxima janela (PVT, NZ em outubro). Adiar não é desistir.</li></ul>" }
+        { t: "Os três planos", html: "<ul><li><b>A</b>: a rota principal, saindo até 08/02.</li><li><b>B</b>: outra rota que cabe na mesma data (ex.: outro país do Mercosul, ou o mesmo país com trabalho local em vez de remoto).</li><li><b>C</b>: adiar com data definida (ex.: julho de 2027), guardando dinheiro e mirando a próxima janela (PVT, NZ em outubro). Adiar não é desistir.</li></ul>" }
       ],
       faca: [
         { id: "gonogo", tipo: "widget", widget: "gonogo", rotulo: "Passei pelos critérios de Go/No-Go" },
@@ -144,7 +180,7 @@ const PREPARA = {
       saida: "Planos A, B e C escritos e uma regra clara para comprar (ou não) a passagem."
     },
     {
-      id: "fontes", n: 7, titulo: "Crivo de fontes e golpes", tempo: "20 min",
+      id: "fontes", n: 8, titulo: "Crivo de fontes e golpes", tempo: "20 min",
       objetivo: "Saber em quem confiar quando os conteúdos se contradizem (e eles vão se contradizer).",
       mapa: ["Escada da confiança","Viés de sobrevivência","Sinais de golpe","Fonte oficial"],
       minimo: "Abra só o site oficial da sua rota A.",
@@ -162,12 +198,20 @@ const PREPARA = {
     }
   ],
 
-  /* Rotas. cabe: sim | talvez | nao (até 07/02/2027). */
+  /* Rotas. cabe: sim | talvez | nao (até 08/02/2027). */
   rotas: [
-    { id: "mercosul", nome: "Mercosul: Argentina, Uruguai ou Paraguai", grupo: "Residência por acordo", cabe: "sim", idioma: "Espanhol",
-      req: "Só a nacionalidade brasileira. Na Argentina: residência temporária de 2 anos, pedida online (RaDEX) já no país, com direito a trabalhar.",
-      custo: "Argentina: 50 UMSM = ARS 50.000 (cerca de US$ 32, out/2026), mais certidões e traduções.",
-      prazo: "Semanas. Dá para entrar e pedir no país.", obs: "Mais rápida e barata. Salários locais baixos: combina muito com renda remota em dólar." },
+    { id: "paraguai", nome: "Mercosul: Paraguai (Assunção)", grupo: "Residência por acordo", cabe: "sim", idioma: "Espanhol (e guarani)",
+      req: "Só a nacionalidade. Residência temporária Mercosul de 2 anos, pedida na Migraciones. Pede RG ou passaporte, certidão de nascimento e antecedentes (com apostila).",
+      custo: "Taxas e renda mínima: fontes não oficiais divergem. Confira em migraciones.gov.py antes de contar no plano.",
+      prazo: "Semanas. Dá para entrar e pedir no país.", obs: "O mais perto de Campo Grande, por terra ou voo curto. Custo de vida baixo: combina com renda remota em dólar." },
+    { id: "argentina", nome: "Mercosul: Argentina (Buenos Aires ou Córdoba)", grupo: "Residência por acordo", cabe: "sim", idioma: "Espanhol",
+      req: "Só a nacionalidade. Residência temporária de 2 anos, pedida online (RaDEX) já no país, com direito a trabalhar.",
+      custo: "Taxa de 50 UMSM = ARS 50.000 (cerca de US$ 32, out/2026), mais certidões e traduções.",
+      prazo: "Semanas.", obs: "Mercado de TI grande e muitas empresas que contratam para fora. Inflação alta: prefira renda em dólar." },
+    { id: "uruguai", nome: "Mercosul: Uruguai (Montevidéu)", grupo: "Residência por acordo", cabe: "sim", idioma: "Espanhol",
+      req: "Só a nacionalidade. Residência Mercosul pedida no país ou no consulado. Fontes divergem se já sai permanente ou se é temporária antes.",
+      custo: "Certidões apostiladas + taxas (confira em gub.uy).",
+      prazo: "Semanas a meses.", obs: "Um dos polos de software mais fortes da região. Custo de vida alto para a América do Sul: a renda precisa vir antes." },
     { id: "japao", nome: "Working Holiday Japão", grupo: "Working Holiday", cabe: "talvez", idioma: "Japonês (inglês ajuda)",
       req: "18 a 30 anos, morar no Brasil, primeira vez no programa. Programa novo: começa em 01/12/2026.",
       custo: "Visto gratuito. Exige seguro, reserva financeira e passagem de volta (valores a definir pelos consulados).",
@@ -207,38 +251,40 @@ const PREPARA = {
   ],
 
   criterios: [
-    { id: "prazo", nome: "Cabe até 07/02", peso: 3 },
-    { id: "custo", nome: "Custo que eu consigo pagar", peso: 3 },
-    { id: "trabalho", nome: "Trabalho legal desde o início", peso: 2 },
-    { id: "idioma", nome: "Idioma que já falo", peso: 2 },
-    { id: "ficar", nome: "Caminho para ficar depois", peso: 2 },
-    { id: "ti", nome: "Chance de renda em TI/QA/suporte", peso: 1 }
+    { id: "prazo", nome: "Cabe até 08/02", peso: 3 },
+    { id: "custo", nome: "Custo baixíssimo", peso: 3 },
+    { id: "trabalho", nome: "Trabalho previsto antes de embarcar", peso: 3 },
+    { id: "ti", nome: "Carreira em TI e trampolim", peso: 2 },
+    { id: "idioma", nome: "Idioma que já falo", peso: 1 },
+    { id: "ficar", nome: "Caminho para ficar depois", peso: 1 }
   ],
 
   marcos: [
-    { id: "m1", data: "2026-11-15", t: "Diagnóstico feito e passaporte solicitado", decisao: false },
+    { id: "m1", data: "2026-11-15", t: "Diagnóstico feito, passaporte pedido e currículo em inglês e espanhol", decisao: false },
     { id: "m2", data: "2026-11-30", t: "Rotas A e B escolhidas pela matriz", decisao: true },
     { id: "m3", data: "2026-12-01", t: "Working Holiday Japão começa: ver regras no consulado (se for rota)", decisao: false },
     { id: "m4", data: "2026-12-10", t: "Avisar o locador conforme o contrato (só com rota escolhida)", decisao: true },
+    { id: "m12", data: "2026-12-15", t: "Funil rodando: 60 candidaturas enviadas e alerta de preço da passagem ligado", decisao: false },
     { id: "m5", data: "2026-12-20", t: "Cartão quitado e 70% dos bens vendidos", decisao: false },
     { id: "m6", data: "2027-01-01", t: "Campanha do PVT França costuma abrir (se for rota)", decisao: false },
-    { id: "m7", data: "2027-01-10", t: "Visto, matrícula ou residência encaminhados", decisao: true },
+    { id: "m7", data: "2027-01-10", t: "Trabalho previsto fechado e documentos da rota prontos. Rota Mercosul: já pode comprar a passagem", decisao: true },
     { id: "m8", data: "2027-01-17", t: "Prova da UFMS (se for fazer)", decisao: false },
-    { id: "m9", data: "2027-01-25", t: "Go/No-Go final: só compra a passagem se for VAI", decisao: true },
+    { id: "m9", data: "2027-01-25", t: "Go/No-Go final: as outras rotas só compram a passagem se for VAI", decisao: true },
     { id: "m10", data: "2027-01-31", t: "Entregar o apartamento", decisao: false },
-    { id: "m11", data: "2027-02-07", t: "Embarque", decisao: false }
+    { id: "m11", data: "2027-02-08", t: "No avião ou pousando lá fora", decisao: false }
   ],
 
   gonogo: [
-    { id: "pp", t: "Passaporte em mãos, válido pelo tempo que a rota exige", critico: true },
+    { id: "pp", t: "Passaporte em mãos (no Mercosul, RG em bom estado também serve para entrar)", critico: true },
     { id: "legal", t: "Rota confirmada no site oficial do destino", critico: true },
     { id: "doc", t: "Visto, autorização ou matrícula aprovados (se a rota exige antes de ir)", critico: true },
-    { id: "din", t: "Capital líquido ≥ comprovação + 3 meses de custo de vida + passagem de volta", critico: true },
+    { id: "trabalho", t: "Trabalho previsto: oferta assinada, contrato remoto ou freelas fechados para os primeiros 60 dias", critico: true },
+    { id: "din", t: "Capital líquido ≥ custo de saída + 2 meses de custo de vida + passagem de volta", critico: true },
     { id: "divida", t: "Dívida do cartão quitada ou negociada", critico: true },
     { id: "casa", t: "Hospedagem das primeiras 2 a 4 semanas reservada", critico: true },
     { id: "seguro", t: "Seguro saúde válido no destino", critico: true },
     { id: "copias", t: "Cópias digitais de todos os documentos no Drive", critico: false },
-    { id: "renda", t: "Plano de renda para os primeiros 60 dias", critico: false },
+    { id: "trampolim", t: "Trampolim escrito: para onde vou em 1 a 2 anos", critico: false },
     { id: "rede", t: "Entrei em pelo menos 2 comunidades de brasileiros no destino", critico: false }
   ],
 
@@ -246,6 +292,8 @@ const PREPARA = {
     { nome: "Polícia Federal: passaporte", url: "https://www.gov.br/pf/pt-br/assuntos/passaporte" },
     { nome: "Polícia Federal: antecedentes criminais", url: "https://www.gov.br/pf/pt-br/assuntos/antecedentes-criminais" },
     { nome: "Argentina: Dirección Nacional de Migraciones", url: "https://www.argentina.gob.ar/migraciones" },
+    { nome: "Paraguai: Dirección Nacional de Migraciones", url: "https://www.migraciones.gov.py" },
+    { nome: "Uruguai: portal do governo (trâmites de residência)", url: "https://www.gub.uy" },
     { nome: "Irlanda: Immigration Service (estudo e finanças)", url: "https://www.irishimmigration.ie/coming-to-study-in-ireland/" },
     { nome: "Portugal: Portal de Vistos (MNE)", url: "https://vistos.mne.gov.pt" },
     { nome: "França: France-Visas", url: "https://france-visas.gouv.fr" },
