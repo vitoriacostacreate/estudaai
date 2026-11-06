@@ -28,7 +28,7 @@ ARQ = DADOS / "config.json"
 ROTEIRO = [
     ("gemini", "Gemini (Google): GRÁTIS", [
         "Entre com sua conta Google e aceite os termos, se pedir.",
-        "Clique em \"Create API key\" (Criar chave de API) e depois em copiar.",
+        "Clique em \"Create API key\" (Criar chave de API) e depois em \"Copiar chave\".",
         "Não precisa de cartão: é a camada gratuita do Google AI Studio."]),
     ("anthropic", "Claude (Anthropic): PAGO, crédito pré-pago", [
         "A assinatura Claude Pro NÃO inclui a API: aqui é crédito à parte (a partir de US$ 5).",
@@ -74,8 +74,16 @@ def ler_clipboard() -> str:
 
 
 def achar_chave(provedor: str, texto: str) -> str | None:
+    """Reconhece a chave pelo formato conhecido; se o formato mudar de novo, aceita qualquer texto
+    com cara de chave (uma palavra longa) que não seja de outra IA: o teste decide se vale."""
     m = re.search(ia.FORMATO_CHAVE[provedor], texto or "")
-    return m.group(0) if m else None
+    if m:
+        return m.group(0)
+    t = (texto or "").strip()
+    outras = [f for p, f in ia.FORMATO_CHAVE.items() if p != provedor]
+    if re.fullmatch(r"[A-Za-z0-9._\-]{30,200}", t) and not any(re.search(f, t) for f in outras) and not t.startswith("projects/"):
+        return t
+    return None
 
 
 # ---------- teclado: Enter pula; colar a chave no terminal também vale ----------
@@ -165,11 +173,11 @@ def main() -> int:
                 break
             print("    Chave copiada! Testando…", end=" ", flush=True)
             try:
-                ia.validar_chave(prov, chave)
+                extras = ia.validar_chave(prov, chave) or {}
             except Exception as e:  # noqa: BLE001
                 print(f"não deu: {e}. Copie a chave de novo, ou Enter para pular.")
                 continue
-            campos = {ia.PROVEDORES[prov][0]: chave}
+            campos = {ia.PROVEDORES[prov][0]: chave, **extras}
             if prov == "gemini":
                 campos["gemini_plano"] = "gratis"
             salvar(campos)

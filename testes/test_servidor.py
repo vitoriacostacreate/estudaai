@@ -231,6 +231,23 @@ class TestIA(unittest.TestCase):
         self.assertIsNone(configurar_ia.achar_chave("openai", "sk-ant-api03-" + "x" * 30))   # chave do Claude não vale como OpenAI
         self.assertEqual(configurar_ia.achar_chave("openai", "sk-proj-" + "y" * 40), "sk-proj-" + "y" * 40)
 
+    def test_chave_gemini_formato_novo(self):
+        import configurar_ia
+        aq = "AQ." + "Ab8RN6KiRkfJuHtrLh412hvTKGXx" * 2
+        self.assertEqual(configurar_ia.achar_chave("gemini", aq), aq)                    # AI Studio só gera AQ. desde 2026
+        self.assertEqual(configurar_ia.achar_chave("gemini", "NOVO_" + "z" * 40), "NOVO_" + "z" * 40)   # formato futuro: o teste decide
+        self.assertIsNone(configurar_ia.achar_chave("gemini", "projects/117805476372"))
+
+    def test_modelos_do_gemini_vem_da_conta(self):
+        lista = {"models": [{"name": "models/gemini-2.5-flash"}, {"name": "models/gemini-3.0-flash"}, {"name": "models/gemini-3.0-flash-lite"},
+                            {"name": "models/gemini-3.1-pro"}, {"name": "models/gemini-3.5-pro-preview"}]}
+        patch, _ = self.rede(lista)
+        with patch:
+            extras = servidor.ia.validar_chave("gemini", "AQ.x")
+        self.assertEqual(extras, {"modelo_gemini_gratis": "gemini-3.0-flash", "modelo_gemini_pro": "gemini-3.1-pro"})
+        self.chaves(gemini_api_key="AQ.x", **extras)
+        self.assertEqual(servidor.ia.cadeia(self.d, "revisao")[0]["modelo"], "gemini-3.0-flash")
+
     def test_rota_texto(self):
         Handler = servidor.Handler
         antigo, Handler.dados = Handler.dados, self.d

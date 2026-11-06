@@ -26,7 +26,7 @@ PROVEDORES = {
     "openai": ("openai_api_key", "OPENAI_API_KEY", "modelo_openai"),
     "gemini": ("gemini_api_key", "GEMINI_API_KEY", "modelo_gemini"),
 }
-CAMPOS = [c for p in PROVEDORES.values() for c in (p[0], p[2])] + ["gemini_plano"]
+CAMPOS = [c for p in PROVEDORES.values() for c in (p[0], p[2])] + ["gemini_plano", "modelo_gemini_gratis", "modelo_gemini_pro"]
 
 # Melhor modelo de cada provedor para cada atividade (o primeiro da lista é tentado primeiro).
 # aula: JSON longo e didático · revisao: rigor e checagem de fatos · duvidas: pesquisa e resumo.
@@ -47,7 +47,7 @@ PAGINA_CHAVE = {
     "anthropic": "https://console.anthropic.com/settings/keys",
     "openai": "https://platform.openai.com/api-keys",
 }
-FORMATO_CHAVE = {"anthropic": r"sk-ant-[A-Za-z0-9_\-]{20,}", "openai": r"sk-(?!ant-)[A-Za-z0-9_\-]{20,}", "gemini": r"AIza[0-9A-Za-z_\-]{30,}"}
+FORMATO_CHAVE = {"anthropic": r"sk-ant-[A-Za-z0-9_\-]{20,}", "openai": r"sk-(?!ant-)[A-Za-z0-9_\-]{20,}", "gemini": r"(?:AIza|AQ\.)[0-9A-Za-z_\-]{30,}"}   # AQ.: formato novo do AI Studio (2026)
 
 
 def config(dados: Path) -> dict:
@@ -83,7 +83,9 @@ def cadeia(dados: Path, atividade: str) -> list[dict]:
         if not cfg[PROVEDORES[prov][0]]:
             continue
         livre = prov == "gemini" and cfg["gemini_plano"] == "gratis"
-        modelo = cfg[PROVEDORES[prov][2]] or (MODELO_GRATIS if livre else modelo)
+        if prov == "gemini":     # modelos escolhidos da lista da conta pelo configurar_ia (nome fixo envelhece)
+            modelo = cfg.get("modelo_gemini_gratis") or MODELO_GRATIS if livre else cfg.get("modelo_gemini_pro") or modelo
+        modelo = cfg[PROVEDORES[prov][2]] or modelo
         (gratis if livre else pagas).append({"provedor": prov, "modelo": modelo, "gratis": livre})
     return pagas + gratis
 
@@ -179,7 +181,26 @@ def gerar_aula(dados: Path, prompt: str) -> dict:
 
 
 # ---------- conferir uma chave (sem gastar crédito: só lista os modelos) ----------
-def validar_chave(provedor: str, chave: str) -> None:
+def melhores_gemini(modelos: list) -> dict:
+    """Da lista de modelos da conta, o flash mais novo (grátis) e o pro mais novo. Ignora preview, lite, tts etc."""
+    import re
+    achados = {"flash": [], "pro": []}
+    for m in modelos:
+        nome = str(m.get("name", "")).removeprefix("models/")
+        if "generateContent" not in m.get("supportedGenerationMethods", ["generateContent"]):
+            continue
+        if (r := re.fullmatch(r"gemini-(\d+(?:\.\d+)?)-(flash|pro)", nome)):
+            achados[r.group(2)].append((float(r.group(1)), nome))
+    out = {}
+    if achados["flash"]:
+        out["modelo_gemini_gratis"] = max(achados["flash"])[1]
+    if achados["pro"]:
+        out["modelo_gemini_pro"] = max(achados["pro"])[1]
+    return out
+
+
+def validar_chave(provedor: str, chave: str) -> dict:
+    """Testa a chave. Devolve campos extras para salvar (no Gemini, os modelos atuais da conta)."""
     url, headers = {
         "anthropic": ("https://api.anthropic.com/v1/models", {"x-api-key": chave, "anthropic-version": "2023-06-01"}),
         "openai": ("https://api.openai.com/v1/models", {"authorization": "Bearer " + chave}),
@@ -187,6 +208,7 @@ def validar_chave(provedor: str, chave: str) -> None:
     }[provedor]
     try:
         with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as r:
-            r.read()
+            corpo = json.loads(r.read().decode() or "{}")
+        return melhores_gemini(corpo.get("models", [])) if provedor == "gemini" else {}
     except urllib.error.HTTPError as e:
         raise RuntimeError("a chave foi recusada" if e.code in (400, 401, 403) else f"a API respondeu {e.code}") from None
