@@ -18,6 +18,7 @@ const ICONES = {
   revisar: '<rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/>',
   biblioteca: '<path d="M4 4h4v16H4zM10 4h4v16h-4z"/><path d="m15.5 4.8 3.8-1 3.4 15.4-3.8 1z"/>',
   progresso: '<path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/>',
+  foco: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M10 2h4M12 2v3"/>',
   mais: '<path d="M12 5v14M5 12h14"/>',
   seta: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   voltar: '<path d="M19 12H5M11 18l-6-6 6-6"/>',

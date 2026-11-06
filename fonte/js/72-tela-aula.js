@@ -104,6 +104,7 @@ function passoFeito(el, a, tid, info) {
     <p>${feitos === tot ? `Você acertou <b>${ac} de ${tot}</b> no teste.` : `Você respondeu ${feitos} de ${tot} questões. Dá para registrar assim mesmo, ou voltar ao <a href="#aula-${tid}-teste">Teste</a>.`}</p>
     <p class="sub">Registrar guarda suas alternativas, o Lembre e o Feynman para a Revisão com IA conferir com o material e com fontes da internet.</p>
     <div class="row"><button class="btn pri" id="reg" ${s.registrada ? "disabled" : ""}>${ico("check")}Registrar respostas</button></div><div id="pos">${s.registrada ? pos() : ""}</div></article>
+    ${ultimoPlacar && ultimoPlacar.ref === tid && Date.now() - ultimoPlacar.fim < 6e5 ? `<article class="bloco placar-bloco">${placarHTML(ultimoPlacar)}</article>` : ""}
     <article class="bloco" id="curios"></article>
     ${a.fontes && a.fontes.length ? `<article class="bloco"><h3>Para ir além</h3><ul>${a.fontes.map(x => `<li>${esc(x)}</li>`).join("")}</ul></article>` : ""}</div>`;
   $("#reg").onclick = () => {

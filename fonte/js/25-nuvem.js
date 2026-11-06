@@ -7,7 +7,7 @@ async function enviarEstado() {
   if (!NUVEM) return;
   if (_enviando) { _pendente = true; return; }          /* já há um envio: reenvia ao terminar, para não perder a última mudança */
   _enviando = true;
-  try { await NUVEM.col.doc("estado").set({ json: JSON.stringify(st), t: st._t || Date.now() }); ultimoSync = new Date(); marcarSync(); }
+  try { await NUVEM.col.doc("estado").set({ json: JSON.stringify(st), t: st._t || Date.now() }); ultimoSync = new Date(); registrarSync(); marcarSync(); }
   catch (e) { marcarSync("Não consegui salvar na nuvem agora. Fica salvo neste aparelho e tento de novo."); }
   finally { _enviando = false; if (_pendente) { _pendente = false; enviarEstado(); } }
 }
@@ -20,7 +20,7 @@ async function puxarNuvem(forcar) {
     if (e && e.json && (forcar === "remoto" || (e.t || 0) > (st._t || 0))) { carregar(JSON.parse(e.json)); mudou = true; }
     else if (!e || (st._t || 0) > (e.t || 0)) await enviarEstado();
     if (await carregarBiblioteca()) mudou = true;
-    ultimoSync = new Date(); marcarSync();
+    ultimoSync = new Date(); registrarSync(); marcarSync();
   } catch (er) { marcarSync("Sem conexão com a nuvem agora."); }
   return mudou;
 }

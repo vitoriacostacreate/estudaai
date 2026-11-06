@@ -469,6 +469,49 @@ button.link { background: none; border: 0; padding: 0; cursor: pointer; text-dec
 button.link[disabled] { opacity: .45; cursor: not-allowed; }
 .outros-chats { font-size: 14px; display: inline-flex; gap: 6px; align-items: center; }
 
+/* ============ acrescentou.ai (78-tela-foco.js) ============ */
+.chip.foco { text-decoration: none; border-color: rgba(79, 207, 134, .35); color: var(--tx2); }
+.chip.foco b { color: var(--ok); }
+.chip.foco:hover { background: var(--s1); }
+.chip.foco.pausado { border-color: var(--line); opacity: .75; }
+.chip.foco.pausado b { color: var(--mu); }
+.anel { width: 15px; height: 15px; border-radius: 50%; flex: none; background: conic-gradient(var(--ok) var(--p), var(--line2) 0); -webkit-mask: radial-gradient(circle, transparent 4px, #000 4.5px); mask: radial-gradient(circle, transparent 4px, #000 4.5px); }
+.chip.foco.pausado .anel { background: conic-gradient(var(--mu2) var(--p), var(--line2) 0); }
+.foco-painel { display: grid; gap: 20px; justify-items: center; text-align: center; padding-block: 32px; --c: var(--ok); }
+.foco-num { display: flex; align-items: baseline; gap: 4px; font-family: var(--fd); font-weight: 800; color: var(--ok); font-variant-numeric: tabular-nums; flex-wrap: wrap; justify-content: center; }
+.foco-num .mais { font-size: 44px; opacity: .6; }
+.foco-num b { font-size: clamp(72px, 14vw, 112px); line-height: 1; }
+.foco-num small { flex-basis: 100%; font-family: var(--fb); font-size: 14px; font-weight: 600; color: var(--mu); }
+.foco-tempo { display: grid; gap: 8px; width: min(360px, 100%); }
+.foco-tempo > span:first-child { font-family: var(--fd); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--tx2); }
+.foco-tempo .sub { font-size: 13px; }
+.foco-painel .exp { display: flex; gap: 8px; align-items: center; text-align: left; max-width: 60ch; }
+.foco-painel .exp .i { color: var(--ok); }
+.btn.cat { border-color: var(--c-line); }
+.btn.cat.on { background: var(--c-soft); color: var(--c); border-color: var(--c); }
+.cat-pill { --c: var(--ac); background: var(--c-soft); color: var(--tx2); font-size: 13px; padding: 4px 6px 4px 9px; }
+.cat-pill .ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.cat-pill .x { border: 0; background: none; color: var(--mu); font-size: 16px; line-height: 1; padding: 0 3px; border-radius: 4px; }
+.cat-pill .x:hover { color: var(--bad); }
+.foco-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.foco-lista li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--r2); background: var(--s2); }
+.foco-lista li > div { flex: 1; display: grid; min-width: 0; }
+.foco-lista li .sub { font-size: 13px; }
+.foco-lista select { max-width: 45%; }
+.placar-in { display: grid; gap: 4px; justify-items: center; text-align: center; }
+.placar-num { font-family: var(--fd); font-size: 48px; font-weight: 800; line-height: 1.05; color: var(--ok); font-variant-numeric: tabular-nums; }
+.placar-num small { font-size: 16px; font-weight: 700; margin-left: 6px; color: var(--tx2); }
+.fc.vazio .placar-in { margin: 18px auto 0; padding: 14px 18px; border-radius: var(--r2); background: var(--s2); max-width: 360px; }
+.placar-bloco { border-color: rgba(79, 207, 134, .35); }
+.placar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 61; display: grid; gap: 6px; justify-items: center; padding: 16px 26px; min-width: 260px; border-radius: var(--r); background: var(--s2); border: 1px solid rgba(79, 207, 134, .4); box-shadow: 0 14px 40px rgba(0, 0, 0, .5); animation: placar-entra .35s ease-out; font: inherit; color: inherit; }
+.placar-rot { font-size: 13px; color: var(--mu); max-width: 40ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@keyframes placar-entra { from { opacity: 0; transform: translate(-50%, 12px) scale(.96); } }
+.chip.foco .t { font-variant-numeric: tabular-nums; }
+/* com o contador ligado, os outros chips mostram só o número (o texto fica para o leitor de tela e no title) */
+@media (max-width: 1400px) { .chipbar:has(.foco) .chip .l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+@media (max-width: 420px) { .chip.foco .t { display: none; } }
+@media (max-width: 720px) { .placar { bottom: 84px; } nav.tabs a { min-width: 52px; padding-inline: 4px; } .foco-lista select { max-width: 40%; } }
+
 </style>
 </head>
 <body>
@@ -1259,6 +1302,7 @@ const ICONES = {
   revisar: '<rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/>',
   biblioteca: '<path d="M4 4h4v16H4zM10 4h4v16h-4z"/><path d="m15.5 4.8 3.8-1 3.4 15.4-3.8 1z"/>',
   progresso: '<path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/>',
+  foco: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M10 2h4M12 2v3"/>',
   mais: '<path d="M12 5v14M5 12h14"/>',
   seta: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   voltar: '<path d="M19 12H5M11 18l-6-6 6-6"/>',
@@ -1322,6 +1366,7 @@ function carregar(doServidor) {
   try { st = doServidor && Object.keys(doServidor).length ? doServidor : (JSON.parse(localStorage.getItem(CHAVE)) || {}); } catch (e) { st = {}; }
   st.top ||= {}; st.cards ||= {}; st.dias ||= {}; st.temasUser ||= []; st.aulasUser ||= {}; st.notas ||= {};
   st.tentativas ||= []; st.duvidas ||= []; st.respostasIA ||= [];   /* revisão com IA e dúvidas (52-revisao-ia) */
+  st.foco ||= {}; st.foco.sessoes ||= []; st.foco.cats ||= []; st.foco.atual ||= null;   /* acrescentou.ai (45-foco, 78-tela-foco) */
   st.principal ||= "concurso"; st.novos ||= { data: "", n: 0 }; st.hoje ||= { data: "", feitos: [] };
   if (st.hoje.data !== hojeStr()) st.hoje = { data: hojeStr(), feitos: [] };
 }
@@ -1330,8 +1375,12 @@ function salvar() {
   st._t = Date.now();
   try { localStorage.setItem(CHAVE, JSON.stringify(st)); } catch (e) { }
   if (MODO === "nuvem") { clearTimeout(_salvarT); _salvarT = setTimeout(enviarEstado, 800); }
-  if (MODO === "local") { clearTimeout(_salvarT); _salvarT = setTimeout(() => api("/api/estado", { method: "PUT", ...json(st) }).catch(() => toast("Não consegui salvar no servidor. O estudaai ainda está rodando?")), 400); }
+  if (MODO === "local") { clearTimeout(_salvarT); _salvarT = setTimeout(() => api("/api/estado", { method: "PUT", ...json(st) }).then(registrarSync).catch(() => toast("Não consegui salvar no servidor. O estudaai ainda está rodando?")), 400); }
 }
+/* Data da última sincronização bem-sucedida (servidor local ou nuvem), guardada por aparelho. */
+const CHAVE_SYNC = "estudaai.sync";
+function registrarSync() { try { localStorage.setItem(CHAVE_SYNC, new Date().toISOString()); } catch (e) { } }
+function ultimaSync() { try { const v = localStorage.getItem(CHAVE_SYNC); return v ? new Date(v) : null; } catch (e) { return null; } }
 function marcarDia(pontos) { const d = hojeStr(); st.dias[d] = (st.dias[d] || 0) + pontos; }
 function marcarFeito(...ids) { for (const id of ids) if (!st.hoje.feitos.includes(id)) st.hoje.feitos.push(id); }
 
@@ -1349,7 +1398,7 @@ async function enviarEstado() {
   if (!NUVEM) return;
   if (_enviando) { _pendente = true; return; }          /* já há um envio: reenvia ao terminar, para não perder a última mudança */
   _enviando = true;
-  try { await NUVEM.col.doc("estado").set({ json: JSON.stringify(st), t: st._t || Date.now() }); ultimoSync = new Date(); marcarSync(); }
+  try { await NUVEM.col.doc("estado").set({ json: JSON.stringify(st), t: st._t || Date.now() }); ultimoSync = new Date(); registrarSync(); marcarSync(); }
   catch (e) { marcarSync("Não consegui salvar na nuvem agora. Fica salvo neste aparelho e tento de novo."); }
   finally { _enviando = false; if (_pendente) { _pendente = false; enviarEstado(); } }
 }
@@ -1362,7 +1411,7 @@ async function puxarNuvem(forcar) {
     if (e && e.json && (forcar === "remoto" || (e.t || 0) > (st._t || 0))) { carregar(JSON.parse(e.json)); mudou = true; }
     else if (!e || (st._t || 0) > (e.t || 0)) await enviarEstado();
     if (await carregarBiblioteca()) mudou = true;
-    ultimoSync = new Date(); marcarSync();
+    ultimoSync = new Date(); registrarSync(); marcarSync();
   } catch (er) { marcarSync("Sem conexão com a nuvem agora."); }
   return mudou;
 }
@@ -1564,6 +1613,51 @@ function responderCartao(c, nota) {
   const s = { S: r.S, D: r.D, int: r.int, n: ((ant && ant.n) || 0) + 1, lapsos: ((ant && ant.lapsos) || 0) + (g === 1 ? 1 : 0), ultima: hojeStr(), prox: addDias(r.int) };
   st.cards[c.id] = s; if (novo) st.novos.n++; marcarDia(.2); salvar();
 }
+
+/* ==== js/45-foco.js ==== */
+/* ============ acrescentou.ai: núcleo do contador de foco (sem DOM, testado em testes/foco.test.js) ============
+   O número só cresce: cada bloco FECHADO de foco vale +1 soma. O tempo total guarda todos os segundos, à parte.
+   Uma sessão: { tipo, ref, rotulo, cat, bloco (s), ini (ms), seg (s acumulados), desde (ms do trecho rodando, ou null se pausada), ultimo (ms do último sinal de atividade) }. */
+const FOCO = (() => {
+  const BLOCO = { aula: 20 * 60, cartoes: 20 * 60, ia: 20 * 60, manual: 30 * 60 };
+  const OCIOSO = 5 * 60;          /* atividades automáticas pausam depois de 5 min sem clique, tecla ou rolagem */
+  const MINIMO = 60;              /* sessões com menos de 1 min não entram no histórico */
+  const NOMES = { aula: "Aulas", cartoes: "Cartões", ia: "Revisão com IA", manual: "Foco livre" };
+  const dia = ms => { const d = new Date(ms); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+
+  const novo = (tipo, ref, rotulo, agora) => ({ tipo, ref: ref || null, rotulo: rotulo || NOMES[tipo] || "", cat: null, bloco: BLOCO[tipo] || BLOCO.manual, ini: agora, seg: 0, desde: agora, ultimo: agora });
+  const decorrido = (s, agora) => s.seg + (s.desde != null ? Math.max(0, agora - s.desde) / 1000 : 0);
+  function pausar(s, agora) { if (s.desde != null) { s.seg = decorrido(s, agora); s.desde = null; } return s; }
+  function retomar(s, agora) { if (s.desde == null) s.desde = agora; s.ultimo = agora; return s; }
+  /* Sinal de atividade (clique, tecla, rolagem). Se o último sinal foi há mais de 5 min, o intervalo não conta. */
+  function atividade(s, agora) {
+    if (s.desde != null && (agora - s.ultimo) / 1000 > OCIOSO) { pausar(s, s.ultimo); s.desde = agora; }
+    else if (s.desde == null) s.desde = agora;
+    s.ultimo = agora; return s;
+  }
+  /* Chamada a cada segundo nas atividades automáticas. Devolve true se acabou de pausar por ócio. */
+  function verificarOcio(s, agora) { if (s.desde != null && (agora - s.ultimo) / 1000 > OCIOSO) { pausar(s, s.ultimo); return true; } return false; }
+
+  function placar(seg, bloco) { seg = Math.floor(seg); return { seg, somas: Math.floor(seg / bloco), resto: seg % bloco, falta: bloco - seg % bloco, p: (seg % bloco) / bloco }; }
+  function encerrar(s, agora) {
+    pausar(s, agora); const p = placar(s.seg, s.bloco);
+    return { id: s.ini.toString(36) + Math.random().toString(36).slice(2, 5), tipo: s.tipo, ref: s.ref, rotulo: s.rotulo, cat: s.cat, tema: s.tema || null, dia: dia(s.ini), ini: s.ini, fim: agora, seg: p.seg, bloco: s.bloco, somas: p.somas };
+  }
+
+  /* Totais por dia, por tipo de atividade e por categoria. */
+  function resumo(regs) {
+    const r = { total: { seg: 0, somas: 0, n: 0 }, dia: {}, tipo: {}, cat: {}, tema: {} };
+    const soma = (o, k, x) => { if (k == null) return; const v = o[k] ||= { seg: 0, somas: 0, n: 0 }; v.seg += x.seg; v.somas += x.somas; v.n++; };
+    for (const x of regs) { r.total.seg += x.seg; r.total.somas += x.somas; r.total.n++; soma(r.dia, x.dia, x); soma(r.tipo, x.tipo, x); soma(r.cat, x.cat, x); soma(r.tema, x.tema, x); }
+    return r;
+  }
+
+  const dur = seg => { const m = Math.floor(seg / 60); return m < 60 ? m + " min" : Math.floor(m / 60) + " h " + String(m % 60).padStart(2, "0") + " min"; };
+  const relogio = seg => { seg = Math.floor(seg); const h = Math.floor(seg / 3600), m = Math.floor(seg / 60) % 60, s = seg % 60; return (h ? h + ":" + String(m).padStart(2, "0") : String(m).padStart(2, "0")) + ":" + String(s).padStart(2, "0"); };
+
+  return { BLOCO, OCIOSO, MINIMO, NOMES, dia, novo, decorrido, pausar, retomar, atividade, verificarOcio, placar, encerrar, resumo, dur, relogio };
+})();
+if (typeof module !== "undefined") module.exports = FOCO;
 
 /* ==== js/50-ia.js ==== */
 /* ============ IA: pedido, geração, validação e importação de aulas ============ */
@@ -1879,7 +1973,7 @@ async function copiarTexto(txt) {
 /* ==== js/60-roteador.js ==== */
 /* ============ roteador ============ */
 /* Abas do topo (no celular viram a barra de baixo). "Novo tema" é uma ação dentro de Temas, não uma aba. */
-const ROTAS = [["inicio", "Início"], ["temas", "Temas"], ["revisar", "Revisar"], ["biblioteca", "Biblioteca"], ["progresso", "Progresso"]];
+const ROTAS = [["inicio", "Início"], ["temas", "Temas"], ["revisar", "Revisar"], ["biblioteca", "Biblioteca"], ["foco", "Foco"], ["progresso", "Progresso"]];
 const abaDaRota = r => r.startsWith("tema-") || r.startsWith("aula-") || r === "novo" ? "temas" : (ROTAS.find(([id]) => r.startsWith(id)) || ["inicio"])[0];
 function topo(rota) {
   const fila = filaCartoes("todos").length; const aba = abaDaRota(rota);
@@ -1888,18 +1982,18 @@ function topo(rota) {
   const prova = diasAte("2027-01-17");
   $("#chips").innerHTML = (prova >= 0 ? `<span class="chip" title="Prova da UFMS em 17/01/2027">${ico("calendario")}<b>${prova}</b><span class="l">dias para a prova</span></span>` : "")
     + `<span class="chip ${seq ? "quente" : ""}" title="Dias seguidos com estudo">${ico("chama")}<b>${seq}</b><span class="l">${seq === 1 ? "dia seguido" : "dias seguidos"}</span></span>`
-    + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "");
+    + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + chipFoco();
   if (MODO === "nuvem") marcarSync();
 }
 function rotear() {
   pararAudio();
   const h = (location.hash || "#inicio").slice(1);
-  topo(h); window.scrollTo(0, 0);
+  focoRota(h); topo(h); window.scrollTo(0, 0);
   const app = $("#app");
   if (h.startsWith("tema-")) return telaTema(app, h.slice(5));
   if (h === "ia" || h === "ia-duvidas") return telaIA(app, h === "ia-duvidas");
   if (h.startsWith("aula-")) { const resto = h.slice(5); const m = resto.match(/^(.*?)(?:-(mapa|lembre|aprenda|pratique|teste|explique|feito))?$/); return telaAula(app, m[1], m[2] || "mapa"); }
-  ({ temas: telaTemas, biblioteca: telaBiblioteca, revisar: telaRevisar, novo: telaNovo, progresso: telaProgresso }[h] || telaInicio)(app);
+  ({ temas: telaTemas, biblioteca: telaBiblioteca, revisar: telaRevisar, novo: telaNovo, progresso: telaProgresso, foco: telaFoco }[h] || telaInicio)(app);
 }
 window.addEventListener("hashchange", rotear);
 function rodape() {
@@ -2147,6 +2241,7 @@ function passoFeito(el, a, tid, info) {
     <p>${feitos === tot ? `Você acertou <b>${ac} de ${tot}</b> no teste.` : `Você respondeu ${feitos} de ${tot} questões. Dá para registrar assim mesmo, ou voltar ao <a href="#aula-${tid}-teste">Teste</a>.`}</p>
     <p class="sub">Registrar guarda suas alternativas, o Lembre e o Feynman para a Revisão com IA conferir com o material e com fontes da internet.</p>
     <div class="row"><button class="btn pri" id="reg" ${s.registrada ? "disabled" : ""}>${ico("check")}Registrar respostas</button></div><div id="pos">${s.registrada ? pos() : ""}</div></article>
+    ${ultimoPlacar && ultimoPlacar.ref === tid && Date.now() - ultimoPlacar.fim < 6e5 ? `<article class="bloco placar-bloco">${placarHTML(ultimoPlacar)}</article>` : ""}
     <article class="bloco" id="curios"></article>
     ${a.fontes && a.fontes.length ? `<article class="bloco"><h3>Para ir além</h3><ul>${a.fontes.map(x => `<li>${esc(x)}</li>`).join("")}</ul></article>` : ""}</div>`;
   $("#reg").onclick = () => {
@@ -2173,7 +2268,7 @@ let filaAtual = [], cartaoIdx = 0, mostrando = false;
 function telaRevisar(app) {
   const filtro = st.filtroRev || "todos";
   const temasComCards = todosTemas().filter(t => CARDS.some(c => c.tema === t.id));
-  filaAtual = shuffle(filaCartoes(filtro)); cartaoIdx = 0; mostrando = false;
+  filaAtual = shuffle(filaCartoes(filtro)); cartaoIdx = 0; mostrando = false; focoRota("revisar");
   app.innerHTML = `<header class="cab"><div><h1>Revisão</h1><p class="sub">Responda de cabeça, vire o cartão e avalie com sinceridade. Até ${NOVOS_DIA} cartões novos por dia.</p></div>
     <div class="campo"><label for="filtro">Tema</label><select id="filtro"><option value="todos">Todos os temas</option>${temasComCards.map(t => `<option value="${t.id}" ${t.id === filtro ? "selected" : ""}>${esc(t.nome)}</option>`).join("")}</select></div></header>
     <section id="fcbox" class="revisao"></section>`;
@@ -2187,7 +2282,8 @@ function telaRevisar(app) {
 }
 function desenharCartao() {
   const box = $("#fcbox"); const c = filaAtual[cartaoIdx];
-  if (!c) { box.innerHTML = `<div class="fc vazio"><div><span class="ico-t lg" style="--c:var(--ok)">${ico("festa")}</span><h2>Tudo revisado por hoje</h2><p class="sub">Volte amanhã: o estudaai traz cada cartão no momento certo.</p><a class="btn pri" href="#inicio">Próximo passo do dia${ico("seta")}</a></div></div>`; if (filaAtual.length) { marcarFeito("cartoes"); salvar(); } topo("revisar"); return; }
+  if (!c) { const pl = focoAuto && focoAuto.tipo === "cartoes" ? fecharAuto(false) : null;
+    box.innerHTML = `<div class="fc vazio"><div><span class="ico-t lg" style="--c:var(--ok)">${ico("festa")}</span><h2>Tudo revisado por hoje</h2><p class="sub">Volte amanhã: o estudaai traz cada cartão no momento certo.</p>${pl ? placarHTML(pl) : ""}<a class="btn pri" href="#inicio">Próximo passo do dia${ico("seta")}</a></div></div>`; if (filaAtual.length) { marcarFeito("cartoes"); salvar(); } topo("revisar"); return; }
   const t = tema(c.tema);
   const NOTAS = [["Errei", "de novo hoje", "var(--bad)"], ["Difícil", prevIntervalo(c, 1), "var(--warn)"], ["Bom", prevIntervalo(c, 2), "var(--ac)"], ["Fácil", prevIntervalo(c, 3), "var(--ok)"]];
   box.innerHTML = `<div class="sessao"><div class="bar fino"><i style="width:${cartaoIdx / filaAtual.length * 100}%"></i></div><span class="sub">${cartaoIdx + 1} de ${filaAtual.length}</span></div>
@@ -2297,6 +2393,7 @@ function telaProgresso(app) {
     <div class="cal-leg" aria-hidden="true">Menos<span class="cal"><i></i><i class="l1"></i><i class="l2"></i><i class="l3"></i></span>Mais</div></section>
     <section class="card grid" style="gap:14px"><h3>Por tema</h3>${todosTemas().map(t => { const p = progressoTema(t); const tops = topicos(t).map(x => st.top[x.id]).filter(Boolean); const ac = tops.reduce((s, x) => s + x.ac, 0), tot = tops.reduce((s, x) => s + x.tot, 0);
       return `<div style="--c:${t.cor}"><div class="row entre"><span class="row">${iconeTema(t, "sm")}<b>${esc(t.nome)}</b></span><span class="sub" style="font-variant-numeric:tabular-nums">${p.v}/${p.n} tópicos · acerto ${tot ? Math.round(100 * ac / tot) + "%" : "—"}</span></div><div class="bar"><i style="width:${p.p * 100}%"></i></div></div>`; }).join("")}</section>
+    ${secaoFocoProgresso()}
     ${MODO === "nuvem" ? `<section class="card grid" style="gap:10px"><h3>${ico("nuvem")} Sincronização entre aparelhos</h3><p class="sub">O progresso é salvo sozinho na sua conta poucos segundos depois de cada ação, e é puxado quando você volta para a página. Para forçar: <b>Sincronizar agora</b> pega a versão mais recente (deste aparelho ou da nuvem). <b>Usar a versão da nuvem</b> descarta o que estiver só neste aparelho.</p><div class="row"><button class="btn pri" id="sincr">Sincronizar agora</button><button class="btn ghost" id="remoto">Usar a versão da nuvem</button><span class="sub" id="sstat">${ultimoSync ? "Última sincronização: " + ultimoSync.toLocaleTimeString("pt-BR") : ""}</span></div></section>` : ""}
     <section class="card grid g2"><div class="grid" style="gap:10px"><h3>Backup</h3><p class="sub">Seu progresso fica neste navegador. Copie o backup e guarde no Google Drive ou no Obsidian. Para restaurar, cole ao lado.</p><div class="row"><button class="btn pri" id="exp">Copiar backup</button></div><textarea id="exptxt" readonly style="min-height:90px" placeholder="O backup aparece aqui"></textarea></div>
     <div class="grid" style="gap:10px"><h3>Restaurar</h3><textarea id="imptxt" style="min-height:130px" placeholder="Cole aqui um backup do estudaai"></textarea><div class="row"><button class="btn" id="imp">Restaurar backup</button></div></div></section>`;
@@ -2375,6 +2472,183 @@ function telaIA(app, focoDuvidas) {
   $("#add-duv").onclick = add; $("#nova-duv").onkeydown = e => { if (e.key === "Enter") add(); };
   if ($("#duv-enviadas")) $("#duv-enviadas").onclick = () => { duv.forEach(d => d.enviada = hojeStr()); salvar(); toast("Lista limpa. Boa pesquisa!"); telaIA(app, true); };
   if (focoDuvidas) { $("#duvidas").scrollIntoView({ block: "start" }); $("#nova-duv").focus({ preventScroll: true }); }
+}
+
+/* ==== js/78-tela-foco.js ==== */
+/* ============ acrescentou.ai: contador de foco ============
+   Automático: aula, revisão de cartões e revisão com IA (blocos de 20 min). Fica só na memória deste aparelho,
+   com um "pulso" no localStorage para sobreviver a um recarregar. Pausa com a aba escondida ou 5 min sem atividade.
+   Manual: aba Foco (blocos de 30 min), em st.foco.atual, para seguir entre aparelhos. Não pausa sozinho. */
+const PULSO = "estudaai.foco.auto";
+let focoAuto = null, ultimoPlacar = null, _pulsoLido = false;
+
+function atividadeDaRota(h) {
+  if (h.startsWith("aula-")) { const m = h.slice(5).match(/^(.*?)(?:-(mapa|lembre|aprenda|pratique|teste|explique|feito))?$/); const a = aula(m[1]); const info = acharTopico(m[1]);
+    return a ? { tipo: "aula", ref: m[1], rotulo: a.titulo, tema: info ? info.tema.id : null, fim: m[2] === "feito" } : null; }
+  if (h === "revisar") return { tipo: "cartoes", ref: "cartoes", rotulo: "Revisão de cartões" };
+  if (h === "ia") return { tipo: "ia", ref: "ia", rotulo: "Revisão com IA" };
+  return null;
+}
+const sessaoFoco = () => st.foco.atual || focoAuto;
+
+/* Guarda a sessão no histórico (se passou de 1 min) e devolve o registro. */
+function guardarSessao(s, agora) {
+  const r = FOCO.encerrar(s, agora);
+  if (r.seg < FOCO.MINIMO) return null;
+  st.foco.sessoes.push(r); salvar(); return r;
+}
+function fecharAuto(mostrar) {
+  if (!focoAuto) return null;
+  const r = guardarSessao(focoAuto, Date.now()); focoAuto = null; localStorage.removeItem(PULSO);
+  if (r) { ultimoPlacar = r; if (mostrar) mostrarPlacar(r); }
+  return r;
+}
+/* Chamada pelo roteador antes de desenhar cada tela. */
+function focoRota(h) {
+  const alvo = atividadeDaRota(h);
+  if (!_pulsoLido) { _pulsoLido = true; lerPulso(alvo); }
+  if (focoAuto && (!alvo || alvo.tipo !== focoAuto.tipo || alvo.ref !== focoAuto.ref || alvo.fim)) fecharAuto(!(alvo && alvo.fim));
+  if (alvo && !alvo.fim && !focoAuto && !st.foco.atual) { focoAuto = FOCO.novo(alvo.tipo, alvo.ref, alvo.rotulo, Date.now()); focoAuto.tema = alvo.tema || null; pulsar(); }
+}
+/* Recarregou a página: retoma a sessão automática se for a mesma atividade e o pulso for recente; se não, guarda o que tinha. */
+function lerPulso(alvo) {
+  let p = null; try { p = JSON.parse(localStorage.getItem(PULSO)); } catch (e) { } localStorage.removeItem(PULSO);
+  if (!p || !p.s) return;
+  FOCO.pausar(p.s, Math.min(Date.now(), p.t));
+  if (alvo && !alvo.fim && alvo.tipo === p.s.tipo && alvo.ref === p.s.ref && Date.now() - p.t < FOCO.OCIOSO * 1000) { focoAuto = FOCO.retomar(p.s, Date.now()); return; }
+  const r = guardarSessao(p.s, p.t); if (r) ultimoPlacar = r;
+}
+function pulsar() { if (focoAuto) try { localStorage.setItem(PULSO, JSON.stringify({ s: focoAuto, t: Date.now() })); } catch (e) { } }
+
+/* ---------- sinais de atividade, aba escondida e o relógio de 1 s ---------- */
+let _ultSinal = 0;
+function sinal() { const agora = Date.now(); if (!focoAuto || document.hidden || agora - _ultSinal < 1000) return; _ultSinal = agora; const pausada = focoAuto.desde == null; FOCO.atividade(focoAuto, agora); if (pausada) atualizarFoco(); }
+["pointerdown", "pointermove", "keydown", "wheel", "touchstart", "scroll"].forEach(ev => window.addEventListener(ev, sinal, { passive: true, capture: true }));
+document.addEventListener("visibilitychange", () => {
+  if (!focoAuto) return;
+  if (document.hidden) { FOCO.pausar(focoAuto, Date.now()); pulsar(); } else FOCO.retomar(focoAuto, Date.now());
+  atualizarFoco();
+});
+window.addEventListener("pagehide", pulsar);
+let _tique = 0;
+setInterval(() => {
+  if (!st) return;
+  if (focoAuto && FOCO.verificarOcio(focoAuto, Date.now())) toast("acrescentou.ai pausado: 5 min sem atividade. Mexa na tela para continuar.");
+  if (focoAuto && ++_tique % 5 === 0) pulsar();
+  atualizarFoco();
+}, 1000);
+
+/* ---------- chip no topo ---------- */
+function chipFoco() {
+  const s = sessaoFoco(); if (!s) return "";
+  return `<a class="chip foco ${s.desde == null ? "pausado" : ""}" id="foco-chip" href="#foco" title="acrescentou.ai: ${esc(s.rotulo)}${s.desde == null ? " (pausado)" : ""}">${conteudoChip(s)}</a>`;
+}
+function conteudoChip(s) { const p = FOCO.placar(FOCO.decorrido(s, Date.now()), s.bloco); return `<i class="anel" style="--p:${(p.p * 100).toFixed(1)}%" aria-hidden="true"></i><b>+${p.somas}</b><span class="t">${FOCO.relogio(p.seg)}</span>`; }
+function atualizarFoco() {
+  const c = document.getElementById("foco-chip"), s = sessaoFoco();
+  if (!!c !== !!s) { topo((location.hash || "#inicio").slice(1)); }
+  else if (c) { c.innerHTML = conteudoChip(s); c.classList.toggle("pausado", s.desde == null); }
+  if (location.hash === "#foco") painelFoco();
+}
+
+/* ---------- placar ---------- */
+function textoPlacar(r) {
+  const p = FOCO.placar(r.seg, r.bloco), bl = Math.round(r.bloco / 60);
+  return p.somas ? `${FOCO.dur(r.seg)} de foco · ${Math.floor(p.resto / 60)} min rumo à próxima soma` : `Faltaram ${Math.ceil(p.falta / 60)} min para a primeira soma (blocos de ${bl} min)`;
+}
+function placarHTML(r) {
+  if (!r) return "";
+  const num = r.somas ? `+${r.somas}<small>${r.somas === 1 ? "soma" : "somas"}</small>` : `${Math.floor(r.seg / 60)}<small>min guardados</small>`;   /* sem bloco fechado: o tempo é o destaque, nunca um "+0" */
+  return `<div class="placar-in" style="--c:var(--ok)"><span class="eyebrow">acrescentou.ai</span><div class="placar-num">${num}</div><p class="sub">${textoPlacar(r)}</p></div>`;
+}
+function mostrarPlacar(r) {
+  document.querySelectorAll(".placar").forEach(x => x.remove());
+  const d = document.createElement("button"); d.className = "placar"; d.setAttribute("aria-live", "polite"); d.title = "Fechar";
+  d.innerHTML = placarHTML(r) + `<span class="placar-rot">${esc(r.rotulo)}</span>`;
+  d.onclick = () => d.remove(); document.body.appendChild(d); setTimeout(() => d.remove(), 6000);
+}
+
+/* ---------- tela Foco ---------- */
+const nomeCat = id => { const c = st.foco.cats.find(x => x.id === id); return c ? c.nome : "Sem categoria"; };
+const catsAtivas = () => st.foco.cats.filter(c => !c.off);
+function telaFoco(app) {
+  app.innerHTML = `<header class="cab"><div><h1>acrescentou.ai</h1><p class="sub">Seu foco vira pontos e o número só cresce. Cada <b>30 min</b> fechados aqui valem <b>+1 soma</b>. Nas aulas e revisões ele roda sozinho, com blocos de 20 min.</p></div></header>
+    <section class="card foco-painel" id="fpainel"></section>
+    <section class="card grid" style="gap:12px" id="fhoje"></section>
+    <section class="card grid" style="gap:12px"><div><h3>Suas categorias</h3><p class="sub">Crie as opções uma vez. Depois é só tocar para marcar cada sessão.</p></div>
+      <div class="row" id="fcats"></div>
+      <form class="row" id="fnova"><label for="fcat" class="sr">Nova categoria</label><input id="fcat" maxlength="30" placeholder="Ex.: Violão, Livro de anatomia, Inglês" style="flex:1;min-width:200px"><button class="btn">${ico("mais")}Criar</button></form></section>`;
+  $("#fnova").onsubmit = e => { e.preventDefault(); const nome = $("#fcat").value.trim(); if (!nome) return;
+    const ja = st.foco.cats.find(c => c.nome.toLowerCase() === nome.toLowerCase()); if (ja) ja.off = false; else st.foco.cats.push({ id: slug(nome, 24) + "-" + sufixo(3), nome, cor: CORES[st.foco.cats.length % CORES.length] });
+    salvar(); $("#fcat").value = ""; desenharFoco(); };
+  desenharFoco();
+}
+function desenharFoco() { painelFoco(true); listaHoje(); listaCats(); }
+let _painelChave = "";
+function painelFoco(forcar) {
+  const el = $("#fpainel"); if (!el) return;
+  const s = sessaoFoco(), auto = !!focoAuto, manual = st.foco.atual;
+  const chave = (s ? s.tipo + s.ref + (s.desde == null) + s.cat : "nada") + catsAtivas().length;
+  const hoje = FOCO.resumo(st.foco.sessoes.filter(x => x.dia === hojeStr())).total;
+  if (forcar || chave !== _painelChave) {
+    _painelChave = chave;
+    el.innerHTML = `<div class="foco-num" aria-live="off"><span class="mais">+</span><b id="fsomas"></b><small id="frot"></small></div>
+      <div class="foco-tempo"><span id="frel"></span><div class="bar"><i id="fbar"></i></div><span class="sub" id="ffalta"></span></div>
+      ${auto ? `<p class="exp">${ico("play")}<span>Rodando sozinho: <b>${esc(focoAuto.rotulo)}</b>${focoAuto.desde == null ? " (pausado, mexa na tela para continuar)" : ""}. Ele encerra quando você sair da atividade.</span></p>`
+        : `<div class="row centro">${!manual ? `<button class="btn pri lg" id="fini">${ico("play")}Começar a contar</button>`
+          : `${manual.desde == null ? `<button class="btn pri lg" id="fret">${ico("play")}Continuar</button>` : `<button class="btn lg" id="fpau">Pausar</button>`}<button class="btn ghost lg" id="ffim">${ico("check")}Encerrar e guardar</button>`}</div>
+          <div class="grid" style="gap:8px"><span class="eyebrow">O que você está estudando?</span><div class="row centro" id="fesc">${catsAtivas().length ? catsAtivas().map(c => `<button class="btn sm cat ${(manual ? manual.cat : st.foco.ultimaCat) === c.id ? "on" : ""}" data-cat="${c.id}" style="--c:${c.cor}" aria-pressed="${(manual ? manual.cat : st.foco.ultimaCat) === c.id}">${esc(c.nome)}</button>`).join("") : `<span class="sub">Crie suas categorias logo abaixo. Dá para marcar depois também.</span>`}</div></div>`}`;
+    if ($("#fini")) $("#fini").onclick = () => { st.foco.atual = FOCO.novo("manual", null, "Foco livre", Date.now()); st.foco.atual.cat = st.foco.ultimaCat || null; salvar(); topo("foco"); desenharFoco(); };
+    if ($("#fpau")) $("#fpau").onclick = () => { FOCO.pausar(st.foco.atual, Date.now()); salvar(); painelFoco(true); atualizarFoco(); };
+    if ($("#fret")) $("#fret").onclick = () => { FOCO.retomar(st.foco.atual, Date.now()); salvar(); painelFoco(true); atualizarFoco(); };
+    if ($("#ffim")) $("#ffim").onclick = () => { const s2 = st.foco.atual; st.foco.atual = null; const r = guardarSessao(s2, Date.now()); salvar(); topo("foco"); desenharFoco();
+      if (r) mostrarPlacar(r); else toast("Menos de 1 minuto: essa sessão não foi guardada."); };
+    el.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => { const id = b.dataset.cat; const novo = (manual ? manual.cat : st.foco.ultimaCat) === id ? null : id;
+      st.foco.ultimaCat = novo; if (manual) manual.cat = novo; salvar(); painelFoco(true); });
+  }
+  /* números que mudam a cada segundo */
+  if (s) { const p = FOCO.placar(FOCO.decorrido(s, Date.now()), s.bloco);
+    $("#fsomas").textContent = p.somas; $("#frot").textContent = p.somas === 1 ? "soma nesta sessão" : "somas nesta sessão";
+    $("#frel").textContent = FOCO.relogio(p.seg); $("#fbar").style.width = (p.p * 100) + "%";
+    $("#ffalta").textContent = s.desde == null ? "pausado" : `faltam ${Math.ceil(p.falta / 60)} min para a próxima soma`; }
+  else { $("#fsomas").textContent = hoje.somas; $("#frot").textContent = hoje.somas === 1 ? "soma hoje" : "somas hoje";
+    $("#frel").textContent = FOCO.dur(hoje.seg) + " hoje"; $("#fbar").style.width = "0"; $("#ffalta").textContent = "Aperte começar quando for estudar algo fora do app."; }
+}
+function listaHoje() {
+  const el = $("#fhoje"); if (!el) return;
+  const regs = st.foco.sessoes.filter(x => x.dia === hojeStr()).slice().reverse(); const t = FOCO.resumo(regs).total;
+  const hora = ms => new Date(ms).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  el.innerHTML = `<div class="row entre"><h3>Hoje</h3><span class="sub" style="font-variant-numeric:tabular-nums"><b style="color:var(--ok)">+${t.somas}</b> ${t.somas === 1 ? "soma" : "somas"} · ${FOCO.dur(t.seg)}</span></div>
+    ${regs.length ? `<ul class="foco-lista">${regs.map(r => `<li><span class="pill ${r.somas ? "ok" : ""}">+${r.somas}</span><div><b>${esc(r.tipo === "manual" ? nomeCat(r.cat) : r.rotulo)}</b><span class="sub">${FOCO.NOMES[r.tipo]} · ${hora(r.ini)} · ${FOCO.dur(r.seg)}</span></div>
+      ${r.tipo === "manual" ? `<label class="sr" for="c-${r.id}">Categoria</label><select id="c-${r.id}" data-reg="${r.id}"><option value="">Sem categoria</option>${st.foco.cats.filter(c => !c.off || c.id === r.cat).map(c => `<option value="${c.id}" ${c.id === r.cat ? "selected" : ""}>${esc(c.nome)}</option>`).join("")}</select>` : ""}</li>`).join("")}</ul>`
+      : `<p class="sub">Nada ainda hoje. A primeira soma chega com 20 min de aula ou 30 min aqui.</p>`}`;
+  el.querySelectorAll("[data-reg]").forEach(sel => sel.onchange = () => { const r = st.foco.sessoes.find(x => x.id === sel.dataset.reg); r.cat = sel.value || null; salvar(); listaHoje(); });
+}
+function listaCats() {
+  const el = $("#fcats"); if (!el) return; const cs = catsAtivas();
+  el.innerHTML = cs.length ? cs.map(c => `<span class="pill cat-pill" style="--c:${c.cor}"><i class="ponto"></i>${esc(c.nome)}<button class="x" data-off="${c.id}" aria-label="Remover ${esc(c.nome)}">×</button></span>`).join("") : `<span class="sub">Nenhuma categoria ainda.</span>`;
+  el.querySelectorAll("[data-off]").forEach(b => b.onclick = () => { const c = st.foco.cats.find(x => x.id === b.dataset.off); c.off = true; if (st.foco.ultimaCat === c.id) st.foco.ultimaCat = null; salvar(); desenharFoco(); toast(`"${c.nome}" removida. As sessões antigas continuam com ela.`); });
+}
+
+/* ---------- bloco da tela Progresso ---------- */
+function secaoFocoProgresso() {
+  const regs = st.foco.sessoes; const r = FOCO.resumo(regs);
+  const semana = []; for (let i = 6; i >= 0; i--) semana.push(addDias(-i));
+  const s7 = semana.reduce((a, d) => a + ((r.dia[d] || {}).somas || 0), 0);
+  const sy = ultimaSync();
+  const syncTxt = MODO === "arquivo" ? "Modo arquivo: não sincroniza, o progresso fica só neste navegador."
+    : sy ? `Última sincronização: <b>${sy.toLocaleDateString("pt-BR")} às ${sy.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</b>` : "Ainda não sincronizou neste aparelho.";
+  const barras = (obj, nome, cor) => { const ks = Object.keys(obj).sort((a, b) => obj[b].seg - obj[a].seg); const max = Math.max(1, ...ks.map(k => obj[k].seg));
+    return ks.length ? ks.map(k => `<div style="--c:${cor(k)}"><div class="row entre"><b>${esc(nome(k))}</b><span class="sub" style="font-variant-numeric:tabular-nums">+${obj[k].somas} · ${FOCO.dur(obj[k].seg)}</span></div><div class="bar"><i style="width:${obj[k].seg / max * 100}%"></i></div></div>`).join("") : `<p class="sub">Sem dados ainda.</p>`; };
+  const manuais = FOCO.resumo(regs.filter(x => x.tipo === "manual")).cat;
+  const semCat = regs.filter(x => x.tipo === "manual" && !x.cat); if (semCat.length) manuais["__sem"] = FOCO.resumo(semCat).total;
+  const corCat = k => (st.foco.cats.find(c => c.id === k) || {}).cor || "var(--mu2)";
+  const COR_TIPO = { aula: "var(--ac)", cartoes: "var(--teal)", ia: "#a98bf0", manual: "var(--ok)" };
+  return `<section class="card grid" style="gap:16px"><div class="row entre"><h3>${ico("foco")} acrescentou.ai</h3><a class="link" href="#foco">Abrir o contador ${ico("dir")}</a></div>
+    <div class="grid g3"><div class="bloco"><div class="grande" style="--c:var(--ok)">+${r.total.somas}</div><span class="sub">somas no total</span></div><div class="bloco"><div class="grande" style="--c:var(--teal)">${FOCO.dur(r.total.seg)}</div><span class="sub">de foco registrado</span></div><div class="bloco"><div class="grande" style="--c:var(--warn)">+${s7}</div><span class="sub">somas nos últimos 7 dias</span></div></div>
+    <div class="grid g2" style="gap:22px"><div class="grid" style="gap:12px"><h3>Por atividade</h3>${barras(r.tipo, k => FOCO.NOMES[k] || k, k => COR_TIPO[k] || "var(--ac)")}</div>
+    <div class="grid" style="gap:12px"><h3>Foco livre por categoria</h3>${barras(manuais, k => k === "__sem" ? "Sem categoria" : nomeCat(k), corCat)}</div></div>
+    <p class="sub">${ico("nuvem")} ${syncTxt}</p></section>`;
 }
 
 /* ==== js/81-audio.js ==== */
@@ -2573,7 +2847,7 @@ function wMetronomo(box) {
 (async function iniciar() {
   let doServ = null;
   const naNuvem = window.claude && typeof window.claude.use === "function";
-  if (location.protocol !== "file:" && !naNuvem) { try { INFO = await api("/api/info"); doServ = await api("/api/estado"); MODO = "local"; } catch (e) { } }
+  if (location.protocol !== "file:" && !naNuvem) { try { INFO = await api("/api/info"); doServ = await api("/api/estado"); MODO = "local"; registrarSync(); } catch (e) { } }
   carregar(doServ);
   if (MODO === "local") {
     if (!doServ.top) { try { const loc = JSON.parse(localStorage.getItem(CHAVE)); if (loc && loc.top) carregar(loc); } catch (e) { } salvar(); }

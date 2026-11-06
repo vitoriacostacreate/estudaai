@@ -3,7 +3,7 @@ let filaAtual = [], cartaoIdx = 0, mostrando = false;
 function telaRevisar(app) {
   const filtro = st.filtroRev || "todos";
   const temasComCards = todosTemas().filter(t => CARDS.some(c => c.tema === t.id));
-  filaAtual = shuffle(filaCartoes(filtro)); cartaoIdx = 0; mostrando = false;
+  filaAtual = shuffle(filaCartoes(filtro)); cartaoIdx = 0; mostrando = false; focoRota("revisar");
   app.innerHTML = `<header class="cab"><div><h1>Revisão</h1><p class="sub">Responda de cabeça, vire o cartão e avalie com sinceridade. Até ${NOVOS_DIA} cartões novos por dia.</p></div>
     <div class="campo"><label for="filtro">Tema</label><select id="filtro"><option value="todos">Todos os temas</option>${temasComCards.map(t => `<option value="${t.id}" ${t.id === filtro ? "selected" : ""}>${esc(t.nome)}</option>`).join("")}</select></div></header>
     <section id="fcbox" class="revisao"></section>`;
@@ -17,7 +17,8 @@ function telaRevisar(app) {
 }
 function desenharCartao() {
   const box = $("#fcbox"); const c = filaAtual[cartaoIdx];
-  if (!c) { box.innerHTML = `<div class="fc vazio"><div><span class="ico-t lg" style="--c:var(--ok)">${ico("festa")}</span><h2>Tudo revisado por hoje</h2><p class="sub">Volte amanhã: o estudaai traz cada cartão no momento certo.</p><a class="btn pri" href="#inicio">Próximo passo do dia${ico("seta")}</a></div></div>`; if (filaAtual.length) { marcarFeito("cartoes"); salvar(); } topo("revisar"); return; }
+  if (!c) { const pl = focoAuto && focoAuto.tipo === "cartoes" ? fecharAuto(false) : null;
+    box.innerHTML = `<div class="fc vazio"><div><span class="ico-t lg" style="--c:var(--ok)">${ico("festa")}</span><h2>Tudo revisado por hoje</h2><p class="sub">Volte amanhã: o estudaai traz cada cartão no momento certo.</p>${pl ? placarHTML(pl) : ""}<a class="btn pri" href="#inicio">Próximo passo do dia${ico("seta")}</a></div></div>`; if (filaAtual.length) { marcarFeito("cartoes"); salvar(); } topo("revisar"); return; }
   const t = tema(c.tema);
   const NOTAS = [["Errei", "de novo hoje", "var(--bad)"], ["Difícil", prevIntervalo(c, 1), "var(--warn)"], ["Bom", prevIntervalo(c, 2), "var(--ac)"], ["Fácil", prevIntervalo(c, 3), "var(--ok)"]];
   box.innerHTML = `<div class="sessao"><div class="bar fino"><i style="width:${cartaoIdx / filaAtual.length * 100}%"></i></div><span class="sub">${cartaoIdx + 1} de ${filaAtual.length}</span></div>

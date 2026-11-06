@@ -459,3 +459,46 @@ details.resp-ia[open] { display: grid; gap: 14px; }
 button.link { background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 button.link[disabled] { opacity: .45; cursor: not-allowed; }
 .outros-chats { font-size: 14px; display: inline-flex; gap: 6px; align-items: center; }
+
+/* ============ acrescentou.ai (78-tela-foco.js) ============ */
+.chip.foco { text-decoration: none; border-color: rgba(79, 207, 134, .35); color: var(--tx2); }
+.chip.foco b { color: var(--ok); }
+.chip.foco:hover { background: var(--s1); }
+.chip.foco.pausado { border-color: var(--line); opacity: .75; }
+.chip.foco.pausado b { color: var(--mu); }
+.anel { width: 15px; height: 15px; border-radius: 50%; flex: none; background: conic-gradient(var(--ok) var(--p), var(--line2) 0); -webkit-mask: radial-gradient(circle, transparent 4px, #000 4.5px); mask: radial-gradient(circle, transparent 4px, #000 4.5px); }
+.chip.foco.pausado .anel { background: conic-gradient(var(--mu2) var(--p), var(--line2) 0); }
+.foco-painel { display: grid; gap: 20px; justify-items: center; text-align: center; padding-block: 32px; --c: var(--ok); }
+.foco-num { display: flex; align-items: baseline; gap: 4px; font-family: var(--fd); font-weight: 800; color: var(--ok); font-variant-numeric: tabular-nums; flex-wrap: wrap; justify-content: center; }
+.foco-num .mais { font-size: 44px; opacity: .6; }
+.foco-num b { font-size: clamp(72px, 14vw, 112px); line-height: 1; }
+.foco-num small { flex-basis: 100%; font-family: var(--fb); font-size: 14px; font-weight: 600; color: var(--mu); }
+.foco-tempo { display: grid; gap: 8px; width: min(360px, 100%); }
+.foco-tempo > span:first-child { font-family: var(--fd); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--tx2); }
+.foco-tempo .sub { font-size: 13px; }
+.foco-painel .exp { display: flex; gap: 8px; align-items: center; text-align: left; max-width: 60ch; }
+.foco-painel .exp .i { color: var(--ok); }
+.btn.cat { border-color: var(--c-line); }
+.btn.cat.on { background: var(--c-soft); color: var(--c); border-color: var(--c); }
+.cat-pill { --c: var(--ac); background: var(--c-soft); color: var(--tx2); font-size: 13px; padding: 4px 6px 4px 9px; }
+.cat-pill .ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.cat-pill .x { border: 0; background: none; color: var(--mu); font-size: 16px; line-height: 1; padding: 0 3px; border-radius: 4px; }
+.cat-pill .x:hover { color: var(--bad); }
+.foco-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.foco-lista li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--r2); background: var(--s2); }
+.foco-lista li > div { flex: 1; display: grid; min-width: 0; }
+.foco-lista li .sub { font-size: 13px; }
+.foco-lista select { max-width: 45%; }
+.placar-in { display: grid; gap: 4px; justify-items: center; text-align: center; }
+.placar-num { font-family: var(--fd); font-size: 48px; font-weight: 800; line-height: 1.05; color: var(--ok); font-variant-numeric: tabular-nums; }
+.placar-num small { font-size: 16px; font-weight: 700; margin-left: 6px; color: var(--tx2); }
+.fc.vazio .placar-in { margin: 18px auto 0; padding: 14px 18px; border-radius: var(--r2); background: var(--s2); max-width: 360px; }
+.placar-bloco { border-color: rgba(79, 207, 134, .35); }
+.placar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 61; display: grid; gap: 6px; justify-items: center; padding: 16px 26px; min-width: 260px; border-radius: var(--r); background: var(--s2); border: 1px solid rgba(79, 207, 134, .4); box-shadow: 0 14px 40px rgba(0, 0, 0, .5); animation: placar-entra .35s ease-out; font: inherit; color: inherit; }
+.placar-rot { font-size: 13px; color: var(--mu); max-width: 40ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@keyframes placar-entra { from { opacity: 0; transform: translate(-50%, 12px) scale(.96); } }
+.chip.foco .t { font-variant-numeric: tabular-nums; }
+/* com o contador ligado, os outros chips mostram só o número (o texto fica para o leitor de tela e no title) */
+@media (max-width: 1400px) { .chipbar:has(.foco) .chip .l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+@media (max-width: 420px) { .chip.foco .t { display: none; } }
+@media (max-width: 720px) { .placar { bottom: 84px; } nav.tabs a { min-width: 52px; padding-inline: 4px; } .foco-lista select { max-width: 40%; } }
