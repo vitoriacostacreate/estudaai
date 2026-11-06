@@ -1784,7 +1784,7 @@ function cadeiaIA(atividade) {
   if (MODO === "local") return (INFO.cadeia || {})[atividade] || [];
   return [];
 }
-const descreverCadeia = c => c.map(o => `${NOME_IA[o.provedor]}${o.gratis ? " grátis" : ""}`).concat("chat").join(" → ");
+const descreverCadeia = c => c.map(o => `${NOME_IA[o.provedor]}${o.gratis ? " grátis" : ""}`).filter((n, i, a) => n !== a[i - 1]).concat("chat").join(" → ");
 /* Último degrau: copia o pedido e abre o chat no navegador (usa a assinatura dela ou a versão grátis). */
 const CHATS = { claude: ["Claude", "https://claude.ai/new"], chatgpt: ["ChatGPT", "https://chatgpt.com/"], gemini: ["Gemini", "https://gemini.google.com/app"] };
 const chatPreferido = () => CHATS[st.chatPreferido] ? st.chatPreferido : "claude";

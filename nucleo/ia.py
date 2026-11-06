@@ -83,10 +83,14 @@ def cadeia(dados: Path, atividade: str) -> list[dict]:
         if not cfg[PROVEDORES[prov][0]]:
             continue
         livre = prov == "gemini" and cfg["gemini_plano"] == "gratis"
+        if livre:                # grátis: vários flash da conta, em sequência (um sobrecarregado não derruba tudo)
+            modelos = [cfg["modelo_gemini"]] if cfg["modelo_gemini"] else \
+                (cfg.get("modelos_gemini_gratis") or [cfg.get("modelo_gemini_gratis") or MODELO_GRATIS])
+            gratis += [{"provedor": prov, "modelo": m, "gratis": True} for m in modelos]
+            continue
         if prov == "gemini":     # modelos escolhidos da lista da conta pelo configurar_ia (nome fixo envelhece)
-            modelo = cfg.get("modelo_gemini_gratis") or MODELO_GRATIS if livre else cfg.get("modelo_gemini_pro") or modelo
-        modelo = cfg[PROVEDORES[prov][2]] or modelo
-        (gratis if livre else pagas).append({"provedor": prov, "modelo": modelo, "gratis": livre})
+            modelo = cfg.get("modelo_gemini_pro") or modelo
+        pagas.append({"provedor": prov, "modelo": cfg[PROVEDORES[prov][2]] or modelo, "gratis": False})
     return pagas + gratis
 
 
@@ -137,11 +141,23 @@ def _gemini(chave: str, modelo: str, prompt: str, busca: bool, max_tokens: int) 
     if busca:
         corpo["tools"] = [{"google_search": {}}]
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{modelo}:generateContent"
-    resp = _post(url, corpo, {"x-goog-api-key": chave})
+    aviso = ""
+    try:
+        resp = _post(url, corpo, {"x-goog-api-key": chave}, timeout=120)
+    except RuntimeError as e:
+        if not (busca and "respondeu 429" in str(e)):
+            raise
+        # A camada grátis pode não liberar a busca do Google: responde sem ela, avisando.
+        corpo.pop("tools")
+        resp = _post(url, corpo, {"x-goog-api-key": chave}, timeout=120)
+        aviso = AVISO_SEM_BUSCA
     cands = resp.get("candidates") or [{}]
-    return "".join(p.get("text", "") for p in cands[0].get("content", {}).get("parts", []))
+    txt = "".join(p.get("text", "") for p in cands[0].get("content", {}).get("parts", []))
+    return aviso + txt if txt.strip() else txt
 
 
+AVISO_SEM_BUSCA = ("> ⚠️ **Sem busca na web nesta resposta**: a camada grátis do Gemini não liberou a busca do Google. "
+                   "Trate os fatos como \"não verificados na web\" e confira na fonte o que for importante.\n\n")
 CHAMAR = {"anthropic": _anthropic, "openai": _openai, "gemini": _gemini}
 
 
@@ -182,18 +198,20 @@ def gerar_aula(dados: Path, prompt: str) -> dict:
 
 # ---------- conferir uma chave (sem gastar crédito: só lista os modelos) ----------
 def melhores_gemini(modelos: list) -> dict:
-    """Da lista de modelos da conta, o flash mais novo (grátis) e o pro mais novo. Ignora preview, lite, tts etc."""
+    """Da lista de modelos da conta: os 3 flash mais novos e o flash-lite mais novo (grátis, em sequência)
+    e o pro mais novo. Ignora preview, tts, image etc."""
     import re
-    achados = {"flash": [], "pro": []}
+    achados = {"flash": [], "flash-lite": [], "pro": []}
     for m in modelos:
         nome = str(m.get("name", "")).removeprefix("models/")
         if "generateContent" not in m.get("supportedGenerationMethods", ["generateContent"]):
             continue
-        if (r := re.fullmatch(r"gemini-(\d+(?:\.\d+)?)-(flash|pro)", nome)):
+        if (r := re.fullmatch(r"gemini-(\d+(?:\.\d+)?)-(flash|flash-lite|pro)", nome)):
             achados[r.group(2)].append((float(r.group(1)), nome))
     out = {}
-    if achados["flash"]:
-        out["modelo_gemini_gratis"] = max(achados["flash"])[1]
+    gratis = [n for _, n in sorted(achados["flash"], reverse=True)[:3]] + [n for _, n in sorted(achados["flash-lite"], reverse=True)[:1]]
+    if gratis:
+        out["modelo_gemini_gratis"], out["modelos_gemini_gratis"] = gratis[0], gratis
     if achados["pro"]:
         out["modelo_gemini_pro"] = max(achados["pro"])[1]
     return out

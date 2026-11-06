@@ -244,9 +244,22 @@ class TestIA(unittest.TestCase):
         patch, _ = self.rede(lista)
         with patch:
             extras = servidor.ia.validar_chave("gemini", "AQ.x")
-        self.assertEqual(extras, {"modelo_gemini_gratis": "gemini-3.0-flash", "modelo_gemini_pro": "gemini-3.1-pro"})
+        self.assertEqual(extras, {"modelo_gemini_gratis": "gemini-3.0-flash", "modelos_gemini_gratis": ["gemini-3.0-flash", "gemini-2.5-flash", "gemini-3.0-flash-lite"],
+                                  "modelo_gemini_pro": "gemini-3.1-pro"})
         self.chaves(gemini_api_key="AQ.x", **extras)
-        self.assertEqual(servidor.ia.cadeia(self.d, "revisao")[0]["modelo"], "gemini-3.0-flash")
+        self.assertEqual([o["modelo"] for o in servidor.ia.cadeia(self.d, "revisao")], extras["modelos_gemini_gratis"])
+
+    def test_gemini_sobrecarregado_tenta_outro_e_sem_cota_de_busca_refaz_sem_busca(self):
+        self.chaves(gemini_api_key="AQ.x", modelos_gemini_gratis=["g-novo", "g-velho"])
+        cheio = urllib.error.HTTPError("u", 503, "x", {}, io.BytesIO(b'{"error": {"message": "high demand"}}'))
+        sem_cota = urllib.error.HTTPError("u", 429, "x", {}, io.BytesIO(b'{"error": {"message": "quota"}}'))
+        patch, env = self.rede(cheio, sem_cota, {"candidates": [{"content": {"parts": [{"text": "revisado"}]}}]})
+        with patch:
+            r = servidor.ia.gerar_texto(self.d, "revise")
+        self.assertEqual(r["modelo"], "g-velho")
+        self.assertTrue(r["texto"].endswith("revisado") and "Sem busca na web" in r["texto"])
+        self.assertIn("tools", env[1][1])
+        self.assertNotIn("tools", env[2][1])                               # refez sem a busca
 
     def test_rota_texto(self):
         Handler = servidor.Handler
