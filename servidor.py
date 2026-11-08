@@ -173,7 +173,7 @@ class Handler(SimpleHTTPRequestHandler):
                 return self._json({"cofre": None})
             ap = sincronia.aparelho(self.dados)
             meu = sincronia.ler_nota(cofre / sincronia.PASTA / f"{ap}.md")
-            return self._json({"cofre": str(cofre), "aparelho": ap, "meu": meu["atualizado"] if meu else "",
+            return self._json({"cofre": str(cofre), "via": sincronia.via(cofre), "aparelho": ap, "meu": meu["atualizado"] if meu else "",
                                "outros": sincronia.outros(self.dados, cofre, ap)})
         if p.startswith("/api/obsidian/aparelho/"):
             cofre = sincronia.achar_cofre(self.dados)
@@ -296,7 +296,7 @@ def main():
     print(f"\n  🧠 estudaai {VERSAO} rodando em {url}")
     print(f"  IA: {'ligada (' + ', '.join(ia.provedores(DADOS)) + ')' if ia.provedores(DADOS) else 'desligada (opcional: configure em Biblioteca → IA)'}")
     cofre = sincronia.achar_cofre(DADOS)
-    print(f"  Obsidian: {f'sincronizando em {cofre / sincronia.PASTA} (este aparelho: {sincronia.aparelho(DADOS)})' if cofre else 'sem cofre (sincronia desligada)'}")
+    print(f"  Sincronia: {f'{sincronia.via(cofre)}, em {cofre / sincronia.PASTA} (este aparelho: {sincronia.aparelho(DADOS)})' if cofre else 'desligada (sem Google Drive nem cofre do Obsidian)'}")
     print("  Para encerrar: Ctrl+C\n")
     if cofre:
         exportar_obsidian(DADOS)             # garante a nota deste aparelho logo na partida

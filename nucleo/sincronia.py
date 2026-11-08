@@ -1,6 +1,7 @@
-"""Sincronia do conteúdo e do progresso pelo cofre do Obsidian (o Obsidian Sync leva os arquivos).
+"""Sincronia do conteúdo e do progresso entre aparelhos por uma pasta que se sincroniza sozinha:
+o Google Drive (grátis, preferido) ou o cofre do Obsidian (se tiver Obsidian Sync).
 
-Cada aparelho escreve só a sua nota, <cofre>/estudaai-sync/<aparelho>.md, com um resumo legível,
+Cada aparelho escreve só a sua nota, <base>/estudaai-sync/<aparelho>.md, com um resumo legível,
 o histórico do que mudou e um bloco ```json com {estado, biblioteca}. Os PDFs vão em
 estudaai-sync/arquivos/ (o pacote JSON vira <id>.json.md, porque o Sync não leva .json por padrão).
 Juntar os dados é com o app (fonte/js/22-sincronia.js): aqui só se lê e se grava.
@@ -8,6 +9,7 @@ Juntar os dados é com o app (fonte/js/22-sincronia.js): aqui só se lê e se gr
 from __future__ import annotations
 
 import json
+import os
 import re
 import secrets
 import shutil
@@ -50,17 +52,40 @@ def aparelho(dados: Path) -> str:
     return s["aparelho"]
 
 
+def google_drive() -> Path | None:
+    """A pasta "Meu Drive" do Google Drive para computador (G:\\Meu Drive no Windows), se estiver instalado.
+    ESTUDAAI_SEM_DRIVE=1 desliga a busca (os testes usam, para nunca gravar no Drive de verdade)."""
+    if os.environ.get("ESTUDAAI_SEM_DRIVE"):
+        return None
+    nomes = ("Meu Drive", "My Drive")
+    cands = [Path(f"{letra}:/") / n for letra in "GHIJKLMNOPQRSTUVWXYZDEF" for n in nomes] if os.name == "nt" else []
+    cands += [Path.home() / "Google Drive" / n for n in nomes] + [Path.home() / "Google Drive"]
+    return next((c for c in cands if c.is_dir()), None)
+
+
 def achar_cofre(dados: Path) -> Path | None:
-    """config.json → cofre_obsidian (caminho, ou "nao" para desligar); senão a 1ª pasta acima de dados/ com .obsidian."""
-    cfg = _ler_json(dados / "config.json", {}).get("cofre_obsidian", "")
+    """Onde fica a pasta estudaai-sync/. Ordem: config.json → pasta_sincronia (ou cofre_obsidian; "nao" desliga)
+    → Google Drive (grátis, leva ao outro aparelho) → a 1ª pasta acima de dados/ com .obsidian (Obsidian Sync)."""
+    c = _ler_json(dados / "config.json", {})
+    cfg = c.get("pasta_sincronia") or c.get("cofre_obsidian") or ""
     if isinstance(cfg, str) and cfg.strip().lower() in ("nao", "não", "off"):
         return None
     if isinstance(cfg, str) and cfg.strip() and Path(cfg.strip()).is_dir():
         return Path(cfg.strip())
+    if drive := google_drive():
+        return drive
     for d in Path(dados).resolve().parents:
         if (d / ".obsidian").is_dir():
             return d
     return None
+
+
+def via(base: Path) -> str:
+    """Por onde a pasta chega ao outro aparelho, para o app mostrar no selo do topo."""
+    d = google_drive()
+    if d and Path(base).resolve() == d.resolve():
+        return "Google Drive"
+    return "Obsidian" if (Path(base) / ".obsidian").is_dir() else "pasta"
 
 
 # ---------- resumo do que mudou ----------

@@ -1,6 +1,8 @@
 """Testes da sincronia pelo cofre do Obsidian (nucleo/sincronia.py e rotas /api/obsidian)."""
 import json
+import os
 import sys
+os.environ["ESTUDAAI_SEM_DRIVE"] = "1"   # nunca grava no Google Drive de verdade
 import tempfile
 import threading
 import unittest
@@ -43,6 +45,16 @@ class TestSincronia(unittest.TestCase):
         self.assertEqual(sincronia.achar_cofre(self.note), self.cofre)
         gravar(self.note / "config.json", {"cofre_obsidian": "nao"})
         self.assertIsNone(sincronia.achar_cofre(self.note))
+
+    def test_google_drive_vem_antes_do_obsidian(self):
+        drive = Path(self.tmp.name) / "Meu Drive"; drive.mkdir()
+        from unittest import mock
+        with mock.patch.object(sincronia, "google_drive", return_value=drive):
+            self.assertEqual(sincronia.achar_cofre(self.pc), drive)
+            self.assertEqual(sincronia.via(drive), "Google Drive")
+            gravar(self.pc / "config.json", {"pasta_sincronia": str(self.cofre)})
+            self.assertEqual(sincronia.achar_cofre(self.pc), self.cofre)          # o config vence
+        self.assertEqual(sincronia.via(self.cofre), "Obsidian")
 
     def test_nome_do_aparelho_e_unico_e_fixo(self):
         a = sincronia.aparelho(self.pc)

@@ -1,7 +1,7 @@
-/* ============ sincronia com o Obsidian (só no modo local) ============
-   O servidor grava o progresso numa nota do cofre (nucleo/sincronia.py) ~2 s depois de cada gravação,
-   e o Obsidian Sync leva a nota ao outro aparelho. Aqui: juntar os dados (SINC, sem DOM, testado em
-   testes/sincronia.test.js), perguntar se sincroniza ao abrir e o chip "Obsidian ✓ 14:32" no topo. */
+/* ============ sincronia entre aparelhos (só no modo local) ============
+   O servidor grava o progresso numa nota em <Google Drive ou cofre do Obsidian>/estudaai-sync/ (nucleo/sincronia.py)
+   ~2 s depois de cada gravação, e o Google Drive (ou o Obsidian Sync) leva a nota ao outro aparelho. Aqui: juntar os dados (SINC, sem DOM, testado em
+   testes/sincronia.test.js), perguntar se sincroniza ao abrir e o chip "Google Drive ✓ 14:32" no topo. */
 const SINC = (() => {
   const obj = v => v !== null && typeof v === "object" && !Array.isArray(v);
   const chave = x => obj(x) ? String(x.id ?? x.ini ?? x.nome ?? JSON.stringify(x)) : JSON.stringify(x);
@@ -62,8 +62,9 @@ function marcarObs(erro) {
   const c = typeof document !== "undefined" && document.getElementById("obs"); if (!c || !OBS) return;
   const h = OBS.meu ? new Date(OBS.meu).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "—";
   c.classList.toggle("alerta", !!erro); c.classList.toggle("ok", !erro && !_obsSalvando);
-  c.innerHTML = ico("sincronia") + (erro ? "<b>Obsidian: erro</b>" : _obsSalvando ? `<span class="l">Obsidian</span><b>salvando…</b>` : `<span class="l">Obsidian ✓</span><b>${h}</b>`);
-  c.title = erro || `Progresso salvo no Obsidian (${OBS.aparelho}). O Obsidian Sync leva para o outro aparelho. Clique para sincronizar agora.`;
+  const v = OBS.via || "Obsidian";
+  c.innerHTML = ico("sincronia") + (erro ? `<b>${esc(v)}: erro</b>` : _obsSalvando ? `<span class="l">${esc(v)}</span><b>salvando…</b>` : `<span class="l">${esc(v)} ✓</span><b>${h}</b>`);
+  c.title = erro || `Progresso deste aparelho (${OBS.aparelho}) salvo na pasta estudaai-sync de ${OBS.cofre}. O ${v} leva para o outro aparelho. Clique para sincronizar agora.`;
 }
 
 /* Chamado depois de cada gravação no servidor: o servidor exporta sozinho em ~2 s; aqui só atualiza o chip. */
@@ -74,8 +75,8 @@ function obsDepoisDeSalvar() {
 }
 
 async function obsSalvarAgora() {
-  try { const r = await api("/api/obsidian/salvar", { method: "POST" }); if (r.atualizado) OBS.meu = r.atualizado; _obsSalvando = false; marcarObs(); toast("Sincronizado com o Obsidian"); }
-  catch (e) { marcarObs("Não consegui salvar no Obsidian: " + e.message); }
+  try { const r = await api("/api/obsidian/salvar", { method: "POST" }); if (r.atualizado) OBS.meu = r.atualizado; _obsSalvando = false; marcarObs(); toast("Progresso salvo no " + (OBS.via || "Obsidian")); }
+  catch (e) { marcarObs("Não consegui salvar: " + e.message); }
 }
 
 /* Ao abrir (e ao voltar para a aba): o outro aparelho tem progresso novo? Se juntar muda algo, pergunta. */
@@ -96,8 +97,8 @@ async function verificarObsidian() {
 const obsVisto = o => api("/api/obsidian/visto", { method: "POST", ...json({ aparelho: o.aparelho, atualizado: o.atualizado }) }).catch(() => { });
 
 function perguntarSync(o, r) {
-  abrirModal(`<div class="grid" style="gap:12px"><h3>${ico("sincronia")} Sincronizar com o Obsidian?</h3>
-    <p>Tem progresso do <b>${esc(o.aparelho)}</b> de <b>${SINC.hora(o.atualizado)}</b>.</p>
+  abrirModal(`<div class="grid" style="gap:12px"><h3>${ico("sincronia")} Sincronizar o progresso?</h3>
+    <p>Tem progresso do <b>${esc(o.aparelho)}</b> de <b>${SINC.hora(o.atualizado)}</b>, que chegou pelo ${esc(OBS.via || "Obsidian")}.</p>
     ${o.ultimo ? `<p class="sub">O que mudou lá: ${esc(o.ultimo)}</p>` : ""}
     <p class="sub">Nada se perde: o app junta o que você fez nos dois aparelhos.</p>
     <div class="row"><button class="btn pri" id="obs-sim">Sincronizar</button><button class="btn" data-fechar>Agora não</button></div></div>`, m => {

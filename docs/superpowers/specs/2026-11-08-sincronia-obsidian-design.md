@@ -19,5 +19,8 @@ A Vitória estuda no notebook e no PC. O código vai pelo Git (ela cuida disso).
 - **Juntar (nunca apaga):** cartões e tópicos → vale o registro com mais revisões (`n`), depois a data mais recente; dias → maior pontuação; listas → união por `id`/`ini`/`nome`; demais valores → do lado mais novo (`_t`). Biblioteca → união de docs, temas e anexos por id.
 - Cofre: `cofre_obsidian` em `dados/config.json` (ou `"nao"` para desligar); senão, a primeira pasta acima de `dados/` que tenha `.obsidian`. Sem cofre, nada aparece.
 
+## Atualização (08/11/2026): Google Drive primeiro
+Ela não tem Obsidian Sync (é pago) e não quer assinar. A base passa a ser o **Google Drive para computador** (`G:\Meu Drive\estudaai-sync`), achado sozinho; o cofre do Obsidian fica como alternativa. Para ler o histórico no Obsidian, `ESTUDOS/estudaai-sync` é uma junção (`mklink /J`) para a pasta do Drive. A exclusão da pasta `estudaai/` do Obsidian Sync deixa de ser necessária.
+
 ## Fora do escopo
 Modo nuvem (já sincroniza) e modo arquivo (não grava em disco). Sincronizar código.

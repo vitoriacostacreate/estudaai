@@ -4,6 +4,7 @@ import json
 import os
 import subprocess
 import sys
+os.environ["ESTUDAAI_SEM_DRIVE"] = "1"   # nunca grava no Google Drive de verdade
 import tempfile
 import threading
 import unittest
