@@ -60,6 +60,19 @@ O navegador abre em **http://127.0.0.1:8765**. Vá em **Biblioteca** e arraste u
 
 > O PDF é lido no próprio navegador (pdf.js), então **importar** precisa de internet. Estudar funciona offline.
 
+### 💻 Em outro PC (pelo Git)
+
+1. Instale o **Git** ([git-scm.com](https://git-scm.com/downloads)) e o **Python 3.10+** (no Windows, marque *Add Python to PATH*).
+2. Abra um terminal na pasta onde quer o app e clone:
+   ```bash
+   git clone https://github.com/vitoriacostacreate/estudaai.git
+   cd estudaai
+   ```
+3. **Windows:** dois cliques em `ESTUDAAI.bat`. **Mac/Linux:** `./estudaai.sh`.
+4. Para pegar as novidades depois: `git pull` dentro da pasta.
+
+> **O que não vem no clone:** a pasta `dados/` (seus PDFs, progresso e chaves de IA) fica fora do Git de propósito. Para levar o progresso: no PC antigo, **Progresso → Copiar backup**; no novo, **Progresso → Restaurar**. As chaves de IA: rode `CONFIGURAR-IA.bat` de novo. Os PDFs: importe de novo na **Biblioteca**. Ou use a **versão na nuvem**, que já sincroniza tudo.
+
 ### IA (opcional)
 **Windows:** dois cliques em **`CONFIGURAR-IA.bat`** (o `ESTUDAAI.bat` oferece isso sozinho na primeira vez). Ele abre a página de cada chave; você cria e **copia**, e o script percebe, testa e salva em `dados/config.json`. Enter pula. Mac/Linux: `python configurar_ia.py`.
 
@@ -93,7 +106,7 @@ estudaai/
 ```bash
 python testes/gerar_exemplo.py     # recria o PDF de exemplo (precisa de reportlab)
 python -m unittest discover testes # testes do servidor
-node --test testes/                # testes do organizador de PDF
+node --test testes/*.test.js       # testes do organizador de PDF
 python fonte/build.py              # depois de editar fonte/ ou conteudo/
 ```
 

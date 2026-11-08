@@ -32,5 +32,5 @@ Outros temas: fisioterapia (começando o curso), neurociência, FL Studio, teori
 ## Regras
 - Não quebre o modo arquivo (abrir `web/index.html` sem servidor). Chamadas à API ficam dentro de `MODO === "local"`.
 - Aulas novas seguem o formato de `docs/REFERENCIAS.md`. Conteúdo factual correto; se for debatido, diga. Legislação: sempre conferir o texto da lei.
-- Testes: `python -m unittest discover testes` (servidor) e `node --test testes/` (organizador).
+- Testes: `python -m unittest discover testes` (servidor) e `node --test testes/*.test.js` (organizador).
 - Dados pessoais (PDFs dela, progresso, chave de API) nunca vão para o git.

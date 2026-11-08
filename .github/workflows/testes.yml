@@ -10,5 +10,5 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "20" }
       - run: python -m unittest discover testes -v
-      - run: node --test testes/
+      - run: node --test testes/*.test.js
       - run: python fonte/build.py
