@@ -16,7 +16,7 @@ function salvar() {
   st._t = Date.now();
   try { localStorage.setItem(CHAVE, JSON.stringify(st)); } catch (e) { }
   if (MODO === "nuvem") { clearTimeout(_salvarT); _salvarT = setTimeout(enviarEstado, 800); }
-  if (MODO === "local") { clearTimeout(_salvarT); _salvarT = setTimeout(() => api("/api/estado", { method: "PUT", ...json(st) }).then(registrarSync).catch(() => toast("Não consegui salvar no servidor. O estudaai ainda está rodando?")), 400); }
+  if (MODO === "local") { clearTimeout(_salvarT); _salvarT = setTimeout(() => api("/api/estado", { method: "PUT", ...json(st) }).then(() => { registrarSync(); obsDepoisDeSalvar(); }).catch(() => toast("Não consegui salvar no servidor. O estudaai ainda está rodando?")), 400); }
 }
 /* Data da última sincronização bem-sucedida (servidor local ou nuvem), guardada por aparelho. */
 const CHAVE_SYNC = "estudaai.sync";

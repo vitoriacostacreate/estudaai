@@ -9,8 +9,9 @@ function topo(rota) {
   const prova = diasAte("2027-01-17");
   $("#chips").innerHTML = (prova >= 0 ? `<span class="chip" title="Prova da UFMS em 17/01/2027">${ico("calendario")}<b>${prova}</b><span class="l">dias para a prova</span></span>` : "")
     + `<span class="chip ${seq ? "quente" : ""}" title="Dias seguidos com estudo">${ico("chama")}<b>${seq}</b><span class="l">${seq === 1 ? "dia seguido" : "dias seguidos"}</span></span>`
-    + chipPrepara() + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + chipFoco();
+    + chipPrepara() + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + (obsLigado() ? `<button type="button" class="chip obs" id="obs"></button>` : "") + chipFoco();
   if (MODO === "nuvem") marcarSync();
+  if (obsLigado()) { marcarObs(); $("#obs").onclick = obsSalvarAgora; }
 }
 function rotear() {
   pararAudio();

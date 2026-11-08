@@ -11,6 +11,10 @@ no navegador; o servidor só guarda o que o app manda, em ./dados/ (fora do git)
     dados/biblioteca.json     índice dos PDFs {docs, temas, anexos}
     dados/arquivos/           os PDFs e os pacotes JSON (aulas, cartões, textos) de cada um
     dados/config.json         chaves de API (Claude, GPT, Gemini) e modelos (opcional)
+    dados/sincronia.json      até onde já juntou o progresso de cada outro aparelho
+
+Sincronia: se houver um cofre do Obsidian acima de dados/, cada gravação vira uma nota em
+<cofre>/estudaai-sync/<aparelho>.md (nucleo/sincronia.py), que o Obsidian Sync leva ao outro aparelho.
 """
 from __future__ import annotations
 
@@ -32,12 +36,37 @@ DADOS = RAIZ / "dados"
 VERSAO = "1.1.0"
 
 sys.path.insert(0, str(RAIZ))
-from nucleo import ia  # noqa: E402
+from nucleo import ia, sincronia  # noqa: E402
 
 TRAVA = threading.Lock()
 TIPOS = {"application/pdf": ".pdf", "application/json": ".json"}
 EXT_TIPO = {v: k for k, v in TIPOS.items()}
 ID_ARQUIVO = re.compile(r"^[\w\-]+\.(pdf|json)$")
+_EXPORTAR: dict[str, threading.Timer] = {}
+
+
+def exportar_obsidian(dados: Path) -> dict | None:
+    """Grava a nota deste aparelho no cofre do Obsidian (se houver cofre). Nunca derruba o servidor."""
+    cofre = sincronia.achar_cofre(dados)
+    if not cofre:
+        return None
+    try:
+        with TRAVA:
+            return sincronia.exportar(dados, cofre, sincronia.aparelho(dados), VERSAO)
+    except Exception as e:  # noqa: BLE001
+        sys.stderr.write(f"  Não consegui salvar no Obsidian: {e}\n")
+        return None
+
+
+def agendar_obsidian(dados: Path, espera: float = 2.0) -> None:
+    """Junta várias gravações seguidas numa só exportação, ~2 s depois da última."""
+    chave = str(dados)
+    if t := _EXPORTAR.get(chave):
+        t.cancel()
+    t = threading.Timer(espera, exportar_obsidian, args=(dados,))
+    t.daemon = True
+    _EXPORTAR[chave] = t
+    t.start()
 
 
 def ler_json(arq: Path, padrao):
@@ -138,6 +167,20 @@ class Handler(SimpleHTTPRequestHandler):
                                **{k: cfg[k] for k in ("modelo", "modelo_openai", "modelo_gemini")}})
         if p == "/api/estado":
             return self._json(ler_json(self.dados / "estado.json", {}))
+        if p == "/api/obsidian":
+            cofre = sincronia.achar_cofre(self.dados)
+            if not cofre:
+                return self._json({"cofre": None})
+            ap = sincronia.aparelho(self.dados)
+            meu = sincronia.ler_nota(cofre / sincronia.PASTA / f"{ap}.md")
+            return self._json({"cofre": str(cofre), "aparelho": ap, "meu": meu["atualizado"] if meu else "",
+                               "outros": sincronia.outros(self.dados, cofre, ap)})
+        if p.startswith("/api/obsidian/aparelho/"):
+            cofre = sincronia.achar_cofre(self.dados)
+            n = cofre and sincronia.baixar(self.dados, cofre, p.rsplit("/", 1)[1])
+            if not n:
+                return self._json({"erro": "nota não encontrada"}, 404)
+            return self._json({k: n[k] for k in ("aparelho", "atualizado", "estado", "biblioteca", "historico")})
         if p == "/api/biblioteca":
             return self._json(ler_json(self.dados / "biblioteca.json", indice_vazio()))
         if p.startswith("/api/arquivos/"):
@@ -169,6 +212,7 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json({"erro": "JSON inválido"}, 400)
         with TRAVA:
             gravar_json(self.dados / destino, obj)
+        agendar_obsidian(self.dados)
         return self._json({"ok": True})
 
     def do_POST(self):
@@ -185,6 +229,20 @@ class Handler(SimpleHTTPRequestHandler):
             pasta.mkdir(parents=True, exist_ok=True)
             (pasta / nome).write_bytes(corpo)
             return self._json({"id": nome, "url": f"/api/arquivos/{nome}"})
+        if p == "/api/obsidian/salvar":                     # chip do topo e saída da aba (sendBeacon)
+            est = self._corpo_json()                         # a aba que fecha manda o estado pendente junto
+            if est and isinstance(est.get("top"), dict):
+                with TRAVA:
+                    gravar_json(self.dados / "estado.json", est)
+            r = exportar_obsidian(self.dados)
+            return self._json({"ok": r is not None, **(r or {})})
+        if p == "/api/obsidian/visto":
+            c = self._corpo_json() or {}
+            if not (isinstance(c.get("aparelho"), str) and sincronia.NOME_OK.match(c["aparelho"]) and isinstance(c.get("atualizado"), str)):
+                return self._json({"erro": "pedido inválido"}, 400)
+            with TRAVA:
+                sincronia.marcar_visto(self.dados, c["aparelho"], c["atualizado"][:40])
+            return self._json({"ok": True})
         if p not in ("/api/ia/aula", "/api/ia/texto", "/api/config"):
             return self._json({"erro": "rota desconhecida"}, 404)
         corpo = self._corpo_json()
@@ -237,12 +295,17 @@ def main():
     url = f"http://127.0.0.1:{a.porta}"
     print(f"\n  🧠 estudaai {VERSAO} rodando em {url}")
     print(f"  IA: {'ligada (' + ', '.join(ia.provedores(DADOS)) + ')' if ia.provedores(DADOS) else 'desligada (opcional: configure em Biblioteca → IA)'}")
+    cofre = sincronia.achar_cofre(DADOS)
+    print(f"  Obsidian: {f'sincronizando em {cofre / sincronia.PASTA} (este aparelho: {sincronia.aparelho(DADOS)})' if cofre else 'sem cofre (sincronia desligada)'}")
     print("  Para encerrar: Ctrl+C\n")
+    if cofre:
+        exportar_obsidian(DADOS)             # garante a nota deste aparelho logo na partida
     if not a.sem_navegador:
         threading.Timer(.8, lambda: webbrowser.open(url)).start()
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
+        exportar_obsidian(DADOS)
         print("\n  Até a próxima sessão de estudo!")
 
 

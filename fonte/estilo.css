@@ -55,6 +55,9 @@ nav.tabs .badge { background: var(--ac); }
 .chip b { color: var(--tx); font-variant-numeric: tabular-nums; }
 .chip.quente .i { color: var(--warn); }
 .chip.alerta { border-color: rgba(255, 125, 134, .4); color: var(--bad); }
+.chip.obs { background: none; font: inherit; font-size: 13px; cursor: pointer; }
+.chip.obs:hover { background: var(--s1); }
+.chip.obs.ok .i { color: var(--ok); }
 
 /* ---------- estrutura ---------- */
 main { max-width: 1120px; margin: 0 auto; padding: 28px 20px 96px; display: grid; gap: 28px; }

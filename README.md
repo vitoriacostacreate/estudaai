@@ -71,7 +71,18 @@ O navegador abre em **http://127.0.0.1:8765**. Vá em **Biblioteca** e arraste u
 3. **Windows:** dois cliques em `ESTUDAAI.bat`. **Mac/Linux:** `./estudaai.sh`.
 4. Para pegar as novidades depois: `git pull` dentro da pasta.
 
-> **O que não vem no clone:** a pasta `dados/` (seus PDFs, progresso e chaves de IA) fica fora do Git de propósito. Para levar o progresso: no PC antigo, **Progresso → Copiar backup**; no novo, **Progresso → Restaurar**. As chaves de IA: rode `CONFIGURAR-IA.bat` de novo. Os PDFs: importe de novo na **Biblioteca**. Ou use a **versão na nuvem**, que já sincroniza tudo.
+> **O que não vem no clone:** a pasta `dados/` (seus PDFs, progresso e chaves de IA) fica fora do Git de propósito. O progresso e os PDFs chegam pelo **Obsidian** (abaixo). As chaves de IA: rode `CONFIGURAR-IA.bat` de novo. Sem Obsidian: **Progresso → Copiar backup** num aparelho e **Restaurar** no outro, ou use a **versão na nuvem**.
+
+### 🔄 Progresso entre aparelhos pelo Obsidian (automático)
+
+Se o estudaai estiver **dentro de um cofre do Obsidian** (uma pasta com `.obsidian` acima dele) com o **Obsidian Sync** ligado:
+
+- **Salva sozinho.** Uns 2 segundos depois de cada mudança (estudar, revisar, importar PDF, prepara.ai, foco), o servidor grava `<cofre>/estudaai-sync/<aparelho>.md`: totais, **histórico do que mudou** e os dados. Os PDFs vão em `estudaai-sync/arquivos/`. Ao fechar a aba, ele grava de novo na hora. O selo **Obsidian ✓ 14:32** no topo mostra a última vez; clique nele para forçar.
+- **Pergunta ao abrir.** No outro aparelho, se a nota de lá for mais nova, aparece **"Sincronizar com o Obsidian?"** com o que mudou. Um clique junta os dois. **Nada se perde:** cartões e tópicos ficam com a revisão mais recente, e listas e dias de estudo são somados.
+- Cada aparelho escreve só a sua nota, então o Sync nunca mistura duas versões do mesmo arquivo.
+- Ajustes em `dados/config.json`: `"nome_aparelho": "notebook"` (como ele aparece no aviso), `"cofre_obsidian": "C:\\caminho\\do\\cofre"` (se o app estiver fora do cofre) ou `"cofre_obsidian": "nao"` (desliga).
+
+> ⚠️ **Exclua a pasta do código do Sync** (Obsidian → Configurações → Sync → Pastas excluídas → `estudaai`) **em cada aparelho**: essa configuração não passa de um para o outro. O código vai só pelo Git; pelo Obsidian vai só `estudaai-sync/`.
 
 ### IA (opcional)
 **Windows:** dois cliques em **`CONFIGURAR-IA.bat`** (o `ESTUDAAI.bat` oferece isso sozinho na primeira vez). Ele abre a página de cada chave; você cria e **copia**, e o script percebe, testa e salva em `dados/config.json`. Enter pula. Mac/Linux: `python configurar_ia.py`.
