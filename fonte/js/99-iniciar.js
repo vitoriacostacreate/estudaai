@@ -10,5 +10,5 @@
   }
   rodape(); rotear();
   if (naNuvem) iniciarNuvem();
-  if (MODO === "local") verificarObsidian();   /* outro aparelho tem progresso novo no Obsidian? (22-sincronia) */
+  if (MODO === "local") juntarAparelhos();   /* puxa e junta sozinho o progresso dos outros aparelhos (22-sincronia) */
 })();

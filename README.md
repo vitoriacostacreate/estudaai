@@ -71,18 +71,18 @@ O navegador abre em **http://127.0.0.1:8765**. Vá em **Biblioteca** e arraste u
 3. **Windows:** dois cliques em `ESTUDAAI.bat`. **Mac/Linux:** `./estudaai.sh`.
 4. Para pegar as novidades depois: `git pull` dentro da pasta.
 
-> **O que não vem no clone:** a pasta `dados/` (seus PDFs, progresso e chaves de IA) fica fora do Git de propósito. O progresso e os PDFs chegam sozinhos pelo **Google Drive** (abaixo). As chaves de IA: rode `CONFIGURAR-IA.bat` de novo. Sem Obsidian: **Progresso → Copiar backup** num aparelho e **Restaurar** no outro, ou use a **versão na nuvem**.
+> **O que não vem no clone:** a pasta `dados/` (seus PDFs, progresso e chaves de IA) fica fora do repositório do código de propósito. O progresso e os PDFs chegam sozinhos pelo seu **repositório privado de dados** (abaixo). As chaves de IA: rode `CONFIGURAR-IA.bat` de novo.
 
-### 🔄 Progresso entre aparelhos (automático, pelo Google Drive)
+### 🔄 Progresso entre aparelhos (automático, pelo Git, grátis)
 
-Com o **Google Drive para computador** instalado e logado na mesma conta nos dois aparelhos (grátis):
+**Uma vez em cada aparelho:** dois cliques em **`CONFIGURAR-SINCRONIA.bat`** (o `ESTUDAAI.bat` oferece sozinho). Ele faz o login no GitHub se precisar, cria ou acha o repositório **privado** `estudaai-dados` (separado do código) e clona em `dados/sync`. Depois disso não há mais nada para fazer:
 
-- **Salva sozinho.** Uns 2 segundos depois de cada mudança (estudar, revisar, importar PDF, prepara.ai, foco), o servidor grava `Meu Drive/estudaai-sync/<aparelho>.md`: totais, **histórico do que mudou** e os dados. Os PDFs vão em `estudaai-sync/arquivos/`. Ao fechar a aba, ele grava de novo na hora. O selo **Google Drive ✓ 14:32** no topo mostra a última vez; clique nele para forçar.
-- **Pergunta ao abrir.** No outro aparelho, se a nota de lá for mais nova, aparece **"Sincronizar o progresso?"** com o que mudou. Um clique junta os dois. **Nada se perde:** cartões e tópicos ficam com a revisão mais recente, e listas e dias de estudo são somados.
-- Cada aparelho escreve só a sua nota, então nunca há duas versões do mesmo arquivo brigando.
-- **Conferir antes de fechar:** dois cliques em **`VERIFICAR-SINCRONIA.bat`**, com o app ainda aberto. Ele confere se o progresso, os PDFs e os pacotes chegaram à pasta do Drive e se o Google já recebeu tudo, e termina em **PODE FECHAR** ou diz o que falta.
-- **Ver no Obsidian (opcional):** crie um atalho da pasta dentro do cofre: `mklink /J "C:\caminho\do\cofre\estudaai-sync" "G:\Meu Drive\estudaai-sync"` (no Prompt de Comando).
-- Sem Google Drive, o app usa o cofre do Obsidian acima dele (exige Obsidian Sync, pago). Ajustes em `dados/config.json`: `"nome_aparelho": "notebook"` (como aparece no aviso), `"pasta_sincronia": "D:\\outra\\pasta"` ou `"pasta_sincronia": "nao"` (desliga).
+- **Envia sozinho.** Uns 30 segundos depois da última mudança (estudar, revisar, importar PDF, prepara.ai, foco), ao fechar a aba e ao encerrar com Ctrl+C. O selo **Git ✓ 14:32** no topo mostra o último envio; clique nele para sincronizar na hora.
+- **Puxa e junta sozinho.** Ao abrir o app e ao voltar para a aba, ele busca o que o outro aparelho enviou e junta **sem perguntar**. **Nada se perde:** se os dois mudaram sem sincronizar, ficam as mudanças dos dois (cartões e tópicos ficam com a revisão mais recente; dias de estudo e listas são unidos; o que você apagou num aparelho não volta).
+- **Sem conflito de merge.** Cada aparelho escreve só o próprio arquivo (`<aparelho>.json`) e quem junta é o app, não o Git.
+- **Sem internet:** o app funciona igual e envia depois, sozinho (o selo mostra **envio pendente**). Se o computador for desligado menos de 30 segundos depois da última mudança, o envio acontece na próxima vez que você abrir.
+- **PDFs** vão no mesmo repositório. Arquivo acima de 50 MB fica só no aparelho onde foi importado (o selo avisa). O histórico do Git guarda todas as versões do progresso, então dá para voltar atrás.
+- Ajustes em `dados/config.json`: `"nome_aparelho": "notebook"` (o nome do arquivo deste aparelho) e `"sincronia_git": "nao"` (desliga). Quem usava a pasta `estudaai-sync` do Google Drive: o conteúdo é trazido sozinho na primeira sincronia e nada é apagado de lá.
 
 ### IA (opcional)
 **Windows:** dois cliques em **`CONFIGURAR-IA.bat`** (o `ESTUDAAI.bat` oferece isso sozinho na primeira vez). Ele abre a página de cada chave; você cria e **copia**, e o script percebe, testa e salva em `dados/config.json`. Enter pula. Mac/Linux: `python configurar_ia.py`.

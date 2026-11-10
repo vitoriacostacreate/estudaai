@@ -1808,7 +1808,7 @@ function salvar() {
   st._t = Date.now();
   try { localStorage.setItem(CHAVE, JSON.stringify(st)); } catch (e) { }
   if (MODO === "nuvem") { clearTimeout(_salvarT); _salvarT = setTimeout(enviarEstado, 800); }
-  if (MODO === "local") { clearTimeout(_salvarT); _salvarT = setTimeout(() => api("/api/estado", { method: "PUT", ...json(st) }).then(() => { registrarSync(); obsDepoisDeSalvar(); }).catch(() => toast("Não consegui salvar no servidor. O estudaai ainda está rodando?")), 400); }
+  if (MODO === "local") { clearTimeout(_salvarT); _salvarT = setTimeout(() => api("/api/estado", { method: "PUT", ...json(st) }).then(() => { registrarSync(); sincDepoisDeSalvar(); }).catch(() => toast("Não consegui salvar no servidor. O estudaai ainda está rodando?")), 400); }
 }
 /* Data da última sincronização bem-sucedida (servidor local ou nuvem), guardada por aparelho. */
 const CHAVE_SYNC = "estudaai.sync";
@@ -1823,17 +1823,40 @@ const json = obj => ({ headers: { "Content-Type": "application/json" }, body: JS
 
 /* ==== js/22-sincronia.js ==== */
 /* ============ sincronia entre aparelhos (só no modo local) ============
-   O servidor grava o progresso numa nota em <Google Drive ou cofre do Obsidian>/estudaai-sync/ (nucleo/sincronia.py)
-   ~2 s depois de cada gravação, e o Google Drive (ou o Obsidian Sync) leva a nota ao outro aparelho. Aqui: juntar os dados (SINC, sem DOM, testado em
-   testes/sincronia.test.js), perguntar se sincroniza ao abrir e o chip "Google Drive ✓ 14:32" no topo. */
+   O servidor guarda o progresso de cada aparelho num repositório Git privado só de dados (dados/sync, nucleo/sincronia.py):
+   puxa ao abrir, envia sozinho depois de salvar e ao fechar. O Git só transporta: cada aparelho escreve o próprio arquivo,
+   então nunca há conflito de merge. Quem junta é o app, aqui (SINC, sem DOM, testado em testes/sincronia.test.js). */
 const SINC = (() => {
+  const SEM = Symbol("sem base");   /* junção de 2 vias: não sei o que o outro aparelho tinha antes */
   const obj = v => v !== null && typeof v === "object" && !Array.isArray(v);
   const chave = x => obj(x) ? String(x.id ?? x.ini ?? x.nome ?? JSON.stringify(x)) : JSON.stringify(x);
-  /* União de listas: o que só existe de um lado entra; o que existe nos dois fica com o lado mais novo. */
-  function lista(a, b, bNovo) {
-    const m = new Map(); for (const x of a) m.set(chave(x), x);
-    for (const x of b) { const k = chave(x); if (!m.has(k) || bNovo) m.set(k, x); }
-    return [...m.values()];
+  /* Compara sem ligar para a ordem das chaves nem para o carimbo _t. */
+  const canon = v => Array.isArray(v) ? "[" + v.map(canon).join(",") + "]"
+    : obj(v) ? "{" + Object.keys(v).filter(k => k !== "_t" && v[k] !== undefined).sort().map(k => JSON.stringify(k) + ":" + canon(v[k])).join(",") + "}"
+    : JSON.stringify(v);
+  const igual = (a, b) => canon(a) === canon(b);
+  const filho = (bs, k) => bs === SEM ? SEM : obj(bs) ? bs[k] : undefined;
+  /* Progresso nunca é apagado pela junção; as chaves do topo do estado também não. */
+  const apagavel = c => c.includes(".") && !/^(top|cards|dias)\.[^.]+$/.test(c);
+
+  /* Listas. Sem base: união (o que existe nos dois fica com o lado mais novo).
+     Com base: quem mexeu no item ganha; o que um lado apagou sem o outro ter mexido sai. */
+  function lista(a, b, bNovo, bs) {
+    const B = new Map(b.map(x => [chave(x), x]));
+    const S = Array.isArray(bs) ? new Map(bs.map(x => [chave(x), x])) : null;
+    const antes = k => S && S.has(k) ? S.get(k) : SEM;
+    const out = [], vistos = new Set();
+    for (const x of a) {
+      const k = chave(x), s = antes(k); if (vistos.has(k)) continue; vistos.add(k);
+      if (!B.has(k)) { if (s === SEM || !igual(x, s)) out.push(x); continue; }          /* o outro apagou e eu não mexi → sai */
+      const y = B.get(k);
+      out.push(igual(x, y) ? x : s !== SEM && igual(y, s) ? x : s !== SEM && igual(x, s) ? y : bNovo ? y : x);
+    }
+    for (const y of b) {
+      const k = chave(y), s = antes(k); if (vistos.has(k)) continue; vistos.add(k);
+      if (s === SEM || !igual(y, s)) out.push(y);                                          /* eu apaguei e o outro não mexeu → não volta */
+    }
+    return out;
   }
   /* Tópico ou cartão: vale o registro com mais revisões; empate → o estudado por último; empate → o lado mais novo. */
   function registro(x, y, bNovo) {
@@ -1842,111 +1865,124 @@ const SINC = (() => {
     if ((x.ultima || "") !== (y.ultima || "")) return (y.ultima || "") > (x.ultima || "") ? y : x;
     return bNovo ? y : x;
   }
-  function campo(x, y, bNovo, c) {
+  function campo(x, y, bNovo, c, bs) {
     if (/^(top|cards)\.[^.]+$/.test(c)) return registro(x, y, bNovo);
     if (/^dias\.[^.]+$/.test(c)) return Math.max(+x || 0, +y || 0);
     if ((c === "hoje" || c === "novos") && obj(x) && obj(y) && x.data !== y.data) return (y.data || "") > (x.data || "") ? y : x;
     if (c === "novos" && obj(x) && obj(y)) return { ...x, n: Math.max(x.n || 0, y.n || 0) };
     if (c === "foco.atual") return bNovo ? (y ?? x) : (x ?? y);
-    return juntar(x, y, bNovo, c);
+    return juntar(x, y, bNovo, c, bs);
   }
-  function juntar(a, b, bNovo, c) {
-    if (Array.isArray(a) && Array.isArray(b)) return lista(a, b, bNovo);
-    if (obj(a) && obj(b)) { const out = { ...a }; for (const k of Object.keys(b)) out[k] = k in a ? campo(a[k], b[k], bNovo, c ? c + "." + k : k) : b[k]; return out; }
+  function juntar(a, b, bNovo, c, bs) {
+    if (Array.isArray(a) && Array.isArray(b)) return lista(a, b, bNovo, bs);
+    if (obj(a) && obj(b)) {
+      const out = {}, tinha = k => obj(bs) && k in bs;
+      for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) {
+        const ck = c ? c + "." + k : k;
+        if (k in a && k in b) out[k] = campo(a[k], b[k], bNovo, ck, filho(bs, k));
+        else { const v = k in a ? a[k] : b[k]; if (!(tinha(k) && apagavel(ck) && igual(v, bs[k]))) out[k] = v; }   /* apagado de um lado, intacto do outro → sai */
+      }
+      return out;
+    }
     if (b === undefined) return a; if (a === undefined) return b;
+    if (igual(a, b)) return a;
+    if (bs !== SEM) { if (igual(b, bs)) return a; if (igual(a, bs)) return b; }   /* só um dos dois mexeu → vale a mudança */
     return bNovo ? b : a;
   }
-  /* Junta o progresso de dois aparelhos. Nunca apaga: o que foi feito em qualquer um dos dois fica. */
-  function juntarEstado(a, b) {
+  /* Junta o progresso de dois aparelhos: a = este, b = o outro, base = o estado do outro na última vez que juntei
+     (opcional). Se o outro "voltou no tempo" (backup antigo), a base não vale e a junção só une, sem apagar nada. */
+  function juntarEstado(a, b, base) {
     a = a || {}; b = b || {};
-    const r = juntar(a, b, (b._t || 0) > (a._t || 0), "");
+    const bs = obj(base) && (b._t || 0) >= (base._t || 0) ? base : SEM;
+    const r = juntar(a, b, (b._t || 0) > (a._t || 0), "", bs);
     r._t = Math.max(a._t || 0, b._t || 0); return r;
   }
-  function juntarBiblioteca(a, b) {
+  function juntarBiblioteca(a, b, base) {
     const vazio = { docs: [], temas: [], anexos: {} };
-    const r = juntar({ ...vazio, ...(a || {}) }, { ...vazio, ...(b || {}) }, false, "bib");
+    const r = juntar({ ...vazio, ...(a || {}) }, { ...vazio, ...(b || {}) }, false, "bib", obj(base) ? { ...vazio, ...base } : SEM);
     const v = Math.max((a && a.vinculo) || 0, (b && b.vinculo) || 0); if (v) r.vinculo = v; else delete r.vinculo;
     return r;
   }
-  /* Compara sem ligar para a ordem das chaves nem para o carimbo _t. */
-  const canon = v => Array.isArray(v) ? "[" + v.map(canon).join(",") + "]"
-    : obj(v) ? "{" + Object.keys(v).filter(k => k !== "_t" && v[k] !== undefined).sort().map(k => JSON.stringify(k) + ":" + canon(v[k])).join(",") + "}"
-    : JSON.stringify(v);
-  const igual = (a, b) => canon(a) === canon(b);
+  /* Dias seguidos com estudo. Enquanto hoje não tem estudo, a sequência que vinha até ontem continua valendo:
+     só zera quando um dia inteiro passa em branco. */
+  function sequencia(dias, hoje) {
+    const iso = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    const d = new Date(hoje + "T12:00:00"); let n = 0; dias = dias || {};
+    if (!dias[iso(d)]) d.setDate(d.getDate() - 1);
+    for (; dias[iso(d)]; d.setDate(d.getDate() - 1)) n++;
+    return n;
+  }
   const hora = iso => { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); };
-  return { juntarEstado, juntarBiblioteca, igual, hora };
+  return { juntarEstado, juntarBiblioteca, igual, hora, sequencia };
 })();
 if (typeof module !== "undefined") module.exports = SINC;
 
 /* ---------- interface (modo local) ---------- */
-let OBS = null, _obsT, _obsVerif = 0, _obsSalvando = false;
-const obsLigado = () => typeof MODO !== "undefined" && MODO === "local" && OBS && OBS.cofre;
+let GITS = null, _sincT, _sincVerif = 0, _sincJuntando = false;
+const sincLigado = () => typeof MODO !== "undefined" && MODO === "local" && !!(GITS && GITS.ligado);
+const rotaAtual = () => (location.hash || "#inicio").slice(1);
 
-function marcarObs(erro) {
-  const c = typeof document !== "undefined" && document.getElementById("obs"); if (!c || !OBS) return;
-  const h = OBS.meu ? new Date(OBS.meu).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "—";
-  c.classList.toggle("alerta", !!erro); c.classList.toggle("ok", !erro && !_obsSalvando);
-  const v = OBS.via || "Obsidian";
-  c.innerHTML = ico("sincronia") + (erro ? `<b>${esc(v)}: erro</b>` : _obsSalvando ? `<span class="l">${esc(v)}</span><b>salvando…</b>` : `<span class="l">${esc(v)} ✓</span><b>${h}</b>`);
-  c.title = erro || `Progresso deste aparelho (${OBS.aparelho}) salvo na pasta estudaai-sync de ${OBS.cofre}. O ${v} leva para o outro aparelho. Clique para sincronizar agora.`;
+function marcarSinc() {
+  const c = typeof document !== "undefined" && document.getElementById("git"); if (!c || !GITS) return;
+  const h = GITS.enviado ? new Date(GITS.enviado).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "—";
+  const parado = GITS.pendente && GITS.erro;
+  c.classList.toggle("alerta", !!parado); c.classList.toggle("ok", !GITS.pendente);
+  c.innerHTML = ico("sincronia") + (parado ? `<b>envio pendente</b>` : GITS.pendente ? `<span class="l">Git</span><b>enviando…</b>` : `<span class="l">Git ✓</span><b>${h}</b>`);
+  c.title = parado ? `Ainda não consegui enviar: ${GITS.erro} Seu progresso está salvo neste aparelho e eu tento de novo sozinho. Clique para tentar agora.`
+    : `Progresso deste aparelho (${GITS.aparelho}) enviado sozinho para o seu repositório privado de dados.${GITS.aviso ? " " + GITS.aviso : ""} Clique para sincronizar agora.`;
 }
 
-/* Chamado depois de cada gravação no servidor: o servidor exporta sozinho em ~2 s; aqui só atualiza o chip. */
-function obsDepoisDeSalvar() {
-  if (!obsLigado()) return;
-  _obsSalvando = true; marcarObs(); clearTimeout(_obsT);
-  _obsT = setTimeout(async () => { try { const r = await api("/api/obsidian"); OBS.meu = r.meu || OBS.meu; _obsSalvando = false; marcarObs(); } catch (e) { _obsSalvando = false; marcarObs("O estudaai parou de rodar?"); } }, 3500);
+async function atualizarSinc() {
+  try { GITS = await api("/api/sinc"); } catch (e) { if (GITS) { GITS.pendente = true; GITS.erro = "o estudaai parou de rodar?"; } }
+  marcarSinc(); clearTimeout(_sincT);
+  if (GITS && GITS.pendente) _sincT = setTimeout(atualizarSinc, 60000);   /* o servidor tenta de novo sozinho; aqui só acompanho */
 }
 
-async function obsSalvarAgora() {
-  try { const r = await api("/api/obsidian/salvar", { method: "POST" }); if (r.atualizado) OBS.meu = r.atualizado; _obsSalvando = false; marcarObs(); toast("Progresso salvo no " + (OBS.via || "Obsidian")); }
-  catch (e) { marcarObs("Não consegui salvar: " + e.message); }
+/* Chamado depois de cada gravação no servidor: ele envia sozinho ~30 s depois da última mudança. */
+function sincDepoisDeSalvar() {
+  if (!sincLigado()) return;
+  GITS.pendente = true; GITS.erro = ""; marcarSinc(); clearTimeout(_sincT);
+  _sincT = setTimeout(atualizarSinc, 38000);
 }
 
-/* Ao abrir (e ao voltar para a aba): o outro aparelho tem progresso novo? Se juntar muda algo, pergunta. */
-async function verificarObsidian() {
-  if (typeof MODO === "undefined" || MODO !== "local" || Date.now() - _obsVerif < 30000) return;
-  _obsVerif = Date.now();
-  try { OBS = await api("/api/obsidian"); } catch (e) { return; }
-  if (!OBS.cofre) return;
-  topo((location.hash || "#inicio").slice(1));
-  for (const o of OBS.outros || []) {
-    if (!o.atualizado || o.atualizado <= (o.visto || "")) continue;
-    let r; try { r = await api("/api/obsidian/aparelho/" + encodeURIComponent(o.aparelho)); } catch (e) { continue; }
-    const est = SINC.juntarEstado(st, r.estado), bib = SINC.juntarBiblioteca(indiceAtual(), r.biblioteca);
-    if (SINC.igual(est, st) && SINC.igual(bib, indiceAtual())) { await obsVisto(o); continue; }
-    return perguntarSync(o, r);
+/* Ao abrir, ao voltar à aba e no clique do chip: puxa o que os outros aparelhos enviaram e junta sozinho, sem perguntar.
+   Nada se perde: a junção é de 3 vias (o servidor guarda a última versão já juntada de cada aparelho). */
+async function juntarAparelhos(manual) {
+  if (typeof MODO === "undefined" || MODO !== "local" || _sincJuntando || (!manual && Date.now() - _sincVerif < 30000)) return;
+  _sincVerif = Date.now(); _sincJuntando = true;
+  const nomes = [];
+  try {
+    const r = await api("/api/sinc/puxar", { method: "POST" });
+    GITS = r; if (!r.ligado) return;
+    for (const o of r.outros || []) {
+      if (!o.novo) continue;
+      const base = o.base || {};
+      const est = SINC.juntarEstado(st, o.estado, base.estado), bib = SINC.juntarBiblioteca(indiceAtual(), o.biblioteca, base.biblioteca);
+      const mudouBib = !SINC.igual(bib, indiceAtual()), mudouEst = !SINC.igual(est, st);
+      if (mudouBib) { await armazem().gravarIndice(bib); BIB._ok = false; await carregarBiblioteca(); }
+      if (mudouEst) { carregar(est); salvar(); }
+      await api("/api/sinc/visto", { method: "POST", ...json({ aparelho: o.aparelho, atualizado: o.atualizado }) });
+      if (mudouBib || mudouEst) nomes.push(o.aparelho);
+    }
+    if (manual) { GITS = { ...GITS, ...(await api("/api/sinc/enviar?esperar=1", { method: "POST" })) }; toast(GITS.pendente ? "Ainda não consegui enviar. Tento de novo sozinho." : "Sincronizado"); }
+    else if (nomes.length) toast(`Juntei o progresso do ${nomes.join(" e do ")}`);
+  } catch (e) { if (manual) toast("Não consegui sincronizar: " + e.message); }
+  finally {
+    _sincJuntando = false;
+    /* Redesenha a tela só onde não atrapalha: no meio de uma aula, revisão, foco ou janela aberta, atualiza só o topo. */
+    const h = rotaAtual(), calma = !document.querySelector(".modal") && /^(inicio|temas|tema-|biblioteca|progresso)/.test(h);
+    if (nomes.length && calma) rotear(); else topo(h);
   }
-}
-const obsVisto = o => api("/api/obsidian/visto", { method: "POST", ...json({ aparelho: o.aparelho, atualizado: o.atualizado }) }).catch(() => { });
-
-function perguntarSync(o, r) {
-  abrirModal(`<div class="grid" style="gap:12px"><h3>${ico("sincronia")} Sincronizar o progresso?</h3>
-    <p>Tem progresso do <b>${esc(o.aparelho)}</b> de <b>${SINC.hora(o.atualizado)}</b>, que chegou pelo ${esc(OBS.via || "Obsidian")}.</p>
-    ${o.ultimo ? `<p class="sub">O que mudou lá: ${esc(o.ultimo)}</p>` : ""}
-    <p class="sub">Nada se perde: o app junta o que você fez nos dois aparelhos.</p>
-    <div class="row"><button class="btn pri" id="obs-sim">Sincronizar</button><button class="btn" data-fechar>Agora não</button></div></div>`, m => {
-    m.querySelector("#obs-sim").onclick = async e => {
-      e.target.disabled = true; e.target.textContent = "Sincronizando…";
-      try {
-        carregar(SINC.juntarEstado(st, r.estado)); salvar();          /* recalcula na hora, com o estado mais atual */
-        const bib = SINC.juntarBiblioteca(indiceAtual(), r.biblioteca);
-        if (!SINC.igual(bib, indiceAtual())) { await armazem().gravarIndice(bib); BIB._ok = false; await carregarBiblioteca(); }
-        await obsVisto(o); fecharModal(); toast(`Sincronizado com o ${o.aparelho}`); rotear();
-        _obsVerif = 0; verificarObsidian();                           /* se houver um terceiro aparelho */
-      } catch (err) { e.target.disabled = false; e.target.textContent = "Tentar de novo"; toast("Não consegui sincronizar: " + err.message); }
-    };
-  });
 }
 
 if (typeof window !== "undefined") {
-  /* Ao fechar a aba: grava o estado pendente e exporta na hora (sendBeacon sobrevive ao fechamento). */
+  /* Ao fechar a aba: manda o estado pendente e o servidor envia na hora (sendBeacon sobrevive ao fechamento). */
   window.addEventListener("pagehide", () => {
-    if (!obsLigado()) return;
+    if (!sincLigado()) return;
     const corpo = new Blob([JSON.stringify(st)], { type: "text/plain" });
-    if (!navigator.sendBeacon("/api/obsidian/salvar", corpo)) navigator.sendBeacon("/api/obsidian/salvar");
+    if (!navigator.sendBeacon("/api/sinc/enviar", corpo)) navigator.sendBeacon("/api/sinc/enviar");
   });
-  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") verificarObsidian(); });
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") juntarAparelhos(); });
 }
 
 /* ==== js/25-nuvem.js ==== */
@@ -2682,13 +2718,13 @@ const abaDaRota = r => r.startsWith("tema-") || r.startsWith("aula-") || r === "
 function topo(rota) {
   const fila = filaCartoes("todos").length; const aba = abaDaRota(rota);
   $("#tabs").innerHTML = ROTAS.map(([id, nome]) => `<a href="#${id}" class="${id === aba ? "on" : ""}" ${id === aba ? 'aria-current="page"' : ""}>${ico(id)}<span>${nome}</span>${id === "revisar" && fila ? `<b class="badge" aria-label="${fila} cartões para hoje">${fila}</b>` : ""}</a>`).join("");
-  let seq = 0; for (const d = new Date(); st.dias[isoLocal(d)]; d.setDate(d.getDate() - 1)) seq++;
+  const seq = SINC.sequencia(st.dias, hojeStr()), falta = seq && !st.dias[hojeStr()];   /* hoje sem estudo ainda não zera */
   const prova = diasAte("2027-01-17");
   $("#chips").innerHTML = (prova >= 0 ? `<span class="chip" title="Prova da UFMS em 17/01/2027">${ico("calendario")}<b>${prova}</b><span class="l">dias para a prova</span></span>` : "")
-    + `<span class="chip ${seq ? "quente" : ""}" title="Dias seguidos com estudo">${ico("chama")}<b>${seq}</b><span class="l">${seq === 1 ? "dia seguido" : "dias seguidos"}</span></span>`
-    + chipPrepara() + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + (obsLigado() ? `<button type="button" class="chip obs" id="obs"></button>` : "") + chipFoco();
+    + `<span class="chip ${seq ? "quente" : ""}" title="${falta ? "Dias seguidos com estudo. Estude hoje para manter a sequência." : "Dias seguidos com estudo"}">${ico("chama")}<b>${seq}</b><span class="l">${seq === 1 ? "dia seguido" : "dias seguidos"}</span></span>`
+    + chipPrepara() + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + (sincLigado() ? `<button type="button" class="chip obs" id="git"></button>` : "") + chipFoco();
   if (MODO === "nuvem") marcarSync();
-  if (obsLigado()) { marcarObs(); $("#obs").onclick = obsSalvarAgora; }
+  if (sincLigado()) { marcarSinc(); $("#git").onclick = () => juntarAparelhos(true); }
 }
 function rotear() {
   pararAudio();
@@ -3834,7 +3870,7 @@ function wMetronomo(box) {
   }
   rodape(); rotear();
   if (naNuvem) iniciarNuvem();
-  if (MODO === "local") verificarObsidian();   /* outro aparelho tem progresso novo no Obsidian? (22-sincronia) */
+  if (MODO === "local") juntarAparelhos();   /* puxa e junta sozinho o progresso dos outros aparelhos (22-sincronia) */
 })();
 
 </script>

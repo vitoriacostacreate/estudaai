@@ -5,13 +5,13 @@ const abaDaRota = r => r.startsWith("tema-") || r.startsWith("aula-") || r === "
 function topo(rota) {
   const fila = filaCartoes("todos").length; const aba = abaDaRota(rota);
   $("#tabs").innerHTML = ROTAS.map(([id, nome]) => `<a href="#${id}" class="${id === aba ? "on" : ""}" ${id === aba ? 'aria-current="page"' : ""}>${ico(id)}<span>${nome}</span>${id === "revisar" && fila ? `<b class="badge" aria-label="${fila} cartões para hoje">${fila}</b>` : ""}</a>`).join("");
-  let seq = 0; for (const d = new Date(); st.dias[isoLocal(d)]; d.setDate(d.getDate() - 1)) seq++;
+  const seq = SINC.sequencia(st.dias, hojeStr()), falta = seq && !st.dias[hojeStr()];   /* hoje sem estudo ainda não zera */
   const prova = diasAte("2027-01-17");
   $("#chips").innerHTML = (prova >= 0 ? `<span class="chip" title="Prova da UFMS em 17/01/2027">${ico("calendario")}<b>${prova}</b><span class="l">dias para a prova</span></span>` : "")
-    + `<span class="chip ${seq ? "quente" : ""}" title="Dias seguidos com estudo">${ico("chama")}<b>${seq}</b><span class="l">${seq === 1 ? "dia seguido" : "dias seguidos"}</span></span>`
-    + chipPrepara() + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + (obsLigado() ? `<button type="button" class="chip obs" id="obs"></button>` : "") + chipFoco();
+    + `<span class="chip ${seq ? "quente" : ""}" title="${falta ? "Dias seguidos com estudo. Estude hoje para manter a sequência." : "Dias seguidos com estudo"}">${ico("chama")}<b>${seq}</b><span class="l">${seq === 1 ? "dia seguido" : "dias seguidos"}</span></span>`
+    + chipPrepara() + (MODO === "nuvem" ? `<span class="chip" id="sync"></span>` : "") + (sincLigado() ? `<button type="button" class="chip obs" id="git"></button>` : "") + chipFoco();
   if (MODO === "nuvem") marcarSync();
-  if (obsLigado()) { marcarObs(); $("#obs").onclick = obsSalvarAgora; }
+  if (sincLigado()) { marcarSinc(); $("#git").onclick = () => juntarAparelhos(true); }
 }
 function rotear() {
   pararAudio();

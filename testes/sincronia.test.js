@@ -51,3 +51,84 @@ test("igual ignora a ordem das chaves e o carimbo _t (para não perguntar à toa
   assert.ok(SINC.igual(SINC.juntarEstado(a, a), a));
   assert.ok(!SINC.igual(SINC.juntarEstado(a, { top: { y: { n: 1 } } }), a));
 });
+
+/* ---------- dias seguidos ---------- */
+test("dias seguidos: hoje ainda sem estudo não zera a sequência que vinha até ontem", () => {
+  const dias = { "2026-11-05": 3, "2026-11-08": 13, "2026-11-09": 8.2 };      // caso real de 10/11/2026
+  assert.strictEqual(SINC.sequencia(dias, "2026-11-10"), 2);                  // antes de estudar hoje
+  assert.strictEqual(SINC.sequencia({ ...dias, "2026-11-10": 1 }, "2026-11-10"), 3);
+  assert.strictEqual(SINC.sequencia(dias, "2026-11-11"), 0);                  // um dia inteiro em branco: zera
+  assert.strictEqual(SINC.sequencia({}, "2026-11-10"), 0);
+  assert.strictEqual(SINC.sequencia({ "2026-10-31": 1, "2026-11-01": 1 }, "2026-11-01"), 2);   // virada de mês
+});
+
+test("dias seguidos: os dois aparelhos mostram o mesmo número depois de juntar, em qualquer ordem", () => {
+  const note = { dias: { "2026-11-05": 3, "2026-11-08": 13, "2026-11-09": 8.2 }, _t: 2 };
+  const pc = { dias: { "2026-11-05": 3, "2026-11-08": 13, "2026-11-10": 1 }, _t: 3 };
+  const a = SINC.juntarEstado(note, pc), b = SINC.juntarEstado(pc, note);
+  assert.deepStrictEqual(a.dias, b.dias);
+  assert.strictEqual(SINC.sequencia(a.dias, "2026-11-10"), 3);
+  assert.strictEqual(SINC.sequencia(b.dias, "2026-11-10"), 3);
+});
+
+/* ---------- junção de 3 vias (base = o estado do outro aparelho na última vez que juntei) ---------- */
+test("3 vias: cada aparelho mudou um campo diferente → ficam as duas mudanças", () => {
+  const base = { prepara: { r: { x: "antigo", y: "antigo" } }, _t: 1 };
+  const meu = { prepara: { r: { x: "NOVO-A", y: "antigo" } }, _t: 2 };
+  const deles = { prepara: { r: { x: "antigo", y: "NOVO-B" } }, _t: 3 };        // salvou depois, mas não mexeu em x
+  assert.deepStrictEqual(SINC.juntarEstado(meu, deles, base).prepara.r, { x: "NOVO-A", y: "NOVO-B" });
+  assert.deepStrictEqual(SINC.juntarEstado(meu, deles).prepara.r, { x: "antigo", y: "NOVO-B" });   // sem base: regra antiga
+});
+
+test("3 vias: os dois mudaram o mesmo campo → vale quem salvou por último", () => {
+  const base = { principal: "concurso", _t: 1 };
+  assert.strictEqual(SINC.juntarEstado({ principal: "fisio", _t: 5 }, { principal: "neuro", _t: 3 }, base).principal, "fisio");
+  assert.strictEqual(SINC.juntarEstado({ principal: "fisio", _t: 2 }, { principal: "neuro", _t: 3 }, base).principal, "neuro");
+});
+
+test("3 vias: o que foi apagado num aparelho não volta", () => {
+  const base = { duvidas: [{ id: "d1" }, { id: "d2" }], notas: { t1: "a", t2: "b" }, _t: 1 };
+  // o outro apagou d1 e a nota t1; eu apaguei d2 e criei d3
+  const meu = { duvidas: [{ id: "d1" }, { id: "d3" }], notas: { t1: "a", t2: "b" }, _t: 2 };
+  const deles = { duvidas: [{ id: "d2" }], notas: { t2: "b" }, _t: 3 };
+  const r = SINC.juntarEstado(meu, deles, base);
+  assert.deepStrictEqual(r.duvidas.map(d => d.id), ["d3"]);
+  assert.deepStrictEqual(r.notas, { t2: "b" });
+});
+
+test("3 vias: apagado de um lado, mas editado do outro → fica (na dúvida, não perde)", () => {
+  const base = { duvidas: [{ id: "d1", texto: "a" }], _t: 1 };
+  const r = SINC.juntarEstado({ duvidas: [{ id: "d1", texto: "a, editada" }], _t: 2 }, { duvidas: [], _t: 3 }, base);
+  assert.deepStrictEqual(r.duvidas, [{ id: "d1", texto: "a, editada" }]);
+});
+
+test("3 vias: progresso (tópicos, cartões, dias) nunca é apagado, nem com o outro aparelho zerado", () => {
+  const base = { top: { t1: { n: 1 } }, cards: { c1: { n: 2 } }, dias: { "2026-11-08": 3 }, _t: 1 };
+  const r = SINC.juntarEstado({ ...base, _t: 2 }, { top: {}, cards: {}, dias: {}, _t: 3 }, base);
+  assert.deepStrictEqual(r.top, base.top);
+  assert.deepStrictEqual(r.cards, base.cards);
+  assert.deepStrictEqual(r.dias, base.dias);
+});
+
+test("3 vias: se o outro aparelho voltou no tempo (backup antigo, reinstalação), ignora a base e só une", () => {
+  const base = { duvidas: [{ id: "d1" }], _t: 10 };
+  const r = SINC.juntarEstado({ duvidas: [{ id: "d1" }], _t: 11 }, { duvidas: [], _t: 4 }, base);
+  assert.deepStrictEqual(r.duvidas, [{ id: "d1" }]);
+});
+
+test("3 vias na biblioteca: PDF removido num aparelho some no outro; PDF novo entra", () => {
+  const base = { docs: [{ id: "d1" }, { id: "d2" }], temas: [], anexos: { fisio: [{ id: "a1" }] } };
+  const meu = { docs: [{ id: "d1" }, { id: "d2" }, { id: "d3" }], temas: [], anexos: { fisio: [{ id: "a1" }] } };
+  const deles = { docs: [{ id: "d2" }], temas: [], anexos: {} };
+  const r = SINC.juntarBiblioteca(meu, deles, base);
+  assert.deepStrictEqual(r.docs.map(d => d.id), ["d2", "d3"]);
+  assert.deepStrictEqual(r.anexos, {});
+});
+
+test("3 vias: juntar de novo o que já foi juntado não muda nada", () => {
+  const base = { duvidas: [{ id: "d1" }], principal: "concurso", _t: 1 };
+  const deles = { duvidas: [], principal: "fisio", _t: 3 };
+  const r1 = SINC.juntarEstado({ duvidas: [{ id: "d1" }, { id: "d2" }], principal: "concurso", _t: 2 }, deles, base);
+  assert.ok(SINC.igual(SINC.juntarEstado(r1, deles, base), r1));
+  assert.ok(SINC.igual(SINC.juntarEstado(r1, deles, deles), r1));
+});
