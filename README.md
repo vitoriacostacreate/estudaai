@@ -80,6 +80,7 @@ Com o **Google Drive para computador** instalado e logado na mesma conta nos doi
 - **Salva sozinho.** Uns 2 segundos depois de cada mudança (estudar, revisar, importar PDF, prepara.ai, foco), o servidor grava `Meu Drive/estudaai-sync/<aparelho>.md`: totais, **histórico do que mudou** e os dados. Os PDFs vão em `estudaai-sync/arquivos/`. Ao fechar a aba, ele grava de novo na hora. O selo **Google Drive ✓ 14:32** no topo mostra a última vez; clique nele para forçar.
 - **Pergunta ao abrir.** No outro aparelho, se a nota de lá for mais nova, aparece **"Sincronizar o progresso?"** com o que mudou. Um clique junta os dois. **Nada se perde:** cartões e tópicos ficam com a revisão mais recente, e listas e dias de estudo são somados.
 - Cada aparelho escreve só a sua nota, então nunca há duas versões do mesmo arquivo brigando.
+- **Conferir antes de fechar:** dois cliques em **`VERIFICAR-SINCRONIA.bat`**, com o app ainda aberto. Ele confere se o progresso, os PDFs e os pacotes chegaram à pasta do Drive e se o Google já recebeu tudo, e termina em **PODE FECHAR** ou diz o que falta.
 - **Ver no Obsidian (opcional):** crie um atalho da pasta dentro do cofre: `mklink /J "C:\caminho\do\cofre\estudaai-sync" "G:\Meu Drive\estudaai-sync"` (no Prompt de Comando).
 - Sem Google Drive, o app usa o cofre do Obsidian acima dele (exige Obsidian Sync, pago). Ajustes em `dados/config.json`: `"nome_aparelho": "notebook"` (como aparece no aviso), `"pasta_sincronia": "D:\\outra\\pasta"` ou `"pasta_sincronia": "nao"` (desliga).
 
